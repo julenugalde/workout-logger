@@ -59,7 +59,7 @@ public class Track implements Serializable {
     /**Removes an element from the loads list
      *
      * @param index Index of the {@link Load} list to be removed
-     * @return {@link Load} that was removed if the operation was successfull
+     * @return {@link Load} that was removed if the operation was successful
      * @throws IndexOutOfBoundsException if the index is not valid
      */
 	public Load removeLoad (int index) throws IndexOutOfBoundsException {
@@ -83,28 +83,19 @@ public class Track implements Serializable {
 	public int getNumLoads() {
 		return listLoads.size();
 	}
-	
+
 	@Override
 	public String toString() {
-		StringBuilder sb = new StringBuilder("{\"name\": \"" + name + "\"");
-	    if (listLoads.size() > 0) {
-	        sb.append(", \"loads\": [");
-            for (int i=0; i<listLoads.size(); i++) {
-                sb.append(listLoads.get(i) + ",");
-            }
-            //Replace the final comma with the array closing character
-            sb.replace(sb.length()-1, sb.length(), "]");
-        }
-		sb.append("}");
+		StringBuilder sb = new StringBuilder("{\n\"name\": \"" + name + "\"");
+		if (listLoads.size() > 0) {
+			sb.append(",\n\"loads\": [");
+			for (int i=0; i<listLoads.size(); i++) {
+				sb.append(listLoads.get(i) + ",");
+			}
+			//Replace the final comma with the array closing character
+			sb.replace(sb.length()-1, sb.length(), "]");
+		}
+		sb.append("\n}");
 		return sb.toString();
 	}
-
-	//TODO test class
-    public static void main(String[] args) {
-	    Track track = new Track("testTrack");
-	    track.addLoad(new Load("load1", 1, 20, 500));
-	    track.addLoad(new Load("load2", 2, 12, 0));
-	    track.addLoad(new Load("load3", 3, 5, 355));    //rounded to 250
-        System.out.println(track.toString());
-    }
 }

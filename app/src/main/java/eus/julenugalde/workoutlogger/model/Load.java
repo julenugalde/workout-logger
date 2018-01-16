@@ -110,13 +110,4 @@ public class Load implements Serializable {
 	public String toString() {
 		return "{\"name\":\"" + name + "\", \"id\": " + idLoad + ", \"value\": " + kg + "." + g + "}";
 	}
-
-	//TODO Test application
-	public static void main(String[] args) {
-	    Load test = new Load("testLoad");
-	    test.setIdLoad(55);
-	    test.setKg(10);
-	    test.setG(265); //will be rounded to 250
-        System.out.println(test.toString());
-    }
 }
