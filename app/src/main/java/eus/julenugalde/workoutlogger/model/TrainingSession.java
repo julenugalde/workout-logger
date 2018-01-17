@@ -1,6 +1,7 @@
 package eus.julenugalde.workoutlogger.model;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /** Represents a training session, storing information about the date and the workout carried out
@@ -23,12 +24,12 @@ public class TrainingSession implements Serializable {
      * @param comment Short comment related to the training session (limit
      *                TrainingSession.MAX_LENGTH_COMMENT)
      */
-	public TrainingSession(Date date, int idWorkout, String nameWorkout, String comment) {
-		this.date = date;
-		this.idWorkout = idWorkout;
-		this.nameWorkout = nameWorkout;
-		this.comment = comment;
-	}
+    public TrainingSession(Date date, int idWorkout, String nameWorkout, String comment) {
+        this.setDate(date);
+        this.setIdWorkout(idWorkout);
+        this.setNameWorkout(nameWorkout);
+        this.setComment(comment);
+    }
 
      /** Constructor that initializes the object with the current date and empty information */
 	public TrainingSession() {
@@ -100,5 +101,12 @@ public class TrainingSession implements Serializable {
 		if (comment.length() > MAX_LENGTH_COMMENT)
 			comment = comment.substring(0, MAX_LENGTH_COMMENT);
 		this.comment = comment;
+	}
+
+	@Override
+	public String toString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+		return "{\"name\":\"" + nameWorkout + "\", \"id\":" + idWorkout + ", \"date\":\"" +
+				sdf.format(date) + "\", \"comment\":\"" + comment + "\"}";
 	}
 }
