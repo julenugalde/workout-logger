@@ -92,7 +92,7 @@ public class WorkoutLoggerXMLHandler extends DefaultHandler {
 			contentValues.put("nombreLoad", sb.toString());
 			db.insert("Loads", null, contentValues);
 		}
-		else if (localName.equals("fecha")) {	//Hay dos elementos en "entrenamiento"
+		else if (localName.equals("fecha")) {	//There are 2 elements in "entrenamiento"
 			aux = sb.toString();
 			sb.setLength(0);
 		}
