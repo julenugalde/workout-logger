@@ -79,7 +79,7 @@ public class TrainingExercise implements Serializable {
     /** Returns the name of a load used during an exercise
      *
      * @param loadNumber Order of the load during the exercise (not to be confused with
-     *                   Load.idLoad), from 0 to TrainingExercise.MAX_LOADS
+     *                   Load.idLoad), from 0 to TrainingExercise.MAX_LOADS-1
      * @return Name of the load
      * @throws IndexOutOfBoundsException if loadNumber is out of bounds
      */

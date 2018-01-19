@@ -39,6 +39,7 @@ public class WorkoutData {
     /** Database version */
     public static final int VERSION = 1;
 
+    private static final String TAG = "WorkoutData";
     private WorkoutLoggerSQLiteHelper workoutLoggerSQLiteHelper;
 	private SQLiteDatabase db;
 
@@ -75,11 +76,11 @@ public class WorkoutData {
 		try {
 			db = workoutLoggerSQLiteHelper.getWritableDatabase();
 			if (db==null) 
-				Log.e("WorkoutData", "getWritableDatabase() has returned null");
+				Log.e(TAG, "getWritableDatabase() has returned null");
 			return true;
 		}
 		catch (SQLiteException sqlex) {
-			Log.e("WorkoutData", "Error opening the database: " + sqlex.getMessage());
+			Log.e(TAG, "Error opening the database: " + sqlex.getMessage());
 			db.close();
 			return false;
 		}
@@ -153,8 +154,7 @@ public class WorkoutData {
 			/////////////////////////////////////////
 			return true;
 		} catch (SQLiteException sqlex) {
-			Log.e("WorkoutData",
-                    "Error storing the workout in the database: " + sqlex.getMessage());
+			Log.e(TAG,"Error storing the workout in the database: " + sqlex.getMessage());
 			return false;
 		}
 	}
@@ -234,7 +234,7 @@ public class WorkoutData {
 				return false;	//It doesn't exist or there's more than one --> error
 			c.moveToFirst();
 			int idWorkout = c.getInt(0);
-			Log.d("WorkoutLogger", "Attempting to delete workout with id " + idWorkout);
+			Log.d(TAG, "Attempting to delete workout with id " + idWorkout);
 
 			//Seek and delete the associated training sessions. SQLite doesn't support INNER JOIN
             //in DELETE statements, so the training list is retreived in a Cursor object and the
@@ -256,7 +256,7 @@ public class WorkoutData {
 			//Deletes the workout
 			int result = db.delete("Workouts", "idWorkout="+idWorkout, null);
 			if (result != 1) {
-			    Log.d("WorkoutLogger", "Error deleting workout with id " + idWorkout);
+			    Log.d(TAG, "Error deleting workout with id " + idWorkout);
 			    return false;
             }
 			
@@ -266,7 +266,7 @@ public class WorkoutData {
 			args[0] = String.valueOf(idWorkout);
 			c = db.rawQuery("SELECT idTrack FROM Tracks WHERE idWorkout=?", args);
 			if (c.getCount()==0)
-				Log.e("WorkoutData", "The workout didn't have any tracks");
+				Log.e(TAG, "The workout didn't have any tracks");
 			else {
 				if (c.moveToFirst()) {
 					do {
@@ -289,7 +289,7 @@ public class WorkoutData {
 			return true;
 			
 		} catch (SQLiteException sqlex) {
-			Log.e("WorkoutData", "Database error deleting workout: " + sqlex.getMessage());
+			Log.e(TAG, "Database error deleting workout: " + sqlex.getMessage());
 			return false;
 		}
 	}
@@ -304,7 +304,7 @@ public class WorkoutData {
 		//Retreive the training sessions ordered by date
 		Cursor cursorTrainingSessions = db.rawQuery(
 		        "SELECT * FROM Entrenamientos ORDER BY fecha", null);
-		Log.d("WorkoutData", cursorTrainingSessions.getCount()+
+		Log.d(TAG, cursorTrainingSessions.getCount()+
                 " training session records in the database");
 		Cursor cursorWorkouts = null;
 		//The 'yyyy-MM-dd' format is used for the date in the database
@@ -433,7 +433,7 @@ public class WorkoutData {
 			////////////////////////////////
 			return result;
 		} catch (SQLiteException sqlex) {
-		    Log.e("WorkoutData", sqlex.getLocalizedMessage());
+		    Log.e(TAG, sqlex.getLocalizedMessage());
 			return null;
 		}
 	}
@@ -480,7 +480,7 @@ public class WorkoutData {
 		if (c.getCount() != 1)	return null;	//Not found or more than one
 		c.moveToFirst();
 		int idWorkout = c.getInt(0);
-		//Log.d("JULEN", "El id del workout seleccionado es " + idWorkout);
+		Log.d(TAG, "The id of the selected workout is " + idWorkout);
 		
 		c = db.rawQuery(
 		        "SELECT * FROM Tracks WHERE idWorkout=?", new String[]{String.valueOf(idWorkout)});
@@ -533,5 +533,449 @@ public class WorkoutData {
         /////////////////////////////////////
 		return workout;
 	}
-	
+
+    /** Returns the global index calculated as the average value of the workout loads'
+     * weigth, in order to perform a global comparison between training sessions. If a track has
+     * not been carried out during the session, it's not taken into account.
+     *
+     * @param nameWorkout	Name of the workout for which the indices will be calculated
+     * @return	Map of dates and indices. null if the workout doesn't exists or there are errors
+     */
+    @SuppressLint("UseSparseArrays")
+    public Map<Date, Double> getIndicesWorkout (String nameWorkout) {
+        Map<Date, Double> result = new TreeMap<Date, Double>();
+
+        //TODO. DEBUG: BORRAR
+        readDB();
+        //////
+
+        Cursor c = db.rawQuery(
+                "SELECT idWorkout FROM Workouts WHERE nombreWorkout=?",
+                new String[] {nameWorkout});
+        if (c.getCount() != 1)	return null;	//Doesn't exist or more than one --> error
+        c.moveToFirst();
+        int idWorkout = c.getInt(0);
+
+        //Seek training sessions and get load data
+        Cursor cAux;
+        double weightValue;
+        int idLoad;
+        ArrayList<Double> alAux;
+        //Retrieve all training sessions associated with the workout
+        c = db.rawQuery(
+                "SELECT * FROM Entrenamientos WHERE idWorkout=?",
+                new String[] {String.valueOf(idWorkout)});
+        if (!c.moveToFirst()) { //No training session associated to the workout
+            return result;
+        }
+        Map<Integer,ArrayList<Double>> mapWeights = new HashMap<Integer,ArrayList<Double>>();
+        do {    //Loop for each training session
+            //Retrieve exercises in the training session
+            cAux = db.rawQuery("SELECT * FROM Ejercicios WHERE idEntrenamiento=?",
+                    new String[] {String.valueOf(c.getInt(0))});
+            //mapWeights will store the weight values for calculating the average. The key is idLoad
+            cAux.moveToFirst();
+            do {    //Loop for each exercise
+                try {
+                    idLoad = cAux.getInt(1);
+                    weightValue = Double.parseDouble(cAux.getInt(3) + "." + cAux.getInt(4));
+                } catch(NumberFormatException ex) {
+                    idLoad = -1;
+                    weightValue = 0;
+                }
+                if (mapWeights.containsKey(Integer.valueOf(idLoad))) {
+                    alAux = mapWeights.get(Integer.valueOf(idLoad));
+                    alAux.add(Double.valueOf(weightValue));
+                }
+                else {
+                    alAux = new ArrayList<Double>();
+                    alAux.add(Double.valueOf(weightValue));
+                    mapWeights.put(idLoad, alAux);
+                }
+
+            } while (cAux.moveToNext());
+        } while (c.moveToNext());
+
+        Map<Integer,Double> mapAverages = new HashMap<Integer,Double>();
+        int numTotal;
+        double sum;
+        Set<Integer> setLoads = mapWeights.keySet();
+        for (Integer keyLoad:setLoads) {
+            alAux = mapWeights.get(keyLoad);
+            numTotal = alAux.size();
+            sum = 0;
+            for (int i=0; i<numTotal; i++)
+                sum += alAux.get(i).doubleValue();
+            mapAverages.put(keyLoad, Double.valueOf(sum/numTotal));
+        }
+
+        //Each training session is compared with the averages
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd", Locale.US);
+        double indexLoad, averageCurrentLoad;
+        Date date;
+        c.moveToFirst();
+        do {
+            indexLoad = 100;
+            try {
+                date = sdf.parse(c.getString(2));
+            } catch (ParseException e) {
+                Log.e(TAG, "Error in the date format: " + e.getLocalizedMessage());
+                return null;
+            }
+
+            cAux = db.rawQuery(
+                    "SELECT * FROM Ejercicios WHERE idEntrenamiento=?",
+                    new String[] {String.valueOf(c.getInt(0))});
+            //Weight values are stored in the map to calculate the average. The key is idLoad
+            cAux.moveToFirst();
+            do {
+                try {
+                    idLoad = cAux.getInt(1);
+                    weightValue = Double.parseDouble(cAux.getInt(3) + "." + cAux.getInt(4));
+                    averageCurrentLoad = mapAverages.get(Integer.valueOf(idLoad));
+                    if (averageCurrentLoad != 0)
+                        indexLoad *= (weightValue/averageCurrentLoad);
+                } catch(NumberFormatException ex) {
+                    Log.e(TAG, "Parse error: " + cAux.getInt(3) + "." + cAux.getInt(4));
+                    idLoad = -1;
+                    indexLoad = 0;
+                }
+            } while(cAux.moveToNext());
+
+            result.put(date, Double.valueOf(indexLoad));
+        } while (c.moveToNext());
+
+        // TODO VER SI EL CURSOR SE CIERRA BIEN
+        c.close();
+        cAux.close();
+        ////////////////////////
+        return result;
+    }
+
+    /** Stores a training session in the database
+     *
+     * @param workout Workout associated to the training session
+     * @param listExercises ArrayList with the exercises performed
+     * @param date Date with format yyyy-MM-dd
+     * @param comment String limited to TrainingSession.MAX_LENGTH_COMMENT
+     * @return true if successfully stored; false if there's any error
+     */
+    public boolean storeTrainingSession(Workout workout, ArrayList<TrainingExercise> listExercises,
+                                        String date, String comment) {
+        //Retrieve the idWorkout from the database
+        Cursor c = db.rawQuery(
+                "SELECT idWorkout FROM Workouts WHERE nombreWorkout=?",
+                new String[] {workout.getName()});
+        if (c.getCount() != 1) {
+            Log.e(TAG, "Error storing training session: workout doesn't exist or multiple");
+            return false;
+        }
+        c.moveToFirst();
+        int idWorkout = c.getInt(0);
+
+        //Insert the training session into table 'Entrenamientos'
+        ContentValues contentValues = new ContentValues();
+        contentValues.put("idWorkout", idWorkout);
+        contentValues.put("fecha", date);
+        contentValues.put("comentario", comment);
+        long rowId = db.insert("Entrenamientos", null, contentValues);
+        int idTrainingSession = (int)rowId;
+        if (idTrainingSession == -1) {
+            Log.e(TAG, "Error inserting into training session table");
+            return false;
+        }
+
+        //Insert each track with completed=true into table 'Ejercicios'
+        int idTrack=0;
+        int idLoad=0;
+        for (TrainingExercise exercise : listExercises) {
+            if (exercise.isCompleted()) {
+                //Find the track id
+                c = db.rawQuery("SELECT * FROM Tracks WHERE idWorkout=?",
+                        new String[] {String.valueOf(idWorkout)});
+                if (c.moveToFirst()) {
+                    do { //Check track name
+                        if (c.getString(2).compareTo(exercise.getName()) == 0)
+                            idTrack = c.getInt(0);
+                    } while(c.moveToNext());
+                }
+                else {
+                    Log.e(TAG, "Error storing training session: workout without tracks");
+                    return false;
+                }
+                if (idTrack==0) {
+                    Log.e(TAG, "Error storing training session: incorrect track id");
+                    return false;
+                }
+
+                //Find the loads associated to the track
+                c = db.rawQuery("SELECT * FROM Loads WHERE idTrack=?",
+                        new String[] {String.valueOf(idTrack)});
+                if (!c.moveToFirst()) {
+                    Log.e(TAG, "Integrity error in the database: record in Loads doesn't exist");
+                    return false;
+                }
+                else if (c.getString(2).equals("-")) {	//No loads in the track
+                    idLoad = c.getInt(0);
+                    contentValues.clear();
+                    contentValues.put("idLoad", idLoad);
+                    contentValues.put("idEntrenamiento", idTrainingSession);
+                    //contentValues.put("kg", 0);
+                    //contentValues.put("g", 0);
+                    if (db.insert("Ejercicios", null, contentValues) == -1) {
+                        Log.e(TAG, "Error inserting training exercise into the database");
+                        return false;
+                    }
+                }
+                else {  //TODO Transform into a loop from 0 to TrainingExercise.MAX_LOADS-1
+                    if (!exercise.getLoadName(0).isEmpty()) {
+                        idLoad = c.getInt(0);
+                        contentValues.clear();
+                        contentValues.put("idLoad", idLoad);
+                        contentValues.put("idEntrenamiento", idTrainingSession);
+                        contentValues.put("kg", exercise.getLoadKg(0));
+                        contentValues.put("g", exercise.getLoadG(0));
+                        if (db.insert("Ejercicios", null, contentValues) == -1) {
+                            Log.e(TAG, "Error inserting training exercise into the database");
+                            return false;
+                        }
+                    }
+
+                    if (c.moveToNext() && !exercise.getLoadName(1).isEmpty()) {
+                        idLoad = c.getInt(0);
+                        contentValues.clear();
+                        contentValues.put("idLoad", idLoad);
+                        contentValues.put("idEntrenamiento", idTrainingSession);
+                        contentValues.put("kg", exercise.getLoadKg(1));
+                        contentValues.put("g", exercise.getLoadG(1));
+                        if (db.insert("Ejercicios", null, contentValues) == -1) {
+                            Log.e(TAG, "Error inserting training exercise into the database");
+                            return false;
+                        }
+                    }
+
+                    if (c.moveToNext() && !exercise.getLoadName(2).isEmpty()) {
+                        idLoad = c.getInt(0);
+                        contentValues.clear();
+                        contentValues.put("idLoad", idLoad);
+                        contentValues.put("idEntrenamiento", idTrainingSession);
+                        contentValues.put("kg", exercise.getLoadKg(2));
+                        contentValues.put("g", exercise.getLoadG(2));
+                        if (db.insert("Ejercicios", null, contentValues) == -1) {
+                            Log.e(TAG, "Error inserting training exercise into the database");
+                            return false;
+                        }
+                    }
+
+                    if (c.moveToNext() && !exercise.getLoadName(3).isEmpty()) {
+                        idLoad = c.getInt(0);
+                        contentValues.clear();
+                        contentValues.put("idLoad", idLoad);
+                        contentValues.put("idEntrenamiento", idTrainingSession);
+                        contentValues.put("kg", exercise.getLoadKg(3));
+                        contentValues.put("g", exercise.getLoadG(3));
+                        if (db.insert("Ejercicios", null, contentValues) == -1) {
+                            Log.e(TAG, "Error inserting training exercise into the database");
+                            return false;
+                        }
+                    }
+                }
+            }
+        }
+        return true;
+    }
+
+    //TODO Move to WorkoutLogerXMLHandler
+    /** Writes the database contents into an XML file
+     *
+     * @param outputStream output stream where the XML file will be written
+     * @return true if the operation is successful; false if there are errors
+     */
+    public boolean saveXML(OutputStream outputStream) {
+        XmlSerializer serializer = Xml.newSerializer();
+        try {
+            serializer.setOutput(outputStream, "UTF-8");
+            serializer.startDocument("UTF-8", true);
+            serializer.startTag("", "info_workouts");
+
+            //Save table 'Workouts'
+            Cursor c = db.rawQuery("SELECT * FROM Workouts", null);
+            if (c.moveToFirst()) {
+                serializer.startTag("", "workouts");
+                do {
+                    serializer.startTag("", "workout");
+                    serializer.attribute("", "idWorkout", String.valueOf(c.getInt(0)));
+                    serializer.startTag("", "nombreWorkout");
+                    serializer.text(c.getString(1));
+                    serializer.endTag("", "nombreWorkout");
+                    serializer.endTag("", "workout");
+                } while(c.moveToNext());
+                serializer.endTag("", "workouts");
+            }
+
+            //Save table 'Tracks'
+            c = db.rawQuery("SELECT * FROM Tracks", null);
+            if (c.moveToFirst()) {
+                serializer.startTag("", "tracks");
+                do {
+                    serializer.startTag("", "track");
+                    serializer.attribute("", "idTrack", String.valueOf(c.getInt(0)));
+                    serializer.attribute("", "idWorkout", String.valueOf(c.getInt(1)));
+                    serializer.startTag("", "nombreTrack");
+                    serializer.text(c.getString(2));
+                    serializer.endTag("", "nombreTrack");
+                    serializer.endTag("", "track");
+                } while(c.moveToNext());
+                serializer.endTag("", "tracks");
+            }
+
+            //Save table 'Loads'
+            c = db.rawQuery("SELECT * FROM Loads", null);
+            if (c.moveToFirst()) {
+                serializer.startTag("", "loads");
+                do {
+                    serializer.startTag("", "load");
+                    serializer.attribute("", "idLoad", String.valueOf(c.getInt(0)));
+                    serializer.attribute("", "idTrack", String.valueOf(c.getInt(1)));
+                    serializer.startTag("", "nombreLoad");
+                    serializer.text(c.getString(2));
+                    serializer.endTag("", "nombreLoad");
+                    serializer.endTag("", "load");
+                } while(c.moveToNext());
+                serializer.endTag("", "loads");
+            }
+
+            //Save table 'Entrenamientos'
+            c = db.rawQuery("SELECT * FROM Entrenamientos", null);
+            if (c.moveToFirst()) {
+                serializer.startTag("", "entrenamientos");
+                do {
+                    serializer.startTag("", "entrenamiento");
+                    serializer.attribute("", "idEntrenamiento", String.valueOf(c.getInt(0)));
+                    serializer.attribute("", "idWorkout", String.valueOf(c.getInt(1)));
+                    serializer.startTag("", "fecha");
+                    serializer.text(c.getString(2));
+                    serializer.endTag("", "fecha");
+                    serializer.startTag("", "comentario");
+                    serializer.text(c.getString(3));
+                    serializer.endTag("", "comentario");
+                    serializer.endTag("", "entrenamiento");
+                } while(c.moveToNext());
+                serializer.endTag("", "entrenamientos");
+            }
+
+            //Save table 'Ejercicios'
+            c = db.rawQuery("SELECT * FROM Ejercicios", null);
+            if (c.moveToFirst()) {
+                serializer.startTag("", "ejercicios");
+                do {
+                    serializer.startTag("", "ejercicio");
+                    serializer.attribute("", "idEjercicio", String.valueOf(c.getInt(0)));
+                    serializer.attribute("", "idLoad", String.valueOf(c.getInt(1)));
+                    serializer.attribute("", "idEntrenamiento", String.valueOf(c.getInt(2)));
+                    serializer.startTag("", "kg");
+                    serializer.text(String.valueOf(c.getInt(3)));
+                    serializer.endTag("", "kg");
+                    serializer.startTag("", "g");
+                    serializer.text(String.valueOf(c.getInt(4)));
+                    serializer.endTag("", "g");
+                    serializer.endTag("", "ejercicio");
+                } while(c.moveToNext());
+                serializer.endTag("", "ejercicios");
+            }
+
+            serializer.endTag("", "info_workouts");
+            serializer.endDocument();
+            return true;
+        }
+        catch (Exception e) {
+            Log.e(TAG, "Error saving XML: " + e.getLocalizedMessage());
+            return false;
+        }
+    }
+
+    //TODO Move to WorkoutLogerXMLHandler
+    /** Cleans the database and loads the contents of an XML file into it
+     *
+      * @param inputStream Input stream from which the XML file will be read
+     * @return true if the operation is successful; false if there are errors
+     */
+    public boolean loadXML(InputStream inputStream) {
+        try {
+            SAXParserFactory factory = SAXParserFactory.newInstance();
+            SAXParser parser = factory.newSAXParser();
+            XMLReader reader = parser.getXMLReader();
+            WorkoutLoggerXMLHandler xmlHandler = new WorkoutLoggerXMLHandler(db);
+            reader.setContentHandler(xmlHandler);
+            cleanDB();
+            reader.parse(new InputSource(inputStream));
+            return true;
+        }
+        catch (Exception e) {
+            Log.e(TAG, "Error loading XML: " + e.getLocalizedMessage());
+            return false;
+        }
+    }
+
+    /** Deletes all the database records
+     */
+    public void cleanDB() {
+        db.execSQL("DELETE FROM Workouts");
+        db.execSQL("DELETE FROM Tracks");
+        db.execSQL("DELETE FROM Loads");
+        db.execSQL("DELETE FROM Entrenamientos");
+        db.execSQL("DELETE FROM Ejercicios");
+    }
+
+    /** Reads all the database contents and prints them in the log (Log.i() method)
+     */
+    public void readDB() {
+        Cursor c = db.rawQuery("SELECT * FROM Workouts", null);
+        c.moveToFirst();
+        Log.i(TAG, "-- Workouts ----------------------------------------------");
+        Log.i(TAG, "idWorkout nombreWorkout");
+        for (int i=0; i<c.getCount(); i++) {
+            Log.i(TAG, c.getInt(0) + "        " + c.getString(1));
+            c.moveToNext();
+        }
+
+        c = db.rawQuery("SELECT * FROM Tracks", null);
+        c.moveToFirst();
+        Log.i(TAG, "-- Tracks ------------------------------------------------");
+        Log.i(TAG, "idTrack idWorkout nombreTrack");
+        for (int i=0; i<c.getCount(); i++) {
+            Log.i(TAG, c.getInt(0) + "      " + c.getInt(1) + "        "+ c.getString(2));
+            c.moveToNext();
+        }
+
+        c = db.rawQuery("SELECT * FROM Loads", null);
+        c.moveToFirst();
+        Log.i(TAG, "-- Loads -------------------------------------------------");
+        Log.i(TAG, "idLoad idTrack nombreLoad");
+        for (int i=0; i<c.getCount(); i++) {
+            Log.i(TAG, c.getInt(0) + "      " + c.getInt(1) + "       "+ c.getString(2));
+            c.moveToNext();
+        }
+
+        c = db.rawQuery("SELECT * FROM Entrenamientos", null);
+        c.moveToFirst();
+        Log.i(TAG, "-- Entrenamientos -------------------------------------------------");
+        Log.i(TAG, "idEntrenamienot fecha idWorkout comentario");
+        for (int i=0; i<c.getCount(); i++) {
+            Log.i(TAG, c.getInt(0) + "      " + c.getString(1)
+                    + "       " + c.getInt(2) + "       "+ c.getString(3));
+            c.moveToNext();
+        }
+
+        c = db.rawQuery("SELECT * FROM Ejercicios", null);
+        c.moveToFirst();
+        Log.i(TAG, "-- Ejercicios -------------------------------------------------");
+        Log.i(TAG, "idEjercicio idLoad idEntrenamiento kg g");
+        for (int i=0; i<c.getCount(); i++) {
+            Log.i(TAG, c.getInt(0) + "    " + c.getInt(1) + "       "
+                    + c.getInt(2) + " " + c.getInt(3) + " " + c.getInt(4));
+            c.moveToNext();
+        }
+        Log.i(TAG, "----------------------------------------------------------");
+    }
 }
