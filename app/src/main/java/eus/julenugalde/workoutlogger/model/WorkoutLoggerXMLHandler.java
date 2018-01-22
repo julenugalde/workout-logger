@@ -6,6 +6,7 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import android.content.ContentValues;
 import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
 
 /** Handler class for the XML file that contains the workout registries. Database information
  * is loaded using an SQLiteDatabase object.
@@ -20,6 +21,7 @@ public class WorkoutLoggerXMLHandler extends DefaultHandler {
 	private int idExercise = 0;
 	private ContentValues contentValues;
     private String aux = "";
+    private static final String TAG = "WorkoutLoggerXMLHandler";
 
     /** Constructor that creates the handler
      *
@@ -52,13 +54,13 @@ public class WorkoutLoggerXMLHandler extends DefaultHandler {
 			idTrack = Integer.parseInt(attributes.getValue("idTrack"));		
 		}
 		else if (localName.equals("entrenamiento")) {
-			idSession = Integer.parseInt(attributes.getValue("idSession"));
+			idSession = Integer.parseInt(attributes.getValue("idEntrenamiento"));
 			idWorkout = Integer.parseInt(attributes.getValue("idWorkout"));		
 		}
 		else if (localName.equals("ejercicio")) {
-			idExercise = Integer.parseInt(attributes.getValue("idExercise"));
+			idExercise = Integer.parseInt(attributes.getValue("idEjercicio"));
 			idLoad = Integer.parseInt(attributes.getValue("idLoad"));
-			idSession = Integer.parseInt(attributes.getValue("idSession"));
+			idSession = Integer.parseInt(attributes.getValue("idEntrenamiento"));
 		}
 	}
 	
@@ -94,11 +96,12 @@ public class WorkoutLoggerXMLHandler extends DefaultHandler {
 		}
 		else if (localName.equals("fecha")) {	//There are 2 elements in "entrenamiento"
 			aux = sb.toString();
+			//Log.d(TAG, "Fecha: aux value='" + aux + "'");
 			sb.setLength(0);
 		}
 		else if (localName.equals("entrenamiento")) {
 			contentValues.clear();
-			contentValues.put("idSession", idSession);
+			contentValues.put("idEntrenamiento", idSession);
 			contentValues.put("idWorkout", idWorkout);
 			contentValues.put("fecha", aux);
 			contentValues.put("comentario", sb.toString());
@@ -110,9 +113,9 @@ public class WorkoutLoggerXMLHandler extends DefaultHandler {
 		}
 		else if (localName.equals("ejercicio")) {
 			contentValues.clear();
-			contentValues.put("idExercise", idExercise);
+			contentValues.put("idEjercicio", idExercise);
 			contentValues.put("idLoad", idLoad);
-			contentValues.put("idSession", idSession);
+			contentValues.put("idEntrenamiento", idSession);
 			contentValues.put("kg", aux);
 			contentValues.put("g", sb.toString());
 			db.insert("Ejercicios", null, contentValues);

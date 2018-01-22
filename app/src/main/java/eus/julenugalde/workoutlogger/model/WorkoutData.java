@@ -676,8 +676,8 @@ public class WorkoutData {
      * @param comment String limited to TrainingSession.MAX_LENGTH_COMMENT
      * @return true if successfully stored; false if there's any error
      */
-    public boolean storeTrainingSession(Workout workout, ArrayList<TrainingExercise> listExercises,
-                                        String date, String comment) {
+    public boolean insertTrainingSession(Workout workout, ArrayList<TrainingExercise> listExercises,
+                                         String date, String comment) {
         //Retrieve the idWorkout from the database
         Cursor c = db.rawQuery(
                 "SELECT idWorkout FROM Workouts WHERE nombreWorkout=?",

@@ -1,12 +1,15 @@
 package eus.julenugalde.workoutlogger.view;
 
+import android.content.Context;
 import android.content.Intent;
+import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -49,8 +52,7 @@ public class MainActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+                // TODO open activity to record new training session
             }
         });
 
@@ -58,7 +60,7 @@ public class MainActivity extends AppCompatActivity {
         lstTrainingSessionSummary.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-                //TODO Crear activitytrainingsessiondetail
+                //TODO Create activitytrainingsessiondetail
                 /*Intent intent = new Intent(MainActivity.this, ActivityTrainingSessionDetail.class);
                 Bundle bundle = new Bundle();
                 int index = listTrainingSessions.size()-position-1; //Showing in inverse order
@@ -78,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
         try {
-            listTrainingSessions = workoutData.getListTrainingSessionsDEBUG();  //Todo quitaar DEBUG
+            listTrainingSessions = workoutData.getListTrainingSessions();
             arrayStrings = new String[listTrainingSessions.size()];
             Iterator<TrainingSession> iterator = listTrainingSessions.iterator();
             TrainingSession aux;
