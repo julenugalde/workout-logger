@@ -2,6 +2,7 @@ package eus.julenugalde.workoutlogger.model;
 
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -74,7 +75,7 @@ public class WorkoutData {
      */
 	public boolean open() {
 		try {
-			db = workoutLoggerSQLiteHelper.getWritableDatabase();
+        	db = workoutLoggerSQLiteHelper.getWritableDatabase();
 			if (db==null) 
 				Log.e(TAG, "getWritableDatabase() has returned null");
 			return true;
@@ -292,6 +293,21 @@ public class WorkoutData {
 			Log.e(TAG, "Database error deleting workout: " + sqlex.getMessage());
 			return false;
 		}
+	}
+
+	//TODO METODO TEST BORRAR
+	public ArrayList<TrainingSession> getListTrainingSessionsDEBUG() throws Exception {
+        ArrayList<TrainingSession> lista = new ArrayList<TrainingSession>();
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        lista.add(new TrainingSession(sdf.parse("2018-01-01"), 11, "BodyPump88", "esto es una prueba"));
+        lista.add(new TrainingSession(sdf.parse("2018-01-02"), 12, "BodyPump88", "esto es una prueba"));
+        lista.add(new TrainingSession(sdf.parse("2018-01-03"), 13, "BodyPump88", "esto es una prueba"));
+        lista.add(new TrainingSession(sdf.parse("2018-01-04"), 14, "BodyPump88", "esto es una prueba"));
+        lista.add(new TrainingSession(sdf.parse("2018-01-05"), 15, "BodyPump88", "esto es una prueba"));
+        lista.add(new TrainingSession(sdf.parse("2018-01-06"), 16, "BodyPump89", "esto es una prueba"));
+        lista.add(new TrainingSession(sdf.parse("2018-01-07"), 17, "BodyPump89", "esto es una prueba"));
+        lista.add(new TrainingSession(sdf.parse("2018-01-08"), 18, "BodyPump89", "esto es una prueba"));
+        return lista;
 	}
 
     /** Returns the list of training sessions stored in the database

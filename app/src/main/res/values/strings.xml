@@ -1,6 +1,9 @@
 <resources>
-    <!-- TODO Organizar y generar idiomas -->
+    <!-- General -->
     <string name="app_name">WorkoutLogger</string>
     <string name="action_settings">Settings</string>
     <string name="main_title">Workout Logger</string>
+
+    <!--View training sessions activity-->
+    <string name="open_db_error">Error opening the database</string>
 </resources>
