@@ -1,11 +1,8 @@
 package eus.julenugalde.workoutlogger.view;
 
-import android.content.Context;
 import android.content.Intent;
-import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.format.DateFormat;
@@ -40,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     private static final String XML_FILE = "workout_logger_db.xml";
     private static final String TAG = "MainActivity";
 
+    protected static final String KEY_TRAINING_SESSION = "TRAINING_SESSION";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,12 +59,12 @@ public class MainActivity extends AppCompatActivity {
         lstTrainingSessionSummary.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
             @Override
             public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
-                //TODO Create activitytrainingsessiondetail
-                /*Intent intent = new Intent(MainActivity.this, ActivityTrainingSessionDetail.class);
+                Intent intent = new Intent(MainActivity.this, ActivityTrainingSessionDetail.class);
                 Bundle bundle = new Bundle();
                 int index = listTrainingSessions.size()-position-1; //Showing in inverse order
+                bundle.putSerializable(KEY_TRAINING_SESSION, listTrainingSessions.get(index));
                 intent.putExtras(bundle);
-                startActivityForResult(intent, REQ_CODE_VIEW_TRAINING_SESSION);*/
+                startActivityForResult(intent, REQ_CODE_VIEW_TRAINING_SESSION);
                 return true;
             }
         });

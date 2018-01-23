@@ -40,11 +40,11 @@ public class Track implements Serializable {
      */
 	public Load[] getLoads() {
 		if (listLoads.size()==0) return (Load[])null;
-		return (Load[])listLoads.toArray();
-		/*Load[] result = new Load[listLoads.size()];
+		//return (Load[])listLoads.toArray();
+		Load[] result = new Load[listLoads.size()];
 		for (int i = 0; i< listLoads.size(); i++)
 			result[i] = listLoads.get(i);
-		return result;*/
+		return result;
 	}
 
     /** Adds a new load to the track

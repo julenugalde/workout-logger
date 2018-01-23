@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">WorkoutLogger</string>
+    <string name="action_settings">Ezarpenak</string>
+    <string name="main_title">Workout Logger</string>
+    <string name="readable_date_format">yyyy, MMMM-k d</string>
+    <string name="open_db_error">Errorea datu basea irekitzen</string>
+    <string name="training_session_detail_date">"Data: "</string>
+    <string name="training_session_detail_workout">Workout:</string>
+    <string name="training_session_detail_comment">Komentarioa:</string>
+    <string name="training_session_detail_tracks_loads">Ariketak eta kargak entrenamenduan:</string>
+    <string name="training_session_detail_title">Entrenamenduaren xehetasunak</string>
+    <string name="training_session_detail_menu_delete">Ezabatu</string>
+    <string name="training_session_detail_warning_delete">Ziur zaude entrenamendu hau ezabatu nahi duzu?</string>
+    <string name="training_session_detail_warning_accept">Entrenamendua ezabatu</string>
+    <string name="training_session_detail_warning_cancel">Utzi</string>
+    <string name="training_session_detail_delete_error">Errorea entrenamenduan ezabatzean</string>
+    <string name="training_session_detail_exercise_data">Egindako ariketa</string>
+    <string name="training_session_data_access_error">Errorea entrenamenduen data irakurtzen</string>
+    <string name="training_session_detail_no_load">Kargarik gabe</string>
+    <string name="decimal_separator">,</string>
+    <string name="training_session_detail_no_comment">Komentariorik ez</string>
+</resources>
