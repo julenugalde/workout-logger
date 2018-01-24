@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="eus.julenugalde.workoutlogger.view.ActivityNewTrainingSession">
+
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/FrameNewTrainingSession"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <!--Selection of date -->
+        <TextView
+            android:id="@+id/LblNewTrainingSessionDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_training_session_date"
+            android:textStyle="bold"
+            android:textSize="@dimen/font_size_normal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/BtnNewTrainingSessionDate"/>
+        <EditText
+            android:id="@+id/TxtNewTrainingSessionDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2018-01-25"
+            android:inputType="date"
+            android:textSize="@dimen/font_size_normal"
+            app:layout_constraintStart_toEndOf="@id/LblNewTrainingSessionDate"
+            app:layout_constraintBottom_toBottomOf="@id/BtnNewTrainingSessionDate"
+            app:layout_constraintTop_toTopOf="parent"/>
+        <ImageButton
+            android:id="@+id/BtnNewTrainingSessionDate"
+            android:layout_width="50px"
+            android:layout_height="50px"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:visibility="visible"
+            android:src="@drawable/calendar-PROVISIONAL"
+            app:layout_constraintStart_toEndOf="@id/TxtNewTrainingSessionDate"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!--Selection of workout-->
+        <TextView
+            android:id="@+id/LblNewTrainingSessionWorkout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_training_session_workout"
+            android:textSize="@dimen/font_size_normal"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toBottomOf="@id/CmbListWorkouts"
+            app:layout_constraintTop_toBottomOf="@id/BtnNewTrainingSessionDate"/>
+        <Spinner
+            android:id="@+id/CmbListWorkouts"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/LblNewTrainingSessionWorkout"
+            app:layout_constraintTop_toBottomOf="@id/BtnNewTrainingSessionDate" />
+
+        <!--Comment-->
+        <TextView
+            android:id="@+id/LblNewTrainingSessionComment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/training_session_detail_comment"
+            android:textSize="@dimen/font_size_normal"
+            android:textStyle="bold"
+            app:layout_constraintTop_toBottomOf="@id/LblNewTrainingSessionWorkout"
+            app:layout_constraintStart_toStartOf="parent"/>
+        <!--TODO CAMBIAR POR ELEMENTO CUSTOM EDITTEXTWITHCOUNTER-->
+        <EditText
+            android:id="@+id/TxtNewtrainingSessionComment"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/font_size_normal"
+            android:inputType="textMultiLine"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/LblNewTrainingSessionComment"/>
+
+        <!--Tracks-->
+        <TextView
+            android:id="@+id/LblNewTrainingSessionWorkoutTracks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/new_training_session_tracks"
+            android:textSize="@dimen/font_size_normal"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/TxtNewtrainingSessionComment"/>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <!--android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintTop_toBottomOf="@id/FrameNewTrainingSession">
+        <ListView
+            android:id="@+id/LstNewTrainingSessionExercises"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+        />
+    </android.support.constraint.ConstraintLayout-->
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.AppBarOverlay">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarNewTrainingSession"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="@string/new_training_session_title" />
+    </android.support.design.widget.AppBarLayout>
+
+</android.support.design.widget.CoordinatorLayout>
+

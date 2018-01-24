@@ -20,4 +20,13 @@
     <string name="training_session_detail_no_load">Kargarik gabe</string>
     <string name="decimal_separator">,</string>
     <string name="training_session_detail_no_comment">Komentariorik ez</string>
+    <string name="new_training_session_title">Entrenamendu berria</string>
+    <string name="title_activity_new_training_session">Gorde</string>
+    <string name="new_training_session_date">Data</string>
+    <string name="new_training_session_group">Workout-a aukeratu</string>
+    <string name="new_training_session_workout">Workout</string>
+    <string name="new_training_session_tracks">Ariketa eta kargen erregistroa</string>
+    <string name="new_training_session_comment">Komentarioa</string>
+    <string name="new_training_session_no_loads">(Kargarik gabe)</string>
+    <string name="new_training_session_empty">Ez da ariketarik egin</string>
 </resources>

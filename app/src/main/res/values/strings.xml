@@ -7,7 +7,8 @@
 
     <!--View training sessions activity-->
     <string name="open_db_error">Error opening the database</string>
-    
+    <string name="decimal_separator">.</string>
+
     <!--View training session detail-->
     <string name="training_session_detail_date">Date:</string>
     <string name="training_session_detail_workout">Workout:</string>
@@ -22,6 +23,15 @@
     <string name="training_session_detail_exercise_data">Exercise carried out</string>
     <string name="training_session_data_access_error">Error accessing the training sessions data</string>
     <string name="training_session_detail_no_load">No load</string>
-    <string name="decimal_separator">.</string>
     <string name="training_session_detail_no_comment">No comment</string>
+
+    <!--View new training session -->
+    <string name="new_training_session_title">New training session</string>
+    <string name="new_training_session_date">Date</string>
+    <string name="new_training_session_group">Select a workout</string>
+    <string name="new_training_session_workout">Workout</string>
+    <string name="new_training_session_tracks">Tracks and loads record</string>
+    <string name="new_training_session_comment">Comment</string>
+    <string name="new_training_session_no_loads">(No loads)</string>
+    <string name="new_training_session_empty">No exercise carried out</string>
 </resources>
