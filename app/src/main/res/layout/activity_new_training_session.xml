@@ -19,6 +19,10 @@
         android:id="@+id/FrameNewTrainingSession"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <!--Selection of date -->
@@ -36,7 +40,6 @@
             android:id="@+id/TxtNewTrainingSessionDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="2018-01-25"
             android:inputType="date"
             android:textSize="@dimen/font_size_normal"
             app:layout_constraintStart_toEndOf="@id/LblNewTrainingSessionDate"
@@ -44,12 +47,12 @@
             app:layout_constraintTop_toTopOf="parent"/>
         <ImageButton
             android:id="@+id/BtnNewTrainingSessionDate"
-            android:layout_width="50px"
-            android:layout_height="50px"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:background="@android:color/transparent"
             android:clickable="true"
             android:visibility="visible"
-            android:src="@drawable/calendar-PROVISIONAL"
+            android:src="@drawable/calendar"
             app:layout_constraintStart_toEndOf="@id/TxtNewTrainingSessionDate"
             app:layout_constraintTop_toTopOf="parent"/>
 
@@ -81,8 +84,7 @@
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/LblNewTrainingSessionWorkout"
             app:layout_constraintStart_toStartOf="parent"/>
-        <!--TODO CAMBIAR POR ELEMENTO CUSTOM EDITTEXTWITHCOUNTER-->
-        <EditText
+        <eus.julenugalde.workoutlogger.view.EditTextWithCounter
             android:id="@+id/TxtNewtrainingSessionComment"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

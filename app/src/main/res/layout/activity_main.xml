@@ -26,6 +26,11 @@
             android:layout_height="match_parent"
             android:id="@+id/LstTrainingSessionSummary">
         </ListView>
+        <!--android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/LstTrainingSessionSummary">
+        </android.support.v7.widget.RecyclerView-->
     </android.support.constraint.ConstraintLayout>
 
     <android.support.design.widget.AppBarLayout
@@ -49,8 +54,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
-        android:background="?attr/colorPrimaryDark"
-        android:foreground="@color/colorTextIcons"
+        app:backgroundTint="@color/colorPrimaryDark"
+        android:tint="@color/colorTextIcons"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </android.support.design.widget.CoordinatorLayout>
