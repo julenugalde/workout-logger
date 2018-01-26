@@ -37,4 +37,8 @@
     <string name="main_activity_menu_save_xml">Guardar XML</string>
     <string name="main_activity_menu_load_xml">Cargar XML</string>
     <string name="main_activity_menu_settings">Ajustes</string>
+    <string name="preferences_title">Ajustes</string>
+    <string name="preferences_locale">Idioma</string>
+    <string name="preferences_locale_sub">Elegir el idioma de la aplicación</string>
+    <string name="preferences_locale_cancel">Cancelar</string>
 </resources>

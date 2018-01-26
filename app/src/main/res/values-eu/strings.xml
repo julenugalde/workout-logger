@@ -37,4 +37,8 @@
     <string name="main_activity_menu_save_xml">XML fitxategia gorde</string>
     <string name="main_activity_menu_load_xml">XML fitxategia kargatu</string>
     <string name="main_activity_menu_settings">Ezarpenak</string>
+    <string name="preferences_title">Ezarpenak</string>
+    <string name="preferences_locale">Hizkuntza</string>
+    <string name="preferences_locale_sub">Aukeratu aplikazioaren hizkuntza</string>
+    <string name="preferences_locale_cancel">Ezeztatu</string>
 </resources>

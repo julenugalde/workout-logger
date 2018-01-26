@@ -3,6 +3,7 @@ package eus.julenugalde.workoutlogger.view;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
+import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +20,12 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Locale;
@@ -124,13 +131,30 @@ public class MainActivity extends AppCompatActivity {
                 //TODO list of workouts
                 return true;
             case R.id.main_activity_menu_load_xml:
-                //TODO load xml
+                if (loadXML()) {
+                    Toast.makeText(getApplicationContext(), R.string.main_activity_load_xml_ok,
+                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), R.string.main_activity_load_xml_error,
+                            Toast.LENGTH_LONG).show();
+                }
                 return true;
             case R.id.main_activity_menu_save_xml:
-                //TODO save xml
+                if (saveXML()) {
+                    Toast.makeText(getApplicationContext(), R.string.main_activity_save_xml_ok,
+                            Toast.LENGTH_LONG).show();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), R.string.main_activity_save_xml_error,
+                            Toast.LENGTH_LONG).show();
+                }
                 return true;
             case R.id.main_activity_menu_settings:
-                //TODO settings windows
+                Log.d(TAG, "opening preferences");
+                startActivityForResult(
+                        new Intent(MainActivity.this, ActivityPreferences.class),
+                        REQ_CODE_SETTINGS);
                 return true;
             case R.id.main_activity_menu_view_graph:
                 //TODO view graph
@@ -173,6 +197,7 @@ public class MainActivity extends AppCompatActivity {
         //Access preferences
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         String languageCode = prefs.getString("selectedLocale", "en");
+        Log.d(TAG, "Selected locale: " + languageCode.toString());
 
         //Update locale
         Locale myLocale = new Locale(languageCode);
@@ -180,5 +205,50 @@ public class MainActivity extends AppCompatActivity {
         Configuration configuration = getResources().getConfiguration();
         configuration.setLocale(myLocale);
         getResources().updateConfiguration(configuration, displayMetrics);
+    }
+
+    private boolean loadXML() {
+        try {
+            File pathSD = this.getExternalFilesDir(null);
+            File file = new File(pathSD.getAbsolutePath(), XML_FILE);
+            InputStream inputStream = new FileInputStream(file);
+            //workoutData.open();
+            boolean result = workoutData.loadXML(inputStream);
+            //workoutData.close();
+            lstTrainingSessionSummary.requestLayout();
+            return result;
+        } catch (IOException ioex) {
+            Log.e(TAG, "I/O error loading XML file: " + ioex.getLocalizedMessage());
+            return false;
+        } catch (IllegalArgumentException iaex) {
+            Log.e(TAG, "Illegal argument exception loading XML file: " + iaex.getLocalizedMessage());
+            return false;
+        }
+    }
+
+    private boolean saveXML() {
+        try {
+            File file = new File(this.getExternalFilesDir(null).getAbsolutePath(), XML_FILE);
+            if (!file.exists()) {
+                file.createNewFile();
+            }
+            OutputStream outputStream = new FileOutputStream(file);
+            //workoutData.open();
+            boolean result = workoutData.saveXML(outputStream);
+            //workoutData.close();
+            MediaScannerConnection.scanFile(
+                    this, new String[] { file.getAbsolutePath() }, null, null);
+            return result;
+
+        } catch (IOException ioex) {
+            Log.e(TAG, "Error saving XML file: " + ioex.getLocalizedMessage());
+            return false;
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        workoutData.close();
+        super.onDestroy();
     }
 }

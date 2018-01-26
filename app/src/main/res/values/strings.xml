@@ -15,6 +15,10 @@
     <string name="main_activity_menu_save_xml">Save XML</string>
     <string name="main_activity_menu_load_xml">Load XML</string>
     <string name="main_activity_menu_settings">Settings</string>
+    <string name="main_activity_load_xml_ok">XML file loaded correctly</string>
+    <string name="main_activity_load_xml_error">Error loading XML file</string>
+    <string name="main_activity_save_xml_ok">XML file saved correctly</string>
+    <string name="main_activity_save_xml_error">Error saving XML file</string>
     <!--string name="main_activity_"></string-->
 
     <!--View training session detail-->
@@ -45,4 +49,9 @@
     <string name="action_settings">Settings</string>
     <string name="title_activity_new_training_session">New training session</string>
 
+    <!-- Preferences window -->
+    <string name="preferences_title">Settings</string>
+    <string name="preferences_locale">Language</string>
+    <string name="preferences_locale_sub">Select the application language</string>
+    <string name="preferences_locale_cancel">Cancel</string>
 </resources>
