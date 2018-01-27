@@ -197,7 +197,6 @@ public class MainActivity extends AppCompatActivity {
         //Access preferences
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(MainActivity.this);
         String languageCode = prefs.getString("selectedLocale", "en");
-        Log.d(TAG, "Selected locale: " + languageCode.toString());
 
         //Update locale
         Locale myLocale = new Locale(languageCode);
@@ -214,7 +213,9 @@ public class MainActivity extends AppCompatActivity {
             InputStream inputStream = new FileInputStream(file);
             //workoutData.open();
             boolean result = workoutData.loadXML(inputStream);
+            Log.d(TAG, "Result of XML load: " + result);
             //workoutData.close();
+            updateTrainingSessionList();
             lstTrainingSessionSummary.requestLayout();
             return result;
         } catch (IOException ioex) {
