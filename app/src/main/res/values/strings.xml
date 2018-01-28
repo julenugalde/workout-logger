@@ -39,10 +39,10 @@
 
     <!--View new training session -->
     <string name="new_training_session_title">New training session</string>
-    <string name="new_training_session_date">Date</string>
+    <string name="new_training_session_date">Date:</string>
     <string name="new_training_session_group">Select a workout</string>
-    <string name="new_training_session_workout">Workout</string>
-    <string name="new_training_session_tracks">Tracks and loads record</string>
+    <string name="new_training_session_workout">Workout:</string>
+    <string name="new_training_session_tracks">Tracks and loads record:</string>
     <string name="new_training_session_comment">Comment</string>
     <string name="new_training_session_no_loads">(No loads)</string>
     <string name="new_training_session_empty">No exercise carried out</string>
@@ -54,4 +54,7 @@
     <string name="preferences_locale">Language</string>
     <string name="preferences_locale_sub">Select the application language</string>
     <string name="preferences_locale_cancel">Cancel</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

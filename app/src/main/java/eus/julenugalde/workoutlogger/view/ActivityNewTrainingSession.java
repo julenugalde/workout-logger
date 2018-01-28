@@ -1,6 +1,8 @@
 package eus.julenugalde.workoutlogger.view;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.PersistableBundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
@@ -25,6 +28,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import eus.julenugalde.workoutlogger.R;
@@ -48,8 +52,8 @@ public class ActivityNewTrainingSession extends AppCompatActivity implements OnI
     private String[] arrayWorkouts;
     private int positionCombo;
 
-    private static final int REQ_CODE_DATA_EXERCISE = 101;
-    private static final int REQ_CODE_DATA_TRAINING_SESSION = 102;
+    private static final int REQ_CODE_EXERCISE_DATA = 101;
+    private static final int REQ_CODE_TRAINING_SESSION_DATE = 102;
     private static final int RESULT_ERROR_SAVE = 401;
     private final String TAG = this.getClass().getSimpleName();
 
@@ -65,7 +69,6 @@ public class ActivityNewTrainingSession extends AppCompatActivity implements OnI
         findControls();
         initializeVariables(savedInstanceState);
         configControls(savedInstanceState);
-
     }
 
     private void configControls(Bundle savedInstanceState) {
@@ -180,18 +183,34 @@ public class ActivityNewTrainingSession extends AppCompatActivity implements OnI
     }
 
     @Override
-    public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+    public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+        TrainingExercise currentExercise = listExercises.get(position);
+        // TODO Create activity to fill exercise data + uncomment this
+        /*Intent intent = new Intent(ActivityNewTrainingSession.this, ActivityExerciseData.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable("EXERCISE", currentExercise);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, REQ_CODE_DATA_EXERCISE);*/
+        Toast.makeText(getApplicationContext(), "Not yet implemented", Toast.LENGTH_LONG).show();   // TODO Delete
     }
 
     @Override
-    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-
+    public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
+        if (positionCombo != position) {
+            positionCombo = position;
+            loadSelectedWorkoutData(true);
+            BaseAdapter baseAdapter = ((BaseAdapter)lstTrainingExercises.getAdapter());
+            if (baseAdapter != null) {
+                baseAdapter.notifyDataSetChanged();
+            }
+        }
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-
+        cmbListWorkouts.setSelection(0);
+        loadSelectedWorkoutData(true);
+        lstTrainingExercises.requestLayout();
     }
 
     @Override
@@ -204,5 +223,55 @@ public class ActivityNewTrainingSession extends AppCompatActivity implements OnI
     public boolean onOptionsItemSelected(MenuItem item) {
         //TODO Define the action for the menu items
         return true;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch(requestCode) {
+            case REQ_CODE_EXERCISE_DATA:    //Training exercise data to update in the list
+                if ((resultCode == RESULT_OK) && (data != null)) {
+                    Bundle bundle = data.getExtras();
+                    TrainingExercise result = (TrainingExercise)bundle.getSerializable("EXERCISE");
+                    //Replace the training session data in the list
+                    TrainingExercise aux;
+                    for (int i=0; i<listExercises.size(); i++) {    //Replace if already existing
+                        aux = listExercises.get(i);
+                        if(aux.getName().compareTo(result.getName()) == 0) {
+                            listExercises.remove(i);
+                            listExercises.add(i, result);
+                            break;
+                        }
+                    }
+                    ((BaseAdapter)lstTrainingExercises.getAdapter()).notifyDataSetChanged();
+                    lstTrainingExercises.requestLayout();
+                }
+                break;
+
+            case REQ_CODE_TRAINING_SESSION_DATE:    //Update date information
+                if ((resultCode == RESULT_OK) && (data != null)) {
+                    Bundle bundle = data.getExtras();
+                    int[] array = bundle.getIntArray("DATE");
+                    if (array.length < 3) {
+                        Log.e(TAG, "Error retrieving date info");
+                    }
+                    else {
+                        GregorianCalendar gregorianCalendar = new GregorianCalendar(
+                                array[0], array[1], array[2]);
+                        txtDate.setText(DateFormat.format("yyyy-MM-dd", gregorianCalendar.getTime()));
+                    }
+                }
+                break;
+            default:
+                Log.e(TAG, "requestCode not valid");
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putSerializable("LIST_EXERCISES", listExercises);
+        outState.putStringArray("ARRAY_WORKOUTS", arrayWorkouts);
+        outState.putInt("POSITION_COMBO", positionCombo);
     }
 }

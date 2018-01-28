@@ -20,7 +20,7 @@ public class EditTextWithCounter extends EditText {
     /** Maximum text length allowed by the counter*/
     public static final int COUNT_LIMIT = TrainingSession.MAX_LENGTH_COMMENT;
     /** Text size in pixel units */
-    public static final float TEXT_SIZE = 30;
+    public static final float TEXT_SIZE = 35;
 
     private Paint paintBackground;
     private Paint paintForeground;

@@ -82,11 +82,11 @@ public class Workout implements Serializable {
      */
 	public Track[] getTracks() {
 		if (listTracks.size()==0) return (Track[])null;
-        return (Track[]) listTracks.toArray();
-		/*Track[] result = new Track[listTracks.size()];
+        //return (Track[]) listTracks.toArray();
+		Track[] result = new Track[listTracks.size()];
 		for (int i = 0; i< listTracks.size(); i++)
 			result[i] = listTracks.get(i);
-		return result;*/
+		return result;
 	}
 
     /** Returns the number of tracks in the workout

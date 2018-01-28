@@ -22,10 +22,10 @@
     <string name="training_session_detail_no_comment">Sin comentario</string>
     <string name="new_training_session_title">Nuevo entrenamiento</string>
     <string name="title_activity_new_training_session">Nuevo entrenamiento</string>
-    <string name="new_training_session_date">Fecha</string>
+    <string name="new_training_session_date">Fecha:</string>
     <string name="new_training_session_group">Seleccionar workout</string>
-    <string name="new_training_session_workout">Workout</string>
-    <string name="new_training_session_tracks">Registro de ejercicios y cargas</string>
+    <string name="new_training_session_workout">Workout:</string>
+    <string name="new_training_session_tracks">Registro de ejercicios y cargas:</string>
     <string name="new_training_session_comment">Comentario</string>
     <string name="new_training_session_no_loads">(Sin carga)</string>
     <string name="new_training_session_empty">No se ha realizado ningún ejercicio</string>
