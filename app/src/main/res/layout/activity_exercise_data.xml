@@ -1,0 +1,243 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:orientation="vertical"
+    tools:context="eus.julenugalde.workoutlogger.view.ActivityExerciseData">
+
+    <android.support.constraint.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/activity_horizontal_margin"
+        android:layout_marginRight="@dimen/activity_horizontal_margin"
+        android:layout_marginTop="@dimen/activity_vertical_margin"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+        <CheckBox
+            android:id="@+id/ChkExerciseDataCompleted"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/exercise_data_completed"
+            android:textSize="@dimen/font_size_normal"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+        <!--Load 0 -->
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/FrameListLoads0"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            app:layout_constraintTop_toBottomOf="@id/ChkExerciseDataCompleted"
+            app:layout_constraintStart_toStartOf="parent">
+            <TextView
+                android:id="@+id/LblExerciseDataLoad0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_normal"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/CmbExerciseDataKg0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                app:layout_constraintStart_toEndOf="@id/LblExerciseDataLoad0"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/LblExerciseDataDecimalSeparator0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_normal"
+                android:text="@string/decimal_separator"
+                app:layout_constraintStart_toEndOf="@id/CmbExerciseDataKg0"
+                app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/CmbExerciseDataG0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/LblExerciseDataDecimalSeparator0"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/LblExerciseDataWeightUnit0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weight_unit"
+                app:layout_constraintStart_toEndOf="@id/CmbExerciseDataG0"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+        <!--Load 1 -->
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/FrameListLoads1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/FrameListLoads0"
+            app:layout_constraintStart_toStartOf="parent">
+            <TextView
+                android:id="@+id/LblExerciseDataLoad1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_normal"
+                android:textStyle="bold"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/CmbExerciseDataKg1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                app:layout_constraintStart_toEndOf="@id/LblExerciseDataLoad1"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/LblExerciseDataDecimalSeparator1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_normal"
+                android:text="@string/decimal_separator"
+                app:layout_constraintStart_toEndOf="@id/CmbExerciseDataKg1"
+                app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/CmbExerciseDataG1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/LblExerciseDataDecimalSeparator1"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/LblExerciseDataWeightUnit1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weight_unit"
+                app:layout_constraintStart_toEndOf="@id/CmbExerciseDataG1"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+        <!--Load 2 -->
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/FrameListLoads2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/FrameListLoads1"
+            app:layout_constraintStart_toStartOf="parent">
+            <TextView
+                android:id="@+id/LblExerciseDataLoad2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_normal"
+                android:textStyle="bold"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/CmbExerciseDataKg2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                app:layout_constraintStart_toEndOf="@id/LblExerciseDataLoad2"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/LblExerciseDataDecimalSeparator2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_normal"
+                android:text="@string/decimal_separator"
+                app:layout_constraintStart_toEndOf="@id/CmbExerciseDataKg2"
+                app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/CmbExerciseDataG2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/LblExerciseDataDecimalSeparator2"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/LblExerciseDataWeightUnit2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weight_unit"
+                app:layout_constraintStart_toEndOf="@id/CmbExerciseDataG2"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+        <!--Load 3 -->
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/FrameListLoads3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintTop_toBottomOf="@id/FrameListLoads2"
+            app:layout_constraintStart_toStartOf="parent">
+            <TextView
+                android:id="@+id/LblExerciseDataLoad3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_normal"
+                android:textStyle="bold"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/CmbExerciseDataKg3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="@dimen/activity_horizontal_margin"
+                android:layout_marginStart="@dimen/activity_horizontal_margin"
+                android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                app:layout_constraintStart_toEndOf="@id/LblExerciseDataLoad3"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/LblExerciseDataDecimalSeparator3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/font_size_normal"
+                android:text="@string/decimal_separator"
+                app:layout_constraintStart_toEndOf="@id/CmbExerciseDataKg3"
+                app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/CmbExerciseDataG3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintStart_toEndOf="@id/LblExerciseDataDecimalSeparator3"
+                app:layout_constraintTop_toTopOf="parent" />
+            <TextView
+                android:id="@+id/LblExerciseDataWeightUnit3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/weight_unit"
+                app:layout_constraintStart_toEndOf="@id/CmbExerciseDataG3"
+                app:layout_constraintTop_toTopOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+
+    <android.support.design.widget.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.NoActionBar">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbarNewTrainingSession"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.PopupOverlay"
+            app:title="@string/exercise_data_title" />
+    </android.support.design.widget.AppBarLayout>
+
+</android.support.design.widget.CoordinatorLayout>

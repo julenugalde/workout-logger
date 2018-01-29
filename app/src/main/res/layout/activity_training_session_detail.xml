@@ -1,17 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!--android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingBottom="@dimen/activity_vertical_margin"
-    android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="eus.julenugalde.workoutlogger.view.ActivityTrainingSessionDetail"-->
-
 <android.support.design.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -43,17 +30,18 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="5dp"
+            android:paddingTop="@dimen/activity_vertical_margin"
             android:text="@string/training_session_detail_date"
-            android:textSize="18sp"
+            android:textSize="@dimen/font_size_title"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/LblTrainingSessionDetailDate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingTop="5dp"
-            android:textSize="18sp"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingLeft="@dimen/activity_horizontal_margin"
+            android:textSize="@dimen/font_size_normal"
             android:textStyle="normal"
             app:layout_constraintStart_toEndOf="@id/DateTitle" />
 
@@ -65,7 +53,7 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:text="@string/training_session_detail_workout"
-            android:textSize="18sp"
+            android:textSize="@dimen/font_size_title"
             android:textStyle="bold"
             app:layout_constraintTop_toBottomOf="@id/DateTitle" />
 
@@ -73,7 +61,7 @@
             android:id="@+id/LblTrainingSessionDetailWorkout"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="18sp"
+            android:textSize="@dimen/font_size_normal"
             android:textStyle="normal"
             app:layout_constraintStart_toEndOf="@id/WorkoutTitle"
             app:layout_constraintTop_toBottomOf="@id/DateTitle" />
@@ -86,8 +74,9 @@
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:text="@string/training_session_detail_comment"
-            android:textSize="18sp"
+            android:textSize="@dimen/font_size_title"
             android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/WorkoutTitle" />
 
         <TextView
@@ -96,39 +85,39 @@
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:textSize="18sp"
+            android:textSize="@dimen/font_size_normal"
             android:textStyle="normal"
             app:layout_constraintTop_toBottomOf="@id/CommentTitle" />
 
         <!--Detail of tracks and loads-->
         <TextView
-            android:id="@+id/TracksLoadsTitle"
+            android:id="@+id/LblTracksLoadsTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
             android:text="@string/training_session_detail_tracks_loads"
-            android:textSize="18sp"
+            android:textSize="@dimen/font_size_title"
             android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/LblTrainingSessionDetailComment" />
-    </android.support.constraint.ConstraintLayout>
 
-    <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="horizontal"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/FrameTrainingSessionDetail" >
-
-        <ListView
-            android:id="@+id/LstTrainingSessionDetailTracksLoads"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="400dp"
+            android:orientation="vertical"
             android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin" />
+            android:paddingRight="@dimen/activity_horizontal_margin"
+            android:gravity="center_horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/LblTracksLoadsTitle" >
+            <ListView
+                android:id="@+id/LstTrainingSessionDetailTracksLoads"
+                android:layout_width="match_parent"
+                android:layout_height="0dip"
+                android:paddingLeft="@dimen/activity_horizontal_margin"
+                android:layout_weight="1" />
+        </LinearLayout>
     </android.support.constraint.ConstraintLayout>
 
 </android.support.design.widget.CoordinatorLayout>
-<!--/android.support.constraint.ConstraintLayout-->

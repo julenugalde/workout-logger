@@ -12,7 +12,7 @@
     <string name="training_session_detail_title">Entrenamenduaren xehetasunak</string>
     <string name="training_session_detail_menu_delete">Ezabatu</string>
     <string name="training_session_detail_warning_delete">Ziur zaude entrenamendu hau ezabatu nahi duzu?</string>
-    <string name="training_session_detail_warning_accept">Entrenamendua ezabatu</string>
+    <string name="training_session_detail_warning_accept">Ezabatu</string>
     <string name="training_session_detail_warning_cancel">Utzi</string>
     <string name="training_session_detail_delete_error">Errorea entrenamenduan ezabatzean</string>
     <string name="training_session_detail_exercise_data">Egindako ariketa</string>
@@ -41,4 +41,9 @@
     <string name="preferences_locale">Hizkuntza</string>
     <string name="preferences_locale_sub">Aukeratu aplikazioaren hizkuntza</string>
     <string name="preferences_locale_cancel">Ezeztatu</string>
+    <string name="main_activity_load_xml_ok">XML fitxategia ondo kargatuta</string>
+    <string name="main_activity_load_xml_error">Errorea XML fitxategia kargatzean</string>
+    <string name="main_activity_save_xml_ok">XML fitxategia ondo gorde da</string>
+    <string name="main_activity_save_xml_error">Errorea XML fitxategia gordetzean</string>
+    <string name="menu_training_session_detail_delete">Ezabatu</string>
 </resources>

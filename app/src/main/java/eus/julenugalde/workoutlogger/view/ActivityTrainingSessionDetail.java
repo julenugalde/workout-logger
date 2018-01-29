@@ -1,21 +1,25 @@
 package eus.julenugalde.workoutlogger.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 
 import eus.julenugalde.workoutlogger.R;
+import eus.julenugalde.workoutlogger.controller.TrainingExerciseAdapter;
 import eus.julenugalde.workoutlogger.model.Load;
 import eus.julenugalde.workoutlogger.model.Track;
+import eus.julenugalde.workoutlogger.model.TrainingExercise;
 import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
@@ -28,9 +32,8 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
     private WorkoutData workoutData;
     private TrainingSession trainingSession;
     private Workout workout;
-    private String[] arrayStrings;
 
-    private static final String TAG = "TrainingSessionDetail";
+    private static final String TAG = ActivityTrainingSessionDetail.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,7 +41,7 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
         setContentView(R.layout.activity_training_session_detail);
         Bundle bundle = this.getIntent().getExtras();
         trainingSession = (TrainingSession)bundle.getSerializable(MainActivity.KEY_TRAINING_SESSION);
-        Log.d(TAG, "trainingSession: " + trainingSession.toString());
+        //Log.d(TAG, "trainingSession: " + trainingSession.toString());
         workoutData = new WorkoutData(getApplicationContext());
         workoutData.open();
         workout = workoutData.getTrainingSession(
@@ -60,47 +63,34 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
                 lblComment.setTypeface(null, Typeface.ITALIC);
                 comment = "(" + getString(R.string.training_session_detail_no_comment) + ")";
             }
-            lblComment.setText(trainingSession.getComment());
-            {
+            else {
                 lblComment.setTypeface(null, Typeface.NORMAL);
             }
             lblComment.setText(comment);
 
             //ListView adapter
-            arrayStrings = new String[workout.getNumTracks()];
-            StringBuilder sb;
+            ArrayList<TrainingExercise> arrayTrainingExercise = new ArrayList<TrainingExercise>();
+            TrainingExercise trainingExercise;
             Track track;
             Load[] arrayLoads;
-            for (int i=0; i<arrayStrings.length; i++) {
+            for (int i=0; i<workout.getNumTracks(); i++) {
                 track = workout.getTrack(i);
-                sb = new StringBuilder(track.getName());
-                sb.append("\n");
+                trainingExercise = new TrainingExercise(track.getName(), true);
                 arrayLoads = track.getLoads();
                 for (int j=0; j<arrayLoads.length; j++) {
-                    if (arrayLoads[j].getName().equals("-")) {
-                        sb.append("       (" + getString(R.string.training_session_detail_no_load) + ")");
-                    }
-                    else {
-                        sb.append("       " + arrayLoads[j].getName() + " - " +
-                                arrayLoads[j].getKg() + getString(R.string.decimal_separator) +
-                                arrayLoads[j].getG() + " kg." );
-                        if (j<(arrayLoads.length-1)) {
-                            sb.append("\n");
-                        }
-                    }
+                    track.addLoad(arrayLoads[j]);
+                    trainingExercise.setLoad(j, arrayLoads[j].getName(), arrayLoads[j].getKg(),
+                            arrayLoads[j].getG());
                 }
-                arrayStrings[i] = sb.toString();
+                arrayTrainingExercise.add(trainingExercise);
             }
-            ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(
-                    this, android.R.layout.simple_list_item_1, arrayStrings);
-            //TODO DEBUG REMOVE
-            //String[] test = {"asdfg", "qweert", "zxcv", "poiuy", "jfgff", "ertyerty", "sfg gsfd sf", "ncbnc", "asdfsf", "adsfadsfa", "eweqwerqew", "dadfsafda"};
-            //ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String> (this, android.R.layout.simple_list_item_1, test);
-            //////
-            lstTracks.setAdapter(arrayAdapter);
+            TrainingExerciseAdapter trainingExerciseAdapter =
+                    new TrainingExerciseAdapter(this, arrayTrainingExercise);
+            lstTracks.setAdapter(trainingExerciseAdapter);
         }
         else {
-            Toast.makeText(this, getString(R.string.training_session_data_access_error), Toast.LENGTH_LONG).
+            Toast.makeText(
+                    this, getString(R.string.training_session_data_access_error), Toast.LENGTH_LONG).
                     show();
             finish();
         }
@@ -109,20 +99,53 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
-        //TODO CREATE MENU
-        //getMenuInflater().inflate(R.menu.menu_training_session_detail);
+        getMenuInflater().inflate(R.menu.menu_training_session_detail, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch(item.getItemId()) {
-            //TODO Create menu with delete option
-            case 1: //TODO Replace by R.id.menu_xxxx value
+            case R.id.menu_training_session_detail_delete:
+                showTrainingSessionDeleteDialog();
                 return true;
             default:
                 return false;
         }
+    }
+
+    private void showTrainingSessionDeleteDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage(R.string.training_session_detail_warning_delete);
+        builder.setPositiveButton(R.string.training_session_detail_warning_accept,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        //workoutData.open();
+                        Log.i(TAG, "Deleting training session " + trainingSession.toString());
+                        //TODO Uncomment this
+                                /*if(!workoutData.deleteTrainingSession(trainingSession)) {
+                                    setResult(
+                                    Toast.makeText(getApplicationContext(),
+                                            R.string.training_session_detail_delete_error,
+                                            Toast.LENGTH_LONG).show();
+                                }
+                                else {
+                                    setResult(RESULT_OK);
+                                    finish();
+                                }*/
+                        //workoutData.close();
+                    }
+                });
+        builder.setNegativeButton(R.string.training_session_detail_warning_cancel,
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Log.i(TAG, "Delete action cancelled");
+                    }
+                });
+        AlertDialog dialog = builder.create();
+        dialog.show();
     }
 
     @Override

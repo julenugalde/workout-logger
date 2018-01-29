@@ -1,12 +1,9 @@
 package eus.julenugalde.workoutlogger.view;
 
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.text.format.DateFormat;
@@ -18,16 +15,16 @@ import android.view.View.OnClickListener;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
 
@@ -40,17 +37,26 @@ import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
 
-public class ActivityNewTrainingSession extends AppCompatActivity implements OnItemSelectedListener, OnItemClickListener {
+public class ActivityNewTrainingSession extends AppCompatActivity
+        implements OnItemSelectedListener, OnItemClickListener, DatePickerDialog.OnDateSetListener {
+    public final static String KEY_EXERCISE = "EXERCISE";
+    public final static String KEY_DATE = "DATE";
+    public final static String KEY_COMBO_POSITION = "COMBO_POSITION";
+    public final static String KEY_LIST_EXERCISES = "LIST_EXERCISES";
+    public final static String KEY_ARRAY_WORKOUTS = "ARRAY_WORKOUTS";
+
     private EditText txtDate;
     private Spinner cmbListWorkouts;
     private ImageButton btnDate;
     private ListView lstTrainingExercises;
     private EditTextWithCounter txtComment;
+    private DatePickerDialog datePickerDialog;
 
     private WorkoutData workoutData;
     private ArrayList<TrainingExercise> listExercises;
     private String[] arrayWorkouts;
     private int positionCombo;
+    private Calendar date;
 
     private static final int REQ_CODE_EXERCISE_DATA = 101;
     private static final int REQ_CODE_TRAINING_SESSION_DATE = 102;
@@ -66,7 +72,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity implements OnI
         //setSupportActionBar(toolbar);
         workoutData = new WorkoutData(this);
 
-        findControls();
+        captureControls();
         initializeVariables(savedInstanceState);
         configControls(savedInstanceState);
     }
@@ -89,15 +95,19 @@ public class ActivityNewTrainingSession extends AppCompatActivity implements OnI
         lstTrainingExercises.setAdapter(trainingExerciseAdapter);
         lstTrainingExercises.setOnItemClickListener(this);
 
+        //DatePickerDialog
+        date = GregorianCalendar.getInstance();
+        datePickerDialog = new DatePickerDialog(this, this,
+                date.get(Calendar.YEAR), date.get(Calendar.MONTH), date.get(Calendar.DAY_OF_MONTH));
+
         //EditText with date
-        txtDate.setText(DateFormat.format("yyyy-MM-dd", new Date()));
+        txtDate.setText(DateFormat.format("yyyy-MM-dd", date.getTime()));
         txtDate.setEnabled(false);
         txtDate.setTextColor(getResources().getColor(R.color.colorPrimaryText));
         btnDate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO Open a dialog to pick a date
-                Toast.makeText(getApplicationContext(), "Not yet implemented", Toast.LENGTH_LONG).show();
+                datePickerDialog.show();
             }
         });
 
@@ -117,7 +127,14 @@ public class ActivityNewTrainingSession extends AppCompatActivity implements OnI
             @Override
             public void afterTextChanged(Editable editable) {}
         });
+    }
 
+    @Override
+    public void onDateSet(DatePicker datePicker, int year, int month, int day) {
+        date.set(Calendar.YEAR, year);
+        date.set(Calendar.MONTH, month);
+        date.set(Calendar.DAY_OF_MONTH, day);
+        txtDate.setText(DateFormat.format("yyyy-MM-dd", date.getTime()));
     }
 
     private void loadSelectedWorkoutData(boolean clean) {   //TODO decide if this should return a boolean
@@ -151,12 +168,12 @@ public class ActivityNewTrainingSession extends AppCompatActivity implements OnI
     private void initializeVariables(Bundle savedInstanceState) {
         if(savedInstanceState != null) {    //Data have been saved
             try {
-                positionCombo = savedInstanceState.getInt("COMBO_POSITION");
-                listExercises = (ArrayList<TrainingExercise>)(savedInstanceState.
-                        getSerializable("LIST_EXERCISES"));
-                arrayWorkouts = savedInstanceState.getStringArray("ARRAY_WORKOUTS");
+                positionCombo = savedInstanceState.getInt(KEY_COMBO_POSITION);
+                listExercises = (ArrayList<TrainingExercise>)savedInstanceState.
+                        getSerializable(KEY_LIST_EXERCISES);
+                arrayWorkouts = savedInstanceState.getStringArray(KEY_ARRAY_WORKOUTS);
             }catch (ClassCastException ccex) {
-                Log.e(TAG, "Error in the cast of the exercises list: " + ccex.getLocalizedMessage());
+                Log.e(TAG, "Error in the cast of exercises list: " + ccex.getLocalizedMessage());
             }
         }
         else {
@@ -174,7 +191,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity implements OnI
         }
     }
 
-    private void findControls() {
+    private void captureControls() {
         txtDate = (EditText)findViewById(R.id.TxtNewTrainingSessionDate);
         cmbListWorkouts = (Spinner)findViewById(R.id.CmbListWorkouts);
         btnDate = (ImageButton)findViewById(R.id.BtnNewTrainingSessionDate);
@@ -185,13 +202,11 @@ public class ActivityNewTrainingSession extends AppCompatActivity implements OnI
     @Override
     public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
         TrainingExercise currentExercise = listExercises.get(position);
-        // TODO Create activity to fill exercise data + uncomment this
-        /*Intent intent = new Intent(ActivityNewTrainingSession.this, ActivityExerciseData.class);
+        Intent intent = new Intent(ActivityNewTrainingSession.this, ActivityExerciseData.class);
         Bundle bundle = new Bundle();
-        bundle.putSerializable("EXERCISE", currentExercise);
+        bundle.putSerializable(KEY_EXERCISE, currentExercise);
         intent.putExtras(bundle);
-        startActivityForResult(intent, REQ_CODE_DATA_EXERCISE);*/
-        Toast.makeText(getApplicationContext(), "Not yet implemented", Toast.LENGTH_LONG).show();   // TODO Delete
+        startActivityForResult(intent, REQ_CODE_EXERCISE_DATA);
     }
 
     @Override
@@ -232,7 +247,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity implements OnI
             case REQ_CODE_EXERCISE_DATA:    //Training exercise data to update in the list
                 if ((resultCode == RESULT_OK) && (data != null)) {
                     Bundle bundle = data.getExtras();
-                    TrainingExercise result = (TrainingExercise)bundle.getSerializable("EXERCISE");
+                    TrainingExercise result = (TrainingExercise)bundle.getSerializable(KEY_EXERCISE);
                     //Replace the training session data in the list
                     TrainingExercise aux;
                     for (int i=0; i<listExercises.size(); i++) {    //Replace if already existing
@@ -251,7 +266,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity implements OnI
             case REQ_CODE_TRAINING_SESSION_DATE:    //Update date information
                 if ((resultCode == RESULT_OK) && (data != null)) {
                     Bundle bundle = data.getExtras();
-                    int[] array = bundle.getIntArray("DATE");
+                    int[] array = bundle.getIntArray(KEY_DATE);
                     if (array.length < 3) {
                         Log.e(TAG, "Error retrieving date info");
                     }

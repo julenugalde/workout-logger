@@ -12,7 +12,7 @@
     <string name="training_session_detail_title">Detalle del entrenamiento</string>
     <string name="training_session_detail_menu_delete">Borrar</string>
     <string name="training_session_detail_warning_delete">¿Estás seguro de que quieres borrar este entrenamiento?</string>
-    <string name="training_session_detail_warning_accept">Borrar el entrenamiento</string>
+    <string name="training_session_detail_warning_accept">Borrar</string>
     <string name="training_session_detail_warning_cancel">Cancelar</string>
     <string name="training_session_detail_delete_error">Error borrando el entrenamiento</string>
     <string name="training_session_detail_exercise_data">Ejercicio realizado</string>
@@ -41,4 +41,9 @@
     <string name="preferences_locale">Idioma</string>
     <string name="preferences_locale_sub">Elegir el idioma de la aplicación</string>
     <string name="preferences_locale_cancel">Cancelar</string>
+    <string name="main_activity_load_xml_ok">Fichero XML cargado correctamente</string>
+    <string name="main_activity_load_xml_error">Error al cargar el fichero XML</string>
+    <string name="main_activity_save_xml_ok">Fichero XML guardado correctamente</string>
+    <string name="main_activity_save_xml_error">Error al guardar el fichero XML</string>
+    <string name="menu_training_session_detail_delete">Borrar</string>
 </resources>

@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
     private static final int RESULT_ERROR_SAVE = 401;
 
     private static final String XML_FILE = "workout_logger_db.xml";
-    private static final String TAG = "MainActivity";
+    private final String TAG = this.getClass().getSimpleName();
 
     protected static final String KEY_TRAINING_SESSION = "TRAINING_SESSION";
 

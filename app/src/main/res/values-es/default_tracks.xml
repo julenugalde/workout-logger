@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="defaultTracks">
+        <item>Calentamiento</item>
+        <item>Squads</item>
+        <item>Pectoral</item>
+        <item>Espalda</item>
+        <item>Triceps</item>
+        <item>Biceps</item >
+        <item>Lunge</item>
+        <item>Hombro</item >
+        <item>Abdominal</item >
+        <item>[Personalizado]</item >
+    </string-array >
+</resources>

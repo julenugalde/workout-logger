@@ -3,6 +3,7 @@
     <string name="app_name">WorkoutLogger</string>
     <string name="readable_date_format">EEE, d MMMM yyyy</string>
     <string name="decimal_separator">.</string>
+    <string name="weight_unit">kg.</string>
     <string name="main_title">Workout Logger</string>
     <string name="open_db_error">Error opening the database</string>
 
@@ -29,13 +30,14 @@
     <string name="training_session_detail_title">Training session detail</string>
     <string name="training_session_detail_menu_delete">Delete</string>
     <string name="training_session_detail_warning_delete">Do you really want to delete this training session?</string>
-    <string name="training_session_detail_warning_accept">Delete training session</string>
+    <string name="training_session_detail_warning_accept">Delete</string>
     <string name="training_session_detail_warning_cancel">Cancel</string>
     <string name="training_session_detail_delete_error">Error deleting the training session</string>
     <string name="training_session_detail_exercise_data">Exercise carried out</string>
     <string name="training_session_data_access_error">Error accessing the training sessions data</string>
     <string name="training_session_detail_no_load">No load</string>
     <string name="training_session_detail_no_comment">No comment</string>
+    <string name="menu_training_session_detail_delete">Delete</string>
 
     <!--View new training session -->
     <string name="new_training_session_title">New training session</string>
@@ -55,6 +57,8 @@
     <string name="preferences_locale_sub">Select the application language</string>
     <string name="preferences_locale_cancel">Cancel</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <!-- View exercise data -->
+    <string name="exercise_data_title">Loads and weights</string>
+    <string name="exercise_data_completed">Exercise completed</string>
+    <string name="menu_exercise_data_save">Save</string>
 </resources>
