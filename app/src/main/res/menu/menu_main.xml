@@ -1,0 +1,35 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context="eus.julenugalde.workoutlogger.view.MainActivity" >
+    <item
+        android:id="@+id/main_activity_menu_view_graph"
+        android:icon="@android:drawable/ic_menu_view"
+        android:title="@string/main_activity_menu_view_graph"
+        app:showAsAction="ifRoom" />
+    <item
+        android:id="@+id/main_activity_menu_list_workouts"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_agenda"
+        android:title="@string/main_activity_menu_list_workouts"/>
+    <item
+        android:title="@string/main_activity_menu_backup">
+        <menu>
+            <item
+                android:id="@+id/main_activity_menu_save_xml"
+                app:showAsAction="never"
+                android:icon="@android:drawable/ic_menu_save"
+                android:title="@string/main_activity_menu_save_xml" />
+            <item
+                android:id="@+id/main_activity_menu_load_xml"
+                app:showAsAction="never"
+                android:icon="@android:drawable/ic_menu_set_as"
+                android:title="@string/main_activity_menu_load_xml" />
+        </menu>
+    </item>
+    <item
+        android:id="@+id/main_activity_menu_settings"
+        app:showAsAction="ifRoom"
+        android:icon="@android:drawable/ic_menu_manage"
+        android:title="@string/main_activity_menu_settings" />
+</menu>

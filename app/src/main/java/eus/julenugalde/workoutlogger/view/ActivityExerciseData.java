@@ -14,8 +14,6 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import org.w3c.dom.Text;
-
 import eus.julenugalde.workoutlogger.R;
 import eus.julenugalde.workoutlogger.model.TrainingExercise;
 
@@ -70,7 +68,7 @@ public class ActivityExerciseData extends AppCompatActivity
                 //Set decimal part of the weight
                 array = getResources().getStringArray(R.array.values_g);
                 selected = trainingExercise.getLoadG(i);
-                for (j=array.length-1; j>0; j++) {
+                for (j=array.length-1; j>0; j--) {
                     if (Integer.parseInt(array[j]) == selected) break;
                 }
                 cmbGs[i].setSelection(j);
