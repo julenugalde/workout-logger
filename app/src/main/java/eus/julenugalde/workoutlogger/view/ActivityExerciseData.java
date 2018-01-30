@@ -1,5 +1,6 @@
 package eus.julenugalde.workoutlogger.view;
 
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import android.widget.Toast;
 
 import eus.julenugalde.workoutlogger.R;
 import eus.julenugalde.workoutlogger.model.TrainingExercise;
+import eus.julenugalde.workoutlogger.model.TrainingSession;
 
 public class ActivityExerciseData extends AppCompatActivity
         implements CompoundButton.OnCheckedChangeListener {
@@ -38,7 +40,7 @@ public class ActivityExerciseData extends AppCompatActivity
         Bundle bundle = getIntent().getExtras();
         trainingExercise = (TrainingExercise)bundle.
                 getSerializable(ActivityNewTrainingSession.KEY_EXERCISE);
-        this.setTitle(trainingExercise.getName());
+        //this.setTitle(trainingExercise.getName());
 
         captureControls();
         configControls(savedInstanceState);
@@ -175,7 +177,21 @@ public class ActivityExerciseData extends AppCompatActivity
     }
 
     private void saveData() {
-        //TODO implmenet save data
-        android.widget.Toast.makeText(getApplicationContext(), "Not implemented", Toast.LENGTH_LONG).show();
+        //Update the training exercise data with the values selected
+        trainingExercise.setCompleted(chkCompleted.isChecked());
+        for (int i=0; i< TrainingExercise.MAX_LOADS; i++) {
+            if (!trainingExercise.getLoadName(i).isEmpty()) {
+                trainingExercise.setLoad(i,
+                        trainingExercise.getLoadName(i),
+                        Integer.parseInt((String)cmbKgs[i].getSelectedItem()),
+                        Integer.parseInt((String)cmbGs[i].getSelectedItem()));
+            }
+        }
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(ActivityNewTrainingSession.KEY_EXERCISE, trainingExercise);
+        Intent intent = getIntent();
+        intent.putExtras(bundle);
+        setResult(RESULT_OK, intent);
+        finish();
     }
 }

@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <array name="defaultTrackIcons">
+        <item>@drawable/track_warmup</item>
+        <item>@drawable/track_squats</item>
+        <item>@drawable/track_chest</item>
+        <item>@drawable/track_back</item>
+        <item>@drawable/track_triceps</item>
+        <item>@drawable/track_biceps</item>
+        <item>@drawable/track_lunges</item>
+        <item>@drawable/track_shoulders</item>
+        <item>@drawable/track_core</item>
+    </array>
+</resources>

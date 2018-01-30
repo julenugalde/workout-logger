@@ -4,31 +4,33 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@drawable/ic_completed_training_session_black"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@drawable/ic_completed_training_session_black"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.MainActivity"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".view.ActivityTrainingSessionDetail" />
+        <activity
+            android:name=".view.ActivityTrainingSessionDetail"
+            android:parentActivityName=".view.ActivityNewTrainingSession" />
         <activity
             android:name=".view.ActivityNewTrainingSession"
             android:label="@string/title_activity_new_training_session"
-            android:parentActivityName=".view.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:parentActivityName=".view.MainActivity" />
         <activity
             android:name=".view.ActivityPreferences"
             android:parentActivityName=".view.MainActivity" />
-        <activity android:name=".view.ActivityExerciseData"></activity>
+        <activity
+            android:name=".view.ActivityExerciseData"
+            android:parentActivityName=".view.ActivityNewTrainingSession"/>
     </application>
 
 </manifest>

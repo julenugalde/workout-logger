@@ -10,6 +10,7 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
+    app:title="@string/exercise_data_title"
     tools:context="eus.julenugalde.workoutlogger.view.ActivityExerciseData">
 
     <android.support.constraint.ConstraintLayout
@@ -225,19 +226,5 @@
         </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>
-
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.NoActionBar">
-
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarNewTrainingSession"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="?attr/colorPrimary"
-            app:popupTheme="@style/AppTheme.PopupOverlay"
-            app:title="@string/exercise_data_title" />
-    </android.support.design.widget.AppBarLayout>
 
 </android.support.design.widget.CoordinatorLayout>

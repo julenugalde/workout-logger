@@ -1,6 +1,8 @@
 package eus.julenugalde.workoutlogger.controller;
 
 import android.app.Activity;
+import android.content.res.TypedArray;
+import android.graphics.drawable.Drawable;
 import android.media.Image;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -40,8 +42,18 @@ public class TrainingExerciseAdapter extends ArrayAdapter<TrainingExercise> {
         lblLoads = (TextView)item.findViewById(R.id.LblListItemTrainingExerciseLoads);
         lblName.setText(trainingExercise.getName());
         imgIcon = (ImageView)item.findViewById(R.id.ImgListItemTrainingExerciseIcon);
-        //TODO Replace strings by elements in a resource file
         String text = lblName.getText().toString();
+
+        //TODO Replace strings by elements in a resource file
+        /*TypedArray defaultTracks =
+                getContext().getResources().obtainTypedArray(R.array.defaultTracks);
+        TypedArray defaultTrackIcons =
+                getContext().getResources().obtainTypedArray(R.array.defaultTrackIcons);
+        for (int i=0; i<defaultTracks.length(); i++) {
+            if (text.equals(defaultTracks.getNonResourceString(i))) {
+                imgIcon.setImageResource(defaultTrackIcons.getResourceId(i, R.drawable.track_default));
+            }
+        }*/
         if (text.equals("Calentamiento"))
             imgIcon.setImageResource(R.drawable.track_warmup);
         else if (text.equals("Squad"))

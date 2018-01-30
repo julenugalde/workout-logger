@@ -1,7 +1,7 @@
 <resources>
     <!-- General -->
     <string name="app_name">WorkoutLogger</string>
-    <string name="readable_date_format">EEE, d MMMM yyyy</string>
+    <string name="readable_date_format">EEEE, d MMMM yyyy</string>
     <string name="decimal_separator">.</string>
     <string name="weight_unit">kg.</string>
     <string name="main_title">Workout Logger</string>
@@ -50,6 +50,7 @@
     <string name="new_training_session_empty">No exercise carried out</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_new_training_session">New training session</string>
+    <string name="menu_new_training_session_save">Save training session</string>
 
     <!-- Preferences window -->
     <string name="preferences_title">Settings</string>

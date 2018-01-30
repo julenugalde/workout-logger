@@ -9,14 +9,12 @@ import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.text.format.DateFormat;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -27,17 +25,16 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Locale;
 
 import eus.julenugalde.workoutlogger.R;
+import eus.julenugalde.workoutlogger.controller.CompletedTrainingSessionAdapter;
 import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
 
 public class MainActivity extends AppCompatActivity {
     private ListView lstTrainingSessionSummary;
     private ArrayList<TrainingSession> listTrainingSessions;
-    private String[] arrayStrings;
     private WorkoutData workoutData;
 
     private static final int REQ_CODE_ADD_TRAINING_SESSION = 101;
@@ -56,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSettings);
-        setSupportActionBar(toolbar);
+        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSettings);
+        //setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAddTrainingSession);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -69,18 +66,19 @@ public class MainActivity extends AppCompatActivity {
         });
 
         lstTrainingSessionSummary = (ListView)findViewById(R.id.LstTrainingSessionSummary);
-        lstTrainingSessionSummary.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lstTrainingSessionSummary.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> adapterView, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, ActivityTrainingSessionDetail.class);
                 Bundle bundle = new Bundle();
                 int index = listTrainingSessions.size()-position-1; //Showing in inverse order
                 bundle.putSerializable(KEY_TRAINING_SESSION, listTrainingSessions.get(index));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, REQ_CODE_VIEW_TRAINING_SESSION);
-                return true;
             }
         });
+
+
         workoutData = new WorkoutData(getApplicationContext());
         updateTrainingSessionList();
     }
@@ -92,21 +90,8 @@ public class MainActivity extends AppCompatActivity {
         }
         try {
             listTrainingSessions = workoutData.getListTrainingSessions();
-            arrayStrings = new String[listTrainingSessions.size()];
-            Iterator<TrainingSession> iterator = listTrainingSessions.iterator();
-            TrainingSession aux;
-            int i = listTrainingSessions.size()-1;
-            StringBuilder sb = new StringBuilder();
-            while(iterator.hasNext()) {
-                aux = iterator.next();
-                sb.append(DateFormat.format("yyyy-MM-dd", aux.getDate()));
-                sb.append("  ");
-                sb.append(aux.getNameWorkout());
-                arrayStrings[i--] = new String(sb.toString());
-                sb.delete(0, sb.length());
-            }
-            ArrayAdapter<String> adapter = new ArrayAdapter<String>(
-                    this, android.R.layout.simple_list_item_1, arrayStrings);
+            CompletedTrainingSessionAdapter adapter =
+                    new CompletedTrainingSessionAdapter(this, listTrainingSessions);
             lstTrainingSessionSummary.setAdapter(adapter);
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();

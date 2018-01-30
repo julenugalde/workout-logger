@@ -2,9 +2,10 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:id="@+id/menu_exercise_data_save"
+        android:id="@+id/menu_new_training_session_save"
         app:showAsAction="always|withText"
         android:icon="@android:drawable/ic_menu_save"
-        android:iconTint="@color/colorTextIcons"
-        android:title="@string/menu_exercise_data_save" />
+        android:iconTint="@android:color/transparent"
+        android:iconTintMode="src_over"
+        android:title="@string/menu_new_training_session_save" />
 </menu>

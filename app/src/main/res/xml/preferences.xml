@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    android:title="@string/preferences_title"
+    android:icon="@android:drawable/ic_menu_preferences"
+    android:configChanges="orientation|keyboardHidden|screenSize">
+    <ListPreference
+        android:dialogTitle="@string/preferences_locale_sub"
+        android:entries="@array/locale"
+        android:entryValues="@array/localeCode"
+        android:icon="@drawable/globe_place"
+        android:key="selectedLocale"
+        android:negativeButtonText="@string/preferences_locale_cancel"
+        android:summary="@string/preferences_locale_sub"
+        android:title="@string/preferences_locale" />
+</PreferenceScreen>

@@ -22,6 +22,7 @@ import android.widget.ListView;
 import android.widget.AdapterView.OnItemSelectedListener;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -153,12 +154,10 @@ public class ActivityNewTrainingSession extends AppCompatActivity
                 //By default we consider that the exercise was not completed
                 trainingExercise = new TrainingExercise(arrayTracks[i].getName(), false);
                 if ((arrayLoads = arrayTracks[i].getLoads()) != null) { //Track contains loads
-                    //TODO check if this is correct
                     for (int j=0; j<arrayLoads.length; j++) {
                         trainingExercise.setLoad(j, arrayLoads[j].getName(),
                                 arrayLoads[j].getKg(), arrayLoads[j].getG());
                     }
-                    //////////////////
                 }
                 listExercises.add(trainingExercise);
             }
@@ -230,14 +229,43 @@ public class ActivityNewTrainingSession extends AppCompatActivity
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        //TODO Create the menu layout and inflate here
+        getMenuInflater().inflate(R.menu.menu_new_training_session, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        //TODO Define the action for the menu items
-        return true;
+        switch(item.getItemId()) {
+            case R.id.menu_new_training_session_save:
+                boolean anyExercise = false;    //Is there any exercise in the training session?
+                for (TrainingExercise trainingExercise : listExercises) {
+                    if(trainingExercise.isCompleted()) anyExercise = true;
+                }
+                if (anyExercise) { //There are exercises --> Save data and return to main activity
+                    workoutData.open();
+                    //Workout list is in inverse order
+                    ArrayList<Workout> listWorkouts = workoutData.getListWorkouts();
+                    int index = listWorkouts.size() - cmbListWorkouts.getSelectedItemPosition() - 1;
+                    if (workoutData.insertTrainingSession(
+                            listWorkouts.get(index),            //Workout
+                            listExercises,                      //List TrainingExercises
+                            txtDate.getText().toString(),       //Date
+                            txtComment.getText().toString())) {  //Comment
+                        setResult(RESULT_OK);
+                    }
+                    else {      //Error inserting in the database
+                        setResult(RESULT_ERROR_SAVE);
+                    }
+                    workoutData.close();
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), R.string.new_training_session_empty,
+                            Toast.LENGTH_LONG).show();
+                }
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     @Override
@@ -249,6 +277,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity
                     Bundle bundle = data.getExtras();
                     TrainingExercise result = (TrainingExercise)bundle.getSerializable(KEY_EXERCISE);
                     //Replace the training session data in the list
+                    Log.d(TAG, "Exercise data: " + result.toString());
                     TrainingExercise aux;
                     for (int i=0; i<listExercises.size(); i++) {    //Replace if already existing
                         aux = listExercises.get(i);
@@ -285,8 +314,8 @@ public class ActivityNewTrainingSession extends AppCompatActivity
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable("LIST_EXERCISES", listExercises);
-        outState.putStringArray("ARRAY_WORKOUTS", arrayWorkouts);
-        outState.putInt("POSITION_COMBO", positionCombo);
+        outState.putSerializable(KEY_LIST_EXERCISES, listExercises);
+        outState.putStringArray(KEY_ARRAY_WORKOUTS, arrayWorkouts);
+        outState.putInt(KEY_COMBO_POSITION, positionCombo);
     }
 }

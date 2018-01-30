@@ -295,21 +295,6 @@ public class WorkoutData {
 		}
 	}
 
-	//TODO METODO TEST BORRAR
-	public ArrayList<TrainingSession> getListTrainingSessionsDEBUG() throws Exception {
-        ArrayList<TrainingSession> lista = new ArrayList<TrainingSession>();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        lista.add(new TrainingSession(sdf.parse("2018-01-01"), 11, "BodyPump88", "esto es una prueba"));
-        lista.add(new TrainingSession(sdf.parse("2018-01-02"), 12, "BodyPump88", "esto es una prueba"));
-        lista.add(new TrainingSession(sdf.parse("2018-01-03"), 13, "BodyPump88", "esto es una prueba"));
-        lista.add(new TrainingSession(sdf.parse("2018-01-04"), 14, "BodyPump88", "esto es una prueba"));
-        lista.add(new TrainingSession(sdf.parse("2018-01-05"), 15, "BodyPump88", "esto es una prueba"));
-        lista.add(new TrainingSession(sdf.parse("2018-01-06"), 16, "BodyPump89", "esto es una prueba"));
-        lista.add(new TrainingSession(sdf.parse("2018-01-07"), 17, "BodyPump89", "esto es una prueba"));
-        lista.add(new TrainingSession(sdf.parse("2018-01-08"), 18, "BodyPump89", "esto es una prueba"));
-        return lista;
-	}
-
     /** Returns the list of training sessions stored in the database
      *
      * @return Array list with all the training sessions stored in the database
@@ -319,7 +304,7 @@ public class WorkoutData {
 		ArrayList<TrainingSession> listTrainingSessions = new ArrayList<TrainingSession>();
 		//Retreive the training sessions ordered by date
 		Cursor cursorTrainingSessions = db.rawQuery(
-		        "SELECT * FROM Entrenamientos ORDER BY fecha", null);
+		        "SELECT * FROM Entrenamientos ORDER BY fecha DESC", null);
 		Log.d(TAG, cursorTrainingSessions.getCount()+
                 " training session records in the database");
 		Cursor cursorWorkouts = null;
