@@ -7,7 +7,7 @@
         android:dialogTitle="@string/preferences_locale_sub"
         android:entries="@array/locale"
         android:entryValues="@array/localeCode"
-        android:icon="@drawable/globe_place"
+        android:icon="@drawable/ic_language_black_24dp"
         android:key="selectedLocale"
         android:negativeButtonText="@string/preferences_locale_cancel"
         android:summary="@string/preferences_locale_sub"

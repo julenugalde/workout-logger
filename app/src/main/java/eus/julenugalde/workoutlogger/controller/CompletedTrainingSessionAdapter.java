@@ -2,8 +2,7 @@ package eus.julenugalde.workoutlogger.controller;
 
 import android.app.Activity;
 import android.content.res.Configuration;
-import android.graphics.drawable.GradientDrawable;
-import android.text.format.DateFormat;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +18,6 @@ import eus.julenugalde.workoutlogger.model.TrainingSession;
 public class CompletedTrainingSessionAdapter extends ArrayAdapter<TrainingSession> {
     private Activity context;
     private ArrayList<TrainingSession> listTrainingSessions;
-    private TrainingSession trainingSession;
-    private TextView lblName;
-    private TextView lblDate;
-    private TextView lblComment;
 
     public CompletedTrainingSessionAdapter(
             Activity context, ArrayList<TrainingSession> listTrainingSessions) {
@@ -31,16 +26,17 @@ public class CompletedTrainingSessionAdapter extends ArrayAdapter<TrainingSessio
         this.listTrainingSessions = listTrainingSessions;
     }
 
+    @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View item = inflater.inflate(R.layout.listitem_completed_training_session, null);
-        trainingSession = listTrainingSessions.get(position);
+        TrainingSession trainingSession = listTrainingSessions.get(position);
 
-        lblName = (TextView)item.findViewById(R.id.LblListItemCompletedTrainingSessionName);
+        TextView lblName = item.findViewById(R.id.LblListItemCompletedTrainingSessionName);
         lblName.setText(trainingSession.getNameWorkout());
 
-        lblDate = (TextView)item.findViewById(R.id.LblListItemCompletedTrainingSessionDate);
+        TextView lblDate = item.findViewById(R.id.LblListItemCompletedTrainingSessionDate);
         SimpleDateFormat sdf;
         if (getContext().getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_LANDSCAPE){   //Landscape: compact date format
@@ -50,7 +46,7 @@ public class CompletedTrainingSessionAdapter extends ArrayAdapter<TrainingSessio
         }
         lblDate.setText(sdf.format(trainingSession.getDate()));
 
-        lblComment = (TextView)item.findViewById(R.id.LblListItemCompletedTrainingSessionComment);
+        TextView lblComment = item.findViewById(R.id.LblListItemCompletedTrainingSessionComment);
         lblComment.setText(trainingSession.getComment());
 
         return item;

@@ -104,7 +104,6 @@ public class ActivityNewTrainingSession extends AppCompatActivity
         //EditText with date
         txtDate.setText(DateFormat.format("yyyy-MM-dd", date.getTime()));
         txtDate.setEnabled(false);
-        txtDate.setTextColor(getResources().getColor(R.color.colorPrimaryText));
         btnDate.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -257,6 +256,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity
                         setResult(RESULT_ERROR_SAVE);
                     }
                     workoutData.close();
+                    finish();
                 }
                 else {
                     Toast.makeText(getApplicationContext(), R.string.new_training_session_empty,

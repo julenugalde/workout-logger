@@ -35,8 +35,8 @@
     <string name="training_session_detail_delete_error">Error deleting the training session</string>
     <string name="training_session_detail_exercise_data">Exercise carried out</string>
     <string name="training_session_data_access_error">Error accessing the training sessions data</string>
-    <string name="training_session_detail_no_load">No load</string>
-    <string name="training_session_detail_no_comment">No comment</string>
+    <string name="training_session_detail_no_load"><em>No loads</em></string>
+    <string name="training_session_detail_no_comment"><em>No comment</em></string>
     <string name="menu_training_session_detail_delete">Delete</string>
 
     <!--View new training session -->
@@ -46,7 +46,7 @@
     <string name="new_training_session_workout">Workout:</string>
     <string name="new_training_session_tracks">Tracks and loads record:</string>
     <string name="new_training_session_comment">Comment</string>
-    <string name="new_training_session_no_loads">(No loads)</string>
+    <string name="new_training_session_no_loads"><em>No loads</em></string>
     <string name="new_training_session_empty">No exercise carried out</string>
     <string name="action_settings">Settings</string>
     <string name="title_activity_new_training_session">New training session</string>
@@ -62,4 +62,32 @@
     <string name="exercise_data_title">Loads and weights</string>
     <string name="exercise_data_completed">Exercise completed</string>
     <string name="menu_exercise_data_save">Save</string>
+
+    <!-- Activity define workout -->
+    <string name="define_workout_name">Name</string>
+    <string name="define_workout_track_list">Track list</string>
+    <string name="define_workout_new">New track</string>
+    <string name="define_workout_define">Define workout</string>
+    <string name="define_workout_contextual_edit">Edit track</string>
+    <string name="define_workout_contextual_delete">Delete track</string>
+    <string name="define_workout_no_loads"><em>No loads</em></string>
+    <string name="define_workout_save_error_empty_name">The name cannot be empty</string>
+    <string name="define_workout_save_error_no_tracks">At least one track must be defined in the workout</string>
+    <string name="define_workout_save_error_exists">A workout with the same name already exists</string>
+    <string name="define_workout_save_error_db">Error opening the database</string>
+    <string name="menu_define_workout_save">Save</string>
+
+    <!-- Activity list workouts -->
+    <string name="list_workouts_view">List of workouts</string>
+    <string name="list_workouts_contextual_detail_workout">View details</string>
+    <string name="list_workouts_contextual_delete_workout">Delete</string>
+    <string name="list_workouts_warning_delete_workout_title">Delete workout</string>
+    <string name="list_workouts_warning_delete_workout_text_with">Warning: there are training sessions associated to this workout. If you delete it, the sessions will also be erased.\nDo you really want to delete the workout?</string>
+    <string name="list_workouts_warning_delete_workout_text_without">Do you really want to delete the workout?</string>
+    <string name="list_workouts_warning_delete_workout_accept">Delete</string>
+    <string name="list_workouts_warning_delete_workout_cancel">Cancel</string>
+    <string name="list_workouts_warning_delete_workout_cancelled">The workout has not been deleted</string>
+    <string name="title_activity_list_workouts">ActivityListWorkouts</string>
+
+
 </resources>

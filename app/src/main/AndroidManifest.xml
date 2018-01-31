@@ -11,7 +11,7 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.MainActivity"
-            android:label="@string/app_name" >
+            android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,7 +30,17 @@
             android:parentActivityName=".view.MainActivity" />
         <activity
             android:name=".view.ActivityExerciseData"
-            android:parentActivityName=".view.ActivityNewTrainingSession"/>
+            android:parentActivityName=".view.ActivityNewTrainingSession" />
+        <activity
+            android:name=".view.ActivityListWorkouts"
+            android:label="@string/title_activity_list_workouts"
+            android:parentActivityName=".view.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="eus.julenugalde.workoutlogger.view.MainActivity" />
+        </activity>
+        <activity android:name=".view.ActivityDefineWokout"></activity>
     </application>
 
 </manifest>

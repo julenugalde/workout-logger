@@ -10,7 +10,6 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:orientation="vertical"
-
     tools:context="eus.julenugalde.workoutlogger.view.ActivityNewTrainingSession">
 
     <android.support.constraint.ConstraintLayout
@@ -45,6 +44,7 @@
             android:inputType="date"
             android:textSize="@dimen/font_size_normal"
             android:paddingRight="@dimen/activity_horizontal_margin"
+            android:textColor="@color/colorPrimaryText"
             app:layout_constraintStart_toEndOf="@id/LblNewTrainingSessionDate"
             app:layout_constraintBottom_toBottomOf="@id/BtnNewTrainingSessionDate"
             app:layout_constraintTop_toTopOf="parent"/>
@@ -55,7 +55,7 @@
             android:background="@android:color/transparent"
             android:clickable="true"
             android:visibility="visible"
-            android:src="@drawable/calendar"
+            android:src="@drawable/ic_event_black_24dp"
             app:layout_constraintStart_toEndOf="@id/TxtNewTrainingSessionDate"
             app:layout_constraintTop_toTopOf="parent"/>
 

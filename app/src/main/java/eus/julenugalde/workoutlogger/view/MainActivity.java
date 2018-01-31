@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private Persistence persistence;
 
     private static final int REQ_CODE_ADD_TRAINING_SESSION = 101;
-    private static final int REQ_CODE_VIEW_WORKOUT = 102;
+    private static final int REQ_CODE_VIEW_WORKOUTS = 102;
     private static final int REQ_CODE_VIEW_TRAINING_SESSION = 103;
     private static final int REQ_CODE_SETTINGS = 104;
     private static final int RESULT_ERROR_SAVE = 401;
@@ -114,7 +114,9 @@ public class MainActivity extends AppCompatActivity {
         Intent intent;
         switch(item.getItemId()) {
             case R.id.main_activity_menu_list_workouts:
-                //TODO list of workouts
+                startActivityForResult(
+                        new Intent(MainActivity.this, ActivityListWorkouts.class),
+                        REQ_CODE_VIEW_WORKOUTS);
                 return true;
             case R.id.main_activity_menu_load_xml:
                 if (loadXML()) {
@@ -167,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             case REQ_CODE_VIEW_TRAINING_SESSION:
-            case REQ_CODE_VIEW_WORKOUT:
+            case REQ_CODE_VIEW_WORKOUTS:
                 updateTrainingSessionList();
                 break;
             case REQ_CODE_SETTINGS:
