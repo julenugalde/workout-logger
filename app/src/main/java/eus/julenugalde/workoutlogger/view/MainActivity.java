@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -29,13 +28,16 @@ import java.util.Locale;
 
 import eus.julenugalde.workoutlogger.R;
 import eus.julenugalde.workoutlogger.controller.CompletedTrainingSessionAdapter;
+import eus.julenugalde.workoutlogger.model.Persistence;
 import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
+import eus.julenugalde.workoutlogger.model.XMLPersistence;
 
 public class MainActivity extends AppCompatActivity {
     private ListView lstTrainingSessionSummary;
     private ArrayList<TrainingSession> listTrainingSessions;
     private WorkoutData workoutData;
+    private Persistence persistence;
 
     private static final int REQ_CODE_ADD_TRAINING_SESSION = 101;
     private static final int REQ_CODE_VIEW_WORKOUT = 102;
@@ -71,15 +73,14 @@ public class MainActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
                 Intent intent = new Intent(MainActivity.this, ActivityTrainingSessionDetail.class);
                 Bundle bundle = new Bundle();
-                int index = listTrainingSessions.size()-position-1; //Showing in inverse order
-                bundle.putSerializable(KEY_TRAINING_SESSION, listTrainingSessions.get(index));
+                bundle.putSerializable(KEY_TRAINING_SESSION, listTrainingSessions.get(position));
                 intent.putExtras(bundle);
                 startActivityForResult(intent, REQ_CODE_VIEW_TRAINING_SESSION);
             }
         });
 
-
         workoutData = new WorkoutData(getApplicationContext());
+        persistence = new XMLPersistence(workoutData);
         updateTrainingSessionList();
     }
 
@@ -196,10 +197,8 @@ public class MainActivity extends AppCompatActivity {
             File pathSD = this.getExternalFilesDir(null);
             File file = new File(pathSD.getAbsolutePath(), XML_FILE);
             InputStream inputStream = new FileInputStream(file);
-            //workoutData.open();
-            boolean result = workoutData.loadXML(inputStream);
+            boolean result = persistence.loadData(inputStream);
             Log.d(TAG, "Result of XML load: " + result);
-            //workoutData.close();
             updateTrainingSessionList();
             lstTrainingSessionSummary.requestLayout();
             return result;
@@ -219,9 +218,7 @@ public class MainActivity extends AppCompatActivity {
                 file.createNewFile();
             }
             OutputStream outputStream = new FileOutputStream(file);
-            //workoutData.open();
-            boolean result = workoutData.saveXML(outputStream);
-            //workoutData.close();
+            boolean result = persistence.saveData(outputStream);
             MediaScannerConnection.scanFile(
                     this, new String[] { file.getAbsolutePath() }, null, null);
             return result;

@@ -1,8 +1,5 @@
 package eus.julenugalde.workoutlogger.model;
 
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,13 +10,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 
-import javax.xml.parsers.SAXParser;
-import javax.xml.parsers.SAXParserFactory;
-
-import org.xml.sax.InputSource;
-import org.xml.sax.XMLReader;
-import org.xmlpull.v1.XmlSerializer;
-
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Context;
@@ -27,7 +17,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.util.Log;
-import android.util.Xml;
 
 /** This class manages the database transactions for the application. It provides methods to open
  * and close the database, load/store/delete workout information (including associated tracks and
@@ -40,9 +29,9 @@ public class WorkoutData {
     /** Database version */
     public static final int VERSION = 1;
 
-    private static final String TAG = "WorkoutData";
+	private static final String TAG = WorkoutData.class.getSimpleName();
     private WorkoutLoggerSQLiteHelper workoutLoggerSQLiteHelper;
-	private SQLiteDatabase db;
+	protected SQLiteDatabase db;
 
     /** Constructor that creates the WorkoutData object from the application context
      *
@@ -786,137 +775,6 @@ public class WorkoutData {
         return true;
     }
 
-    //TODO Move to WorkoutLogerXMLHandler
-    /** Writes the database contents into an XML file
-     *
-     * @param outputStream output stream where the XML file will be written
-     * @return true if the operation is successful; false if there are errors
-     */
-    public boolean saveXML(OutputStream outputStream) {
-        XmlSerializer serializer = Xml.newSerializer();
-        try {
-            serializer.setOutput(outputStream, "UTF-8");
-            serializer.startDocument("UTF-8", true);
-            serializer.startTag("", "info_workouts");
-
-            //Save table 'Workouts'
-            Cursor c = db.rawQuery("SELECT * FROM Workouts", null);
-            if (c.moveToFirst()) {
-                serializer.startTag("", "workouts");
-                do {
-                    serializer.startTag("", "workout");
-                    serializer.attribute("", "idWorkout", String.valueOf(c.getInt(0)));
-                    serializer.startTag("", "nombreWorkout");
-                    serializer.text(c.getString(1));
-                    serializer.endTag("", "nombreWorkout");
-                    serializer.endTag("", "workout");
-                } while(c.moveToNext());
-                serializer.endTag("", "workouts");
-            }
-
-            //Save table 'Tracks'
-            c = db.rawQuery("SELECT * FROM Tracks", null);
-            if (c.moveToFirst()) {
-                serializer.startTag("", "tracks");
-                do {
-                    serializer.startTag("", "track");
-                    serializer.attribute("", "idTrack", String.valueOf(c.getInt(0)));
-                    serializer.attribute("", "idWorkout", String.valueOf(c.getInt(1)));
-                    serializer.startTag("", "nombreTrack");
-                    serializer.text(c.getString(2));
-                    serializer.endTag("", "nombreTrack");
-                    serializer.endTag("", "track");
-                } while(c.moveToNext());
-                serializer.endTag("", "tracks");
-            }
-
-            //Save table 'Loads'
-            c = db.rawQuery("SELECT * FROM Loads", null);
-            if (c.moveToFirst()) {
-                serializer.startTag("", "loads");
-                do {
-                    serializer.startTag("", "load");
-                    serializer.attribute("", "idLoad", String.valueOf(c.getInt(0)));
-                    serializer.attribute("", "idTrack", String.valueOf(c.getInt(1)));
-                    serializer.startTag("", "nombreLoad");
-                    serializer.text(c.getString(2));
-                    serializer.endTag("", "nombreLoad");
-                    serializer.endTag("", "load");
-                } while(c.moveToNext());
-                serializer.endTag("", "loads");
-            }
-
-            //Save table 'Entrenamientos'
-            c = db.rawQuery("SELECT * FROM Entrenamientos", null);
-            if (c.moveToFirst()) {
-                serializer.startTag("", "entrenamientos");
-                do {
-                    serializer.startTag("", "entrenamiento");
-                    serializer.attribute("", "idEntrenamiento", String.valueOf(c.getInt(0)));
-                    serializer.attribute("", "idWorkout", String.valueOf(c.getInt(1)));
-                    serializer.startTag("", "fecha");
-                    serializer.text(c.getString(2));
-                    serializer.endTag("", "fecha");
-                    serializer.startTag("", "comentario");
-                    serializer.text(c.getString(3));
-                    serializer.endTag("", "comentario");
-                    serializer.endTag("", "entrenamiento");
-                } while(c.moveToNext());
-                serializer.endTag("", "entrenamientos");
-            }
-
-            //Save table 'Ejercicios'
-            c = db.rawQuery("SELECT * FROM Ejercicios", null);
-            if (c.moveToFirst()) {
-                serializer.startTag("", "ejercicios");
-                do {
-                    serializer.startTag("", "ejercicio");
-                    serializer.attribute("", "idEjercicio", String.valueOf(c.getInt(0)));
-                    serializer.attribute("", "idLoad", String.valueOf(c.getInt(1)));
-                    serializer.attribute("", "idEntrenamiento", String.valueOf(c.getInt(2)));
-                    serializer.startTag("", "kg");
-                    serializer.text(String.valueOf(c.getInt(3)));
-                    serializer.endTag("", "kg");
-                    serializer.startTag("", "g");
-                    serializer.text(String.valueOf(c.getInt(4)));
-                    serializer.endTag("", "g");
-                    serializer.endTag("", "ejercicio");
-                } while(c.moveToNext());
-                serializer.endTag("", "ejercicios");
-            }
-
-            serializer.endTag("", "info_workouts");
-            serializer.endDocument();
-            return true;
-        }
-        catch (Exception e) {
-            Log.e(TAG, "Error saving XML: " + e.getLocalizedMessage());
-            return false;
-        }
-    }
-
-    //TODO Move to WorkoutLogerXMLHandler
-    /** Cleans the database and loads the contents of an XML file into it
-     *
-      * @param inputStream Input stream from which the XML file will be read
-     * @return true if the operation is successful; false if there are errors
-     */
-    public boolean loadXML(InputStream inputStream) {
-        try {
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser parser = factory.newSAXParser();
-            XMLReader reader = parser.getXMLReader();
-            WorkoutLoggerXMLHandler xmlHandler = new WorkoutLoggerXMLHandler(db);
-            reader.setContentHandler(xmlHandler);
-            cleanDB();
-            reader.parse(new InputSource(inputStream));
-            return true;
-        }
-        catch (Exception e) {
-            Log.e(TAG, "Error loading XML: " + e.getLocalizedMessage());
-            return false;
-        }
-    }
 
     /** Deletes all the database records
      */

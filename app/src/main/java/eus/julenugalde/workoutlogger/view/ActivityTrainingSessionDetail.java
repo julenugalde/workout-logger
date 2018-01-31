@@ -24,6 +24,10 @@ import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
 
+/** This activity is displayed when a training session is selected from the list in the main
+ * activity. It shows the information of the {@link TrainingSession} object and all the details
+ * of the associated {@link TrainingExercise} objects. It allows to delete the training session.
+ */
 public class ActivityTrainingSessionDetail extends AppCompatActivity {
     private ListView lstTracks;
     private TextView lblDate;
@@ -121,20 +125,18 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        //workoutData.open();
+                        workoutData.open();
                         Log.i(TAG, "Deleting training session " + trainingSession.toString());
-                        //TODO Uncomment this
-                                /*if(!workoutData.deleteTrainingSession(trainingSession)) {
-                                    setResult(
-                                    Toast.makeText(getApplicationContext(),
-                                            R.string.training_session_detail_delete_error,
-                                            Toast.LENGTH_LONG).show();
-                                }
-                                else {
-                                    setResult(RESULT_OK);
-                                    finish();
-                                }*/
-                        //workoutData.close();
+                        if(!workoutData.deleteTrainingSession(trainingSession)) {
+                            Toast.makeText(getApplicationContext(),
+                                    R.string.training_session_detail_delete_error,
+                                    Toast.LENGTH_LONG).show();
+                        }
+                        else {
+                            setResult(RESULT_OK);
+                            finish();
+                        }
+                        workoutData.close();
                     }
                 });
         builder.setNegativeButton(R.string.training_session_detail_warning_cancel,
