@@ -15,10 +15,19 @@ import java.util.List;
 import eus.julenugalde.workoutlogger.R;
 import eus.julenugalde.workoutlogger.model.Workout;
 
+/** Provides views for a ListView of {@link eus.julenugalde.workoutlogger.model.Workout}
+ * elements, using the listitem_workout layout
+ */
 public class WorkoutAdapter extends ArrayAdapter<Workout> {
     private Activity context;
     private List<Workout> listWorkouts;
 
+    /** Constructor that gets a list of {@link eus.julenugalde.workoutlogger.model.Workout}
+     * objects to be displayed in a ListView
+     *
+     * @param context The current context
+     * @param listWorkouts List of {@link Workout} elements to be displayed
+     */
     public WorkoutAdapter(@NonNull Activity context, @NonNull List<Workout> listWorkouts) {
         super(context, R.layout.listitem_workout, listWorkouts);
         this.context = context;

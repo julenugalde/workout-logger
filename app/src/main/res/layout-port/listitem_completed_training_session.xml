@@ -7,8 +7,8 @@
     android:layout_height="match_parent">
     <ImageView
         android:id="@+id/ImgListItemCompletedTrainingSessionIcon"
-        android:layout_width="24dp"
-        android:layout_height="24dp"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:paddingLeft="@dimen/activity_horizontal_margin"

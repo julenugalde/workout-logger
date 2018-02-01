@@ -89,4 +89,7 @@
     <string name="list_workouts_warning_delete_workout_cancelled">The workout has not been deleted</string>
     <string name="list_workouts_tracks">tracks</string>
     <string name="list_workouts_completed_sessions">completed sessions</string>
+
+    <!-- Workout details -->
+    <string name="detail_workout_title">List of tracks and loads</string>
 </resources>
