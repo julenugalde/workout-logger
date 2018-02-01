@@ -184,6 +184,9 @@ public class WorkoutData {
 				currentWorkout.addTrack(currentTrack);
 				cursorTracks.moveToNext();
 			}
+			//Retrieve the number of trainig sessions
+			currentWorkout.setNumTrainingSessions(getNumTrainingSessions(currentWorkout.getName()));
+			//Add to the list and continue
 			listWorkouts.add(currentWorkout);
 			cursorWorkouts.moveToNext();
 		}

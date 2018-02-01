@@ -87,7 +87,6 @@
     <string name="list_workouts_warning_delete_workout_accept">Delete</string>
     <string name="list_workouts_warning_delete_workout_cancel">Cancel</string>
     <string name="list_workouts_warning_delete_workout_cancelled">The workout has not been deleted</string>
-    <string name="title_activity_list_workouts">ActivityListWorkouts</string>
-
-
+    <string name="list_workouts_tracks">tracks</string>
+    <string name="list_workouts_completed_sessions">completed sessions</string>
 </resources>

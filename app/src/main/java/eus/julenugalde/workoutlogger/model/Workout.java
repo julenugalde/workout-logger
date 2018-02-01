@@ -12,6 +12,7 @@ public class Workout implements Serializable {
 
     private static final long serialVersionUID = 7213290710726185589L;
 	private String name;
+	private int numTrainingSessions;
 	private ArrayList<Track> listTracks;
 
     /**Constructor that takes a workout name and initializes the track list as an empty
@@ -22,6 +23,7 @@ public class Workout implements Serializable {
     public Workout (String name) {
 		this.name = name;
 		this.listTracks = new ArrayList<Track>();
+		this.numTrainingSessions = 0;
 	}
 
     /**Default constructor that sets the name as an empty String */
@@ -110,5 +112,21 @@ public class Workout implements Serializable {
         }
         sb.append("\n}");
         return sb.toString();
+    }
+
+    /** Returns the total number of training sessions associated to the workout
+     *
+     * @return number of {@link TrainingSession} objects associated to the workout
+     */
+    public int getNumTrainingSessions() {
+        return numTrainingSessions;
+    }
+
+    /** Sets the number of training sessions associated to the workout
+     *
+     * @param numTrainingSessions number of training sessions
+     */
+    public void setNumTrainingSessions(int numTrainingSessions) {
+        this.numTrainingSessions = numTrainingSessions;
     }
 }

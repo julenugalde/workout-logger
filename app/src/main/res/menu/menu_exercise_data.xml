@@ -4,7 +4,6 @@
     <item
         android:id="@+id/menu_exercise_data_save"
         app:showAsAction="always|withText"
-        android:icon="@android:drawable/ic_menu_save"
-        android:iconTint="@color/colorTextIcons"
+        android:icon="@drawable/ic_save_white_24dp"
         android:title="@string/menu_exercise_data_save" />
 </menu>

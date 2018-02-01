@@ -4,8 +4,6 @@
     <item
         android:id="@+id/menu_new_training_session_save"
         app:showAsAction="always|withText"
-        android:icon="@android:drawable/ic_menu_save"
-        android:iconTint="@android:color/transparent"
-        android:iconTintMode="src_over"
+        android:icon="@drawable/ic_save_white_24dp"
         android:title="@string/menu_new_training_session_save" />
 </menu>

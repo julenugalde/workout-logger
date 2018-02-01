@@ -2,14 +2,10 @@ package eus.julenugalde.workoutlogger.view;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.ContextMenu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -17,15 +13,15 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.HashMap;
+
 
 import eus.julenugalde.workoutlogger.R;
+import eus.julenugalde.workoutlogger.controller.WorkoutAdapter;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
 
 public class ActivityListWorkouts extends AppCompatActivity {
     private ArrayList<Workout> listWorkouts;
-    private HashMap<Workout, Integer> exercisesHashMap;
     private WorkoutData workoutData;
     private ListView lstWorkouts;
     private FloatingActionButton fabAddWorkout;
@@ -51,7 +47,7 @@ public class ActivityListWorkouts extends AppCompatActivity {
         fabAddWorkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent(ActivityListWorkouts.this, ActivityDefineWokout.class);
+                Intent intent = new Intent(ActivityListWorkouts.this, ActivityDefineWorkout.class);
                 startActivityForResult(intent, REQ_CODE_DEF_WORKOUT);
             }
         });
@@ -61,14 +57,8 @@ public class ActivityListWorkouts extends AppCompatActivity {
             finish();   //TODO Change open() method calls in the project so they test if DB is correctly opened
         }
         listWorkouts = workoutData.getListWorkouts();
-
-        exercisesHashMap = new HashMap<Workout, Integer>();
-        Workout aux;
-        for (int i=0; i<listWorkouts.size(); i++) {
-            aux = listWorkouts.get(i);
-            exercisesHashMap.put(aux, workoutData.getNumTrainingSessions(aux.getName()));
-        }
-        workoutData.close();
+        Log.d(TAG, listWorkouts.size() + " workouts in the database");
+        lstWorkouts.setAdapter(new WorkoutAdapter(this, listWorkouts));
     }
 
     private void captureControls() {
