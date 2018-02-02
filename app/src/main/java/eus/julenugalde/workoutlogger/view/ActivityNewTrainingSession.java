@@ -112,6 +112,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity
         });
 
         //TextView for the comment
+        txtComment.setCountLimit(TrainingSession.MAX_LENGTH_COMMENT);
         txtComment.setText("");
         txtComment.addTextChangedListener(new TextWatcher() {
             @Override

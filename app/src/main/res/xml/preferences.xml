@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
-    android:title="@string/preferences_title"
+    android:configChanges="orientation|keyboardHidden|screenSize"
     android:icon="@android:drawable/ic_menu_preferences"
-    android:configChanges="orientation|keyboardHidden|screenSize">
+    android:title="@string/preferences_title">
     <ListPreference
         android:dialogTitle="@string/preferences_locale_sub"
         android:entries="@array/locale"
         android:entryValues="@array/localeCode"
-        android:icon="@drawable/ic_language_black_24dp"
+        android:icon="@drawable/ic_language_black_36dp"
         android:key="selectedLocale"
         android:negativeButtonText="@string/preferences_locale_cancel"
         android:summary="@string/preferences_locale_sub"

@@ -87,33 +87,4 @@ public class ActivityListWorkouts extends AppCompatActivity {
         setResult(RESULT_OK);
         workoutData.close();
     }
-
-    @Override
-    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
-        super.onCreateContextMenu(menu, v, menuInfo);
-        getMenuInflater().inflate(R.menu.menu_ctx_workout, menu);
-    }
-
-    @Override
-    public boolean onContextItemSelected(MenuItem item) {
-        AdapterView.AdapterContextMenuInfo adapterContextMenuInfo =
-                (AdapterView.AdapterContextMenuInfo)item.getMenuInfo();
-        int position = adapterContextMenuInfo.position;
-        final Workout selectedWorkout = listWorkouts.get(position);
-        Log.d(TAG, "Selected workout: " + selectedWorkout.toString());
-        Log.d(TAG, workoutData.getNumTrainingSessions(selectedWorkout.getName()) +
-                " training sessions for the workout");
-
-        switch(item.getItemId()) {
-            case R.id.CtxLblDeleteWorkout:
-                //TODO IMPLEMENT DELETE
-                return true;
-            case R.id.CtxLblDetailWorkout:
-                //TODO IMPLEMENT DETAIL
-                return true;
-            default:
-                Log.e(TAG, "Invalid item id: " + item.getItemId());
-                return super.onContextItemSelected(item);
-        }
-    }
 }

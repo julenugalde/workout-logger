@@ -17,14 +17,15 @@ import eus.julenugalde.workoutlogger.model.Workout;
  */
 @SuppressLint("AppCompatCustomView")
 public class EditTextWithCounter extends EditText {
-    /** Maximum text length allowed by the counter*/
-    public static final int COUNT_LIMIT = TrainingSession.MAX_LENGTH_COMMENT;
+    /** Maximum text length allowed by the counter by default*/
+    public static final int DEFAULT_COUNT_LIMIT = TrainingSession.MAX_LENGTH_COMMENT;
     /** Text size in pixel units */
     public static final float TEXT_SIZE = 35;
 
     private Paint paintBackground;
     private Paint paintForeground;
     private float scale;
+    private int countLimit;
 
     public EditTextWithCounter(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
@@ -51,6 +52,7 @@ public class EditTextWithCounter extends EditText {
         paintForeground.setTextSize(TEXT_SIZE);
 
         scale = getResources().getDisplayMetrics().density;
+        countLimit = DEFAULT_COUNT_LIMIT;
     }
 
     @Override
@@ -60,7 +62,23 @@ public class EditTextWithCounter extends EditText {
         canvas.drawRect(this.getWidth()-30*scale, 5*scale, this.getWidth()-(5*scale),
                 20*scale, paintBackground);
         //Paint the number of characters
-        canvas.drawText("" + (COUNT_LIMIT-this.getText().toString().length()),
+        canvas.drawText("" + (countLimit-this.getText().toString().length()),
                 this.getWidth()-28*scale, 17*scale, paintForeground);
+    }
+
+    /** Returns the current count limit
+     *
+     * @return Limit of characters in the edit text
+     */
+    public int getCountLimit() {
+        return countLimit;
+    }
+
+    /** Sets the count limit
+     *
+     * @param countLimit Limit of characters in the edit text
+     */
+    public void setCountLimit(int countLimit) {
+        this.countLimit = countLimit;
     }
 }

@@ -35,7 +35,10 @@
             android:name=".view.ActivityListWorkouts"
             android:label="@string/list_workouts_view"
             android:parentActivityName=".view.MainActivity" />
-        <activity android:name=".view.ActivityDefineWorkout" />
+        <activity
+            android:name=".view.ActivityDefineWorkout"
+            android:label="@string/define_workout_title"
+            android:parentActivityName=".view.ActivityListWorkouts" />
         <activity
             android:name=".view.ActivityDetailWorkout"
             android:parentActivityName=".view.ActivityListWorkouts" />

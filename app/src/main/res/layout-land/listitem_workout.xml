@@ -48,6 +48,7 @@
         android:layout_height="wrap_content"
         android:backgroundTint="@android:color/transparent"
         android:src="@drawable/ic_delete_forever_black_24dp"
+        android:tint="@color/colorBlack"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -61,6 +62,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/ImgListItemWorkoutDelete"
         android:src="@drawable/ic_assignment_black_24dp"
+        android:tint="@color/colorBlack"
         tools:ignore="ContentDescription" />
 </android.support.constraint.ConstraintLayout>
 

@@ -30,22 +30,49 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/activity_vertical_margin"
-            android:paddingBottom="@dimen/activity_vertical_margin"
             android:text="@string/define_workout_name"
             android:textSize="@dimen/font_size_title"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"/>
-        <EditText
+        <eus.julenugalde.workoutlogger.view.EditTextWithCounter
             android:id="@+id/TxtDefineWorkoutName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
+            android:textSize="@dimen/font_size_normal"
+            android:textColor="@color/colorBlack"
+            android:paddingBottom="@dimen/activity_vertical_margin"
             app:layout_constraintStart_toStartOf="@id/LblDefineWorkoutName"
-            app:layout_constraintTop_toTopOf="parent"
-            android:maxLength="30"/>    <!--TODO Read from a resource file-->
+            app:layout_constraintTop_toBottomOf="@id/LblDefineWorkoutName" />
 
-        <!--TODO COMPLETE-->
+        <TextView
+            android:id="@+id/LblDefineWorkoutListTracks"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            android:paddingBottom="@dimen/activity_vertical_margin"
+            android:text="@string/define_workout_track_list"
+            android:textSize="@dimen/font_size_title"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/TxtDefineWorkoutName"/>
+        <ImageButton
+            android:id="@+id/BtnDefineWorkoutNewTrack"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:tint="@color/colorBlack"
+            android:src="@drawable/ic_add_circle_outline_black_24dp"
+            app:layout_constraintStart_toEndOf="@id/LblDefineWorkoutListTracks"
+            app:layout_constraintBaseline_toBaselineOf="@id/LblDefineWorkoutListTracks"/>
+        <ListView
+            android:id="@+id/LstDefineWorkoutsTracks"
+            android:layout_width="match_parent"
+            android:layout_height="380dp"
+            android:paddingTop="@dimen/activity_vertical_margin"
+            app:layout_constraintTop_toBottomOf="@id/LblDefineWorkoutListTracks"
+            app:layout_constraintStart_toStartOf="parent"/>
 
     </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>

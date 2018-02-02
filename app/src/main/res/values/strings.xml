@@ -67,7 +67,7 @@
     <string name="define_workout_name">Name</string>
     <string name="define_workout_track_list">Track list</string>
     <string name="define_workout_new">New track</string>
-    <string name="define_workout_define">Define workout</string>
+    <string name="define_workout_title">Define new workout</string>
     <string name="define_workout_contextual_edit">Edit track</string>
     <string name="define_workout_contextual_delete">Delete track</string>
     <string name="define_workout_no_loads"><em>No loads</em></string>
