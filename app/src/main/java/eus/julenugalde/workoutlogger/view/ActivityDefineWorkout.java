@@ -8,7 +8,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -35,7 +35,7 @@ public class ActivityDefineWorkout extends AppCompatActivity {
     private ArrayList<Track> trackArrayList;
     private TrackAdapter trackAdapter;
     private EditTextWithCounter txtWorkoutName;
-    private ImageButton btnNewTrack;
+    private Button btnNewTrack;
     private ListView lstTracks;
 
     @Override
@@ -57,19 +57,18 @@ public class ActivityDefineWorkout extends AppCompatActivity {
         btnNewTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //TODO Create ActivityDefineTrack
-                /*Intent intent = new Intent(ActivityDefineWorkout.this, ActivityDefineTrack.class);
+                Intent intent = new Intent(ActivityDefineWorkout.this, ActivityDefineTrack.class);
                 Bundle bundle = new Bundle();
                 bundle.putInt(KEY_POSITION, trackArrayList.size());
                 intent.putExtras(bundle);
-                startActivityForResult(intent, REQ_CODE_NEW_TRACK);*/
+                startActivityForResult(intent, REQ_CODE_NEW_TRACK);
             }
         });
     }
 
     private void captureControls() {
         txtWorkoutName = (EditTextWithCounter)findViewById(R.id.TxtDefineWorkoutName);
-        btnNewTrack = (ImageButton)findViewById(R.id.BtnDefineWorkoutNewTrack);
+        btnNewTrack = (Button)findViewById(R.id.BtnDefineWorkoutNewTrack);
         lstTracks = (ListView)findViewById(R.id.LstDefineWorkoutsTracks);
     }
 

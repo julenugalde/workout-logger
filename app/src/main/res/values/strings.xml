@@ -66,7 +66,7 @@
     <!-- Activity define workout -->
     <string name="define_workout_name">Name</string>
     <string name="define_workout_track_list">Track list</string>
-    <string name="define_workout_new">New track</string>
+    <string name="define_workout_new">Add new track / muscle group</string>
     <string name="define_workout_title">Define new workout</string>
     <string name="define_workout_contextual_edit">Edit track</string>
     <string name="define_workout_contextual_delete">Delete track</string>
@@ -76,6 +76,15 @@
     <string name="define_workout_save_error_exists">A workout with the same name already exists</string>
     <string name="define_workout_save_error_db">Error opening the database</string>
     <string name="menu_define_workout_save">Save</string>
+
+    <!-- Activity define track -->
+    <string name="define_track_title">Define new track</string>
+    <string name="define_track_group">Muscle group</string>
+    <string name="define_track_loads">Loads in the track</string>
+    <string name="define_track_load_default">Lifting bar</string>
+    <string name="define_track_error_empty">The custom name cannot be empty</string>
+    <string name="define_track_error_exists">The track defined already exists</string>
+    <string name="menu_define_track_save">Save</string>
 
     <!-- Activity list workouts -->
     <string name="list_workouts_view">List of workouts</string>
@@ -88,8 +97,12 @@
     <string name="list_workouts_warning_delete_workout_cancel">Cancel</string>
     <string name="list_workouts_warning_delete_workout_cancelled">The workout has not been deleted</string>
     <string name="list_workouts_tracks">tracks</string>
-    <string name="list_workouts_completed_sessions">completed sessions</string>
+    <string name="list_workouts_completed_sessions">sessions completed</string>
 
     <!-- Workout details -->
     <string name="detail_workout_title">List of tracks and loads</string>
+    <string name="detail_workout_string_tracks_singular">track in the workout</string>
+    <string name="detail_workout_string_tracks_plural">tracks in the workout</string>
+    <string name="detail_workout_string_training_sessions_singular">training session completed</string>
+    <string name="detail_workout_string_training_sessions_plural">training sessions completed</string>
 </resources>

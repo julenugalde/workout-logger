@@ -42,6 +42,9 @@
         <activity
             android:name=".view.ActivityDetailWorkout"
             android:parentActivityName=".view.ActivityListWorkouts" />
+        <activity
+            android:name=".view.ActivityDefineTrack"
+            android:parentActivityName=".view.ActivityDefineWorkout"/>
     </application>
 
 </manifest>
