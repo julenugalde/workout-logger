@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 
 import eus.julenugalde.workoutlogger.R;
+import eus.julenugalde.workoutlogger.controller.CompletedTrainingSessionAdapter;
 import eus.julenugalde.workoutlogger.controller.WorkoutAdapter;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
@@ -28,6 +29,7 @@ public class ActivityListWorkouts extends AppCompatActivity {
     private FloatingActionButton fabAddWorkout;
 
     private static final int REQ_CODE_DEF_WORKOUT = 101;
+    private static final int REQ_CODE_VIEW_WORKOUT = 102;
     private static final String TAG = ActivityListWorkouts.class.getSimpleName();
 
     public static final String KEY_WORKOUT = "WORKOUT";
@@ -45,6 +47,7 @@ public class ActivityListWorkouts extends AppCompatActivity {
     }
 
     private void initializeControls() {
+        //Button new Workout
         fabAddWorkout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -53,13 +56,26 @@ public class ActivityListWorkouts extends AppCompatActivity {
             }
         });
 
-        if (!workoutData.open()) {
+        //List of workouts
+        lstWorkouts.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int position, long id) {
+                Intent intent = new Intent(ActivityListWorkouts.this, ActivityDetailWorkout.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable(KEY_WORKOUT, listWorkouts.get(position));
+                intent.putExtras(bundle);
+                startActivityForResult(intent, REQ_CODE_VIEW_WORKOUT);
+            }
+        });
+        /*if (!workoutData.open()) {
             Toast.makeText(getApplicationContext(), R.string.open_db_error, Toast.LENGTH_LONG).show();
             finish();   //TODO Change open() method calls in the project so they test if DB is correctly opened
         }
         listWorkouts = workoutData.getListWorkouts();
         Log.d(TAG, listWorkouts.size() + " workouts in the database");
         lstWorkouts.setAdapter(new WorkoutAdapter(this, listWorkouts));
+        */
+        updateWorkoutList();
     }
 
     private void captureControls() {
@@ -72,9 +88,8 @@ public class ActivityListWorkouts extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode) {
             case REQ_CODE_DEF_WORKOUT:
-                listWorkouts = workoutData.getListWorkouts();
-                lstWorkouts.setAdapter(new WorkoutAdapter(this, listWorkouts));
-                ((WorkoutAdapter)lstWorkouts.getAdapter()).notifyDataSetChanged();
+            case REQ_CODE_VIEW_WORKOUT:
+                updateWorkoutList();
                 break;
             default:
                 Log.e(TAG, "Invalid reqCode: " + requestCode);
@@ -87,5 +102,19 @@ public class ActivityListWorkouts extends AppCompatActivity {
         super.onDestroy();
         setResult(RESULT_OK);
         workoutData.close();
+    }
+
+    private void updateWorkoutList() {
+        if (!workoutData.open()) {
+            Toast.makeText(getApplicationContext(), R.string.open_db_error, Toast.LENGTH_LONG).show();
+            finish();
+        }
+        try {
+            listWorkouts = workoutData.getListWorkouts();
+            WorkoutAdapter adapter = new WorkoutAdapter(this, listWorkouts);
+            lstWorkouts.setAdapter(adapter);
+        } catch (Exception e) {
+            Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+        }
     }
 }

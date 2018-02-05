@@ -1,11 +1,16 @@
 package eus.julenugalde.workoutlogger.view;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.res.Resources;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -13,9 +18,12 @@ import eus.julenugalde.workoutlogger.R;
 import eus.julenugalde.workoutlogger.controller.TrackAdapter;
 import eus.julenugalde.workoutlogger.model.Track;
 import eus.julenugalde.workoutlogger.model.Workout;
+import eus.julenugalde.workoutlogger.model.WorkoutData;
 
 /** Activity that shows workout details */
 public class ActivityDetailWorkout extends AppCompatActivity {
+    private Workout workout;
+    private WorkoutData  workoutData;
     private static final String TAG = ActivityDetailWorkout.class.getSimpleName();
 
     @Override
@@ -25,7 +33,8 @@ public class ActivityDetailWorkout extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
 
         try {
-            Workout workout = (Workout) bundle.getSerializable(ActivityListWorkouts.KEY_WORKOUT);
+            workout = (Workout) bundle.getSerializable(ActivityListWorkouts.KEY_WORKOUT);
+            workoutData = new WorkoutData(getApplicationContext());
             setTitle(workout.getName());
             TextView lblNumSessions = (TextView)findViewById(R.id.LblDetailWorkoutNumSessions);
             StringBuilder sb = new StringBuilder();
@@ -57,6 +66,73 @@ public class ActivityDetailWorkout extends AppCompatActivity {
             lstTracks.setAdapter(new TrackAdapter(this, trackArrayList));
         } catch (NullPointerException npex) {
             Log.e(TAG, "Error accessing the workout data from ActivityListWorkouts");
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_workout_detail, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch(item.getItemId()) {
+            case R.id.menu_workout_delete:
+                showWorkoutDeleteDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        setResult(RESULT_OK);
+    }
+
+    private void showWorkoutDeleteDialog() {
+        Log.d(TAG, "Deleting workout " + workout.toString());
+        //Alert dialog displayed to the user
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        if (!workoutData.open()) {
+            Toast.makeText(getApplicationContext(), R.string.open_db_error, Toast.LENGTH_LONG).show();
+        }
+        else {  //Database opened
+            if (workoutData.getNumTrainingSessions(workout.getName()) == 0) {
+                //No recorded training sessions for this workout
+                builder.setMessage(R.string.list_workouts_warning_delete_workout_text_without);
+            } else {  //There are recorded training sessions
+                builder.setMessage(R.string.list_workouts_warning_delete_workout_text_with);
+            }
+            builder.setTitle(R.string.list_workouts_warning_delete_workout_title).
+                    setPositiveButton(R.string.list_workouts_warning_delete_workout_accept,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Log.i(TAG, "Deleting workout " + workout.toString());
+                                if (!workoutData.deleteWorkout(workout.getName())) {
+                                    Toast.makeText(getApplicationContext(),
+                                            R.string.detail_workout_delete_error,
+                                            Toast.LENGTH_LONG).show();
+                                }
+                                else {
+                                    setResult(RESULT_OK);
+                                    finish();
+                                }
+                            }
+                        }).
+                    setNegativeButton(R.string.training_session_detail_warning_cancel,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                Toast.makeText(getApplicationContext(),
+                                        R.string.list_workouts_warning_delete_workout_cancelled,
+                                        Toast.LENGTH_LONG).show();
+                            }
+                        }).
+            //AlertDialog dialog = builder.create();
+                    setIcon(android.R.drawable.ic_dialog_alert).
+                    show();
         }
     }
 }

@@ -51,9 +51,7 @@ public class WorkoutData {
 		String[] args = new String[]{workout.getName()};
 		Cursor c = db.rawQuery("SELECT idWorkout FROM Workouts WHERE nombreWorkout=?", args);
 		boolean result = (c.getCount() > 0);
-		//TODO añadido codigo - COMPROBAR QUE se puede close sin problemas
         c.close();
-        //////////////////////////////
 		return result;
 	}
 
@@ -139,9 +137,6 @@ public class WorkoutData {
 					result = db.insert("Loads", null, newRecord);
 				}					
 			}
-			//TODO ver si esto es necesario y si no, borrar
-			readDB();
-			/////////////////////////////////////////
 			return true;
 		} catch (SQLiteException sqlex) {
 			Log.e(TAG,"Error storing the workout in the database: " + sqlex.getMessage());
@@ -190,11 +185,9 @@ public class WorkoutData {
 			listWorkouts.add(currentWorkout);
 			cursorWorkouts.moveToNext();
 		}
-		// TODO Codigo nuevo - Comprobar que se se cierran bien ////////
-        if (cursorLoads != null) cursorLoads.close();
+		if (cursorLoads != null) cursorLoads.close();
 		if (cursorTracks != null) cursorTracks.close();
 		cursorWorkouts.close();
-		///////////////////////////////////////////////////////////
 		return listWorkouts;
 	}
 
@@ -237,7 +230,7 @@ public class WorkoutData {
                     "WHERE Workouts.nombreWorkout=?", args);
 			if (c.moveToFirst()) {
 				while (!c.isAfterLast()) {
-					readDB();
+					//readDB();		//DEBUG
 					//The session record is deleted from the 'Entrenamientos' table...
 					db.execSQL("DELETE FROM Entrenamientos WHERE idEntrenamiento=" + c.getInt(0));
 					//... and the associated exercises are also deleted
@@ -276,9 +269,7 @@ public class WorkoutData {
 					} while (c.moveToNext());
 				}
 			}
-			//TODO codigo nuevo. ver si se cierra bien
-            c.close();
-			////////////////////////////////////////
+			c.close();
 			return true;
 			
 		} catch (SQLiteException sqlex) {
@@ -327,11 +318,9 @@ public class WorkoutData {
 			}
 			cursorTrainingSessions.moveToNext();
 		}
-		//TODO codigo nuevo. comprobar que va bien
 		cursorTrainingSessions.close();
 		if (cursorWorkouts != null) cursorWorkouts.close();
-        //////////////////////////////
-		return listTrainingSessions;
+        return listTrainingSessions;
 	}
 
     /** Retrieves the training session information based on the workout name and the date
@@ -384,9 +373,7 @@ public class WorkoutData {
 					else throw new SQLiteException (
 							"Integrity error in the database: idLoad doesn't exist in table Loads");
 				} while (c.moveToNext());
-				//TODO codigo nuevo. comprobar que se cierra bien el cursor
-                if (cLoads != null) cLoads.close();
-                /////////////////////////////
+				if (cLoads != null) cLoads.close();
 
                 //For each load, get the associated track information
 				for (i=0; i<idLoad.length; i++) {					
@@ -421,9 +408,7 @@ public class WorkoutData {
 							"Database integrity error: foreign key idTrack not found in table Tracks");
 				}
 			}
-			//TODO codigo nuevo. comprobar que se cierra bien
-            c.close();
-			////////////////////////////////
+			c.close();
 			return result;
 		} catch (SQLiteException sqlex) {
 		    Log.e(TAG, sqlex.getLocalizedMessage());
@@ -509,22 +494,16 @@ public class WorkoutData {
                                     0));
                         }
 					} while (cLoads.moveToNext());
-                    //TODO codigo nuevo. comprobar que se cierra bien
                     cExercises.close();
-                    /////////////////////////////////////
 				}
 				workout.addTrack(track);
 			} while (c.moveToNext());
-            //TODO codigo nuevo. comprobar que se cierra bien
             cLoads.close();
-            /////////////////////////////////////
 		}
 		else return null;
 
-		//TODO codigo nuevo. comprobar que se cierra bien
 		c.close();
-        /////////////////////////////////////
-		return workout;
+        return workout;
 	}
 
     /** Returns the global index calculated as the average value of the workout loads'

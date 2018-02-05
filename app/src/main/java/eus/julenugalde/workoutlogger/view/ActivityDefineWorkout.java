@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.StringTokenizer;
 
 import eus.julenugalde.workoutlogger.R;
 import eus.julenugalde.workoutlogger.controller.TextWithCounterWatcher;
@@ -34,7 +35,6 @@ public class ActivityDefineWorkout extends AppCompatActivity {
     private static final String TAG = ActivityDefineWorkout.class.getSimpleName();
 
     private ArrayList<Track> trackArrayList;
-    private TrackAdapter trackAdapter;
     private EditTextWithCounter txtWorkoutName;
     private Button btnNewTrack;
     private ListView lstTracks;
@@ -51,7 +51,7 @@ public class ActivityDefineWorkout extends AppCompatActivity {
 
     private void initializeControls() {
         txtWorkoutName.setCountLimit(Workout.NAME_MAX_LENGTH);
-        txtWorkoutName.setText(""); //todo Suggest name
+        txtWorkoutName.setText(suggestWorkoutName());
         txtWorkoutName.addTextChangedListener(new TextWithCounterWatcher(txtWorkoutName));
 
         lstTracks.setAdapter(new TrackAdapter(this, trackArrayList));
@@ -195,5 +195,42 @@ public class ActivityDefineWorkout extends AppCompatActivity {
                         Toast.LENGTH_LONG).show();
             }
         }
+    }
+
+    /** For the case of BodyPump workouts, the next workout is suggested */
+    private String suggestWorkoutName() {
+        WorkoutData workoutData = new WorkoutData(getApplicationContext());
+        if(!workoutData.open()) {
+            Log.e(TAG, "Error opening the database");
+            return "";
+        }
+        boolean flagBodyPump = false;
+        int lastRelease=0;
+        int i;
+        String s;
+        StringTokenizer st;
+        ArrayList<Workout> workoutArrayList = workoutData.getListWorkouts();
+        Iterator<Workout> iterator = workoutArrayList.iterator();
+        while (iterator.hasNext()) {
+            st = new StringTokenizer(iterator.next().getName(), " ");
+            flagBodyPump = false;
+            i = 0;
+            s = "";
+            while (st.hasMoreTokens()) {
+                s = st.nextToken();
+                if (s.equalsIgnoreCase("BodyPump")) {
+                    flagBodyPump = true;
+                }
+            }
+            if (flagBodyPump) {
+                try {
+                    i = Integer.parseInt(s); //The last token is the release number.
+                } catch (NumberFormatException e) {}
+                lastRelease = (i>lastRelease) ? i : lastRelease;
+            }
+        }
+
+        workoutData.close();
+        return "BodyPump" + (++lastRelease);
     }
 }

@@ -53,14 +53,6 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
         lblNumSessions.setText(numTrainingSessions + " " +
                 getContext().getResources().getString(R.string.list_workouts_completed_sessions));
 
-        ImageButton imgViewTracks = (ImageButton)item.findViewById(R.id.ImgListItemWorkoutViewTracks);
-        imgViewTracks.setOnClickListener(
-                new WorkoutListener(item, workout, WorkoutListener.ACTION_VIEW_TRACKS));
-
-        ImageButton imgDelete = (ImageButton)item.findViewById(R.id.ImgListItemWorkoutDelete);
-        imgDelete.setOnClickListener(
-                new WorkoutListener(item, workout, WorkoutListener.ACTION_DELETE));
-
         return item;
     }
 }

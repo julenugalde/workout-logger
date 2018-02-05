@@ -29,7 +29,8 @@
     <string name="training_session_detail_tracks_loads">Tracks and loads in the session: </string>
     <string name="training_session_detail_title">Training session detail</string>
     <string name="training_session_detail_menu_delete">Delete</string>
-    <string name="training_session_detail_warning_delete">Do you really want to delete this training session?</string>
+    <string name="training_session_detail_warning_delete">
+        Do you really want to delete this training session?</string>
     <string name="training_session_detail_warning_accept">Delete</string>
     <string name="training_session_detail_warning_cancel">Cancel</string>
     <string name="training_session_detail_delete_error">Error deleting the training session</string>
@@ -72,7 +73,8 @@
     <string name="define_workout_contextual_delete">Delete track</string>
     <string name="define_workout_no_loads"><em>No loads</em></string>
     <string name="define_workout_save_error_empty_name">The name cannot be empty</string>
-    <string name="define_workout_save_error_no_tracks">At least one track must be defined in the workout</string>
+    <string name="define_workout_save_error_no_tracks">
+        At least one track must be defined in the workout</string>
     <string name="define_workout_save_error_exists">A workout with the same name already exists</string>
     <string name="define_workout_save_error_db">Error opening the database</string>
     <string name="menu_define_workout_save">Save</string>
@@ -88,14 +90,18 @@
 
     <!-- Activity list workouts -->
     <string name="list_workouts_view">List of workouts</string>
-    <string name="list_workouts_contextual_detail_workout">View details</string>
-    <string name="list_workouts_contextual_delete_workout">Delete</string>
     <string name="list_workouts_warning_delete_workout_title">Delete workout</string>
-    <string name="list_workouts_warning_delete_workout_text_with">Warning: there are training sessions associated to this workout. If you delete it, the sessions will also be erased.\nDo you really want to delete the workout?</string>
-    <string name="list_workouts_warning_delete_workout_text_without">Do you really want to delete the workout?</string>
+    <string name="list_workouts_warning_delete_workout_text_with">
+        <b>Warning</b>: there are training sessions associated to this workout.
+        If you delete it, the sessions will also be erased.\n\n
+        Do you really want to delete the workout?
+    </string>
+    <string name="list_workouts_warning_delete_workout_text_without">
+        Do you really want to delete the workout?</string>
     <string name="list_workouts_warning_delete_workout_accept">Delete</string>
     <string name="list_workouts_warning_delete_workout_cancel">Cancel</string>
-    <string name="list_workouts_warning_delete_workout_cancelled">The workout has not been deleted</string>
+    <string name="list_workouts_warning_delete_workout_cancelled">
+        Delete operation cancelled by the user</string>"
     <string name="list_workouts_tracks">tracks</string>
     <string name="list_workouts_completed_sessions">sessions completed</string>
 
@@ -105,4 +111,6 @@
     <string name="detail_workout_string_tracks_plural">tracks in the workout</string>
     <string name="detail_workout_string_training_sessions_singular">training session completed</string>
     <string name="detail_workout_string_training_sessions_plural">training sessions completed</string>
+    <string name="detail_workout_delete_error">Error deleting the workout</string>
+    <string name="menu_detail_workout_delete">Delete</string>
 </resources>

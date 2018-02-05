@@ -52,13 +52,13 @@ public class TrackIcon {
                 return R.drawable.track_biceps;
             }
             else if (text.equalsIgnoreCase(defaultTrackNames[i][6])) {
-                return R.drawable.track_shoulders;
-            }
-            else if (text.equalsIgnoreCase(defaultTrackNames[i][7])) {
                 return R.drawable.track_lunges;
             }
+            else if (text.equalsIgnoreCase(defaultTrackNames[i][7])) {
+                return R.drawable.track_shoulders;
+            }
             else if (text.equalsIgnoreCase(defaultTrackNames[i][8])) {
-                return R.drawable.track_default;
+                return R.drawable.track_core;
             }
         }
         return R.drawable.track_default;    //By default, if not found
