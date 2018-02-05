@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="eus.julenugalde.workoutlogger">
-
+    
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    
     <application
         android:allowBackup="true"
         android:icon="@drawable/workout_logger_app"
@@ -9,6 +14,8 @@
         android:roundIcon="@drawable/workout_logger_app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <meta-data android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAIyZ_lVAdq-NoqkNBEXRA4d11TlIjf0FCNCvXKkA" />
         <activity
             android:name=".view.MainActivity"
             android:label="@string/main_title">
@@ -44,7 +51,10 @@
             android:parentActivityName=".view.ActivityListWorkouts" />
         <activity
             android:name=".view.ActivityDefineTrack"
-            android:parentActivityName=".view.ActivityDefineWorkout"/>
+            android:parentActivityName=".view.ActivityDefineWorkout" />
+        <activity
+            android:name=".view.ActivityViewStatistics"
+            android:parentActivityName=".view.MainActivity" />
     </application>
 
 </manifest>

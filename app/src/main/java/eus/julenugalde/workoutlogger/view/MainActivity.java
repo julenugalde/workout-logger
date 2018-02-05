@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private Persistence persistence;
 
     private static final int REQ_CODE_ADD_TRAINING_SESSION = 101;
-    private static final int REQ_CODE_VIEW_WORKOUTS = 102;
+    private static final int REQ_CODE_VIEW_STATISTICS = 102;
     private static final int REQ_CODE_VIEW_TRAINING_SESSION = 103;
     private static final int REQ_CODE_SETTINGS = 104;
     private static final int RESULT_ERROR_SAVE = 401;
@@ -54,9 +54,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarSettings);
-        //setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fabAddTrainingSession);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -108,15 +105,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        Intent intent;
         switch(item.getItemId()) {
             case R.id.main_activity_menu_list_workouts:
                 startActivityForResult(
                         new Intent(MainActivity.this, ActivityListWorkouts.class),
-                        REQ_CODE_VIEW_WORKOUTS);
+                        REQ_CODE_VIEW_STATISTICS);
                 return true;
             case R.id.main_activity_menu_load_xml:
                 if (loadXML()) {
@@ -145,7 +138,9 @@ public class MainActivity extends AppCompatActivity {
                         REQ_CODE_SETTINGS);
                 return true;
             case R.id.main_activity_menu_view_graph:
-                //TODO view graph
+                startActivityForResult(
+                        new Intent(MainActivity.this, ActivityViewStatistics.class),
+                        REQ_CODE_VIEW_STATISTICS);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -169,7 +164,7 @@ public class MainActivity extends AppCompatActivity {
                         break;
                 }
             case REQ_CODE_VIEW_TRAINING_SESSION:
-            case REQ_CODE_VIEW_WORKOUTS:
+            case REQ_CODE_VIEW_STATISTICS:
                 updateTrainingSessionList();
                 break;
             case REQ_CODE_SETTINGS:

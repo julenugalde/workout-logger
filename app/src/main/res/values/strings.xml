@@ -113,4 +113,12 @@
     <string name="detail_workout_string_training_sessions_plural">training sessions completed</string>
     <string name="detail_workout_delete_error">Error deleting the workout</string>
     <string name="menu_detail_workout_delete">Delete</string>
+
+    <!-- View statistics -->
+    <string name="statistics_workout_title">Workout:</string>
+    <string name="statistics_tracks_title">Tracks:</string>
+    <string name="statistics_global_index"><b>Global index</b></string>
+    <string name="statistics_error_data">Data error</string>
+    <string name="statistics_graph_no_title">(No title)</string>
+
 </resources>

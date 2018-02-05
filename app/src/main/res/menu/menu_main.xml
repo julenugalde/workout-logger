@@ -9,14 +9,14 @@
         android:title="@string/main_activity_menu_settings" />
     <item
         android:id="@+id/main_activity_menu_list_workouts"
-        app:showAsAction="ifRoom"
+        app:showAsAction="always"
         android:icon="@drawable/ic_list_white_24dp"
         android:title="@string/main_activity_menu_list_workouts"/>
     <item
         android:id="@+id/main_activity_menu_view_graph"
         android:title="@string/main_activity_menu_view_graph"
         android:icon="@drawable/ic_show_chart_white_18dp"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="always" />
     <item
         android:title="@string/main_activity_menu_backup">
         <menu>

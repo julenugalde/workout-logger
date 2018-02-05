@@ -517,10 +517,6 @@ public class WorkoutData {
     public Map<Date, Double> getIndicesWorkout (String nameWorkout) {
         Map<Date, Double> result = new TreeMap<Date, Double>();
 
-        //TODO. DEBUG: BORRAR
-        readDB();
-        //////
-
         Cursor c = db.rawQuery(
                 "SELECT idWorkout FROM Workouts WHERE nombreWorkout=?",
                 new String[] {nameWorkout});
@@ -617,10 +613,8 @@ public class WorkoutData {
             result.put(date, Double.valueOf(indexLoad));
         } while (c.moveToNext());
 
-        // TODO VER SI EL CURSOR SE CIERRA BIEN
         c.close();
         cAux.close();
-        ////////////////////////
         return result;
     }
 
