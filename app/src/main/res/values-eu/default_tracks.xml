@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string-array name="defaultTracks">
-        <item>Calentamiento</item>
-        <item>Squad</item>
-        <item>Pectoral</item>
-        <item>Espalda</item>
-        <item>Triceps</item>
-        <item>Biceps</item >
+        <item>Beroketa</item>
+        <item>Koadrizeps</item>
+        <item>Bular-muskuluak</item>
+        <item>Bizkarra</item>
+        <item>Trizeps</item>
+        <item>Bizeps</item >
         <item>Lunge</item>
-        <item>Hombro</item >
-        <item>Abdominal</item >
-        <item>[Personalizado]</item >
+        <item>Sorbalda</item >
+        <item>Abdominalak</item >
+        <item>[Pertsonalizatuta]</item >
     </string-array >
 </resources>

@@ -9,6 +9,7 @@ import android.view.ContextMenu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -62,8 +63,6 @@ public class ActivityListWorkouts extends AppCompatActivity {
     }
 
     private void captureControls() {
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //setSupportActionBar(toolbar);
         lstWorkouts = (ListView)findViewById(R.id.LstWorkouts);
         fabAddWorkout = (FloatingActionButton) findViewById(R.id.fabAddWorkout);
     }
@@ -73,7 +72,9 @@ public class ActivityListWorkouts extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         switch(requestCode) {
             case REQ_CODE_DEF_WORKOUT:
-                //TODO implement
+                listWorkouts = workoutData.getListWorkouts();
+                lstWorkouts.setAdapter(new WorkoutAdapter(this, listWorkouts));
+                ((WorkoutAdapter)lstWorkouts.getAdapter()).notifyDataSetChanged();
                 break;
             default:
                 Log.e(TAG, "Invalid reqCode: " + requestCode);

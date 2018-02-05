@@ -4,8 +4,6 @@ import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.text.format.DateFormat;
 import android.util.Log;
 import android.view.Menu;
@@ -30,6 +28,7 @@ import java.util.GregorianCalendar;
 import java.util.Iterator;
 
 import eus.julenugalde.workoutlogger.R;
+import eus.julenugalde.workoutlogger.controller.TextWithCounterWatcher;
 import eus.julenugalde.workoutlogger.controller.TrainingExerciseAdapter;
 import eus.julenugalde.workoutlogger.model.Load;
 import eus.julenugalde.workoutlogger.model.Track;
@@ -114,20 +113,8 @@ public class ActivityNewTrainingSession extends AppCompatActivity
         //TextView for the comment
         txtComment.setCountLimit(TrainingSession.MAX_LENGTH_COMMENT);
         txtComment.setText("");
-        txtComment.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {}
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-                //Make sure that the text length limit is not surpassed
-                if (charSequence.length() > TrainingSession.MAX_LENGTH_COMMENT) {
-                    txtComment.setText(
-                            charSequence.subSequence(0, TrainingSession.MAX_LENGTH_COMMENT-1));
-                }
-            }
-            @Override
-            public void afterTextChanged(Editable editable) {}
-        });
+        txtComment.addTextChangedListener(new TextWithCounterWatcher(txtComment));
+
     }
 
     @Override

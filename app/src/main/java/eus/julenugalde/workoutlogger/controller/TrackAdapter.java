@@ -47,7 +47,7 @@ public class TrackAdapter extends ArrayAdapter<Track> {
         lblName.setText(name);
 
         ImageView imgIcon = (ImageView)item.findViewById(R.id.ImgListItemTrainingExerciseIcon);
-        imgIcon.setImageResource(TrackIcon.getResourceId(name));
+        imgIcon.setImageResource(TrackIcon.getResourceId(name, context));
 
         TextView lblLoads = (TextView)item.findViewById(R.id.LblListItemTrainingExerciseLoads);
         if (track.getNumLoads() == 0) {
@@ -57,9 +57,11 @@ public class TrackAdapter extends ArrayAdapter<Track> {
             StringBuilder sb = new StringBuilder();
             Load[] loads = track.getLoads();
             for (Load load : loads) {
-                sb.append(load.getName() + " | ");
+                if (!load.getName().isEmpty()) {
+                    sb.append(load.getName() + "\n");
+                }
             }
-            lblLoads.setText(sb.substring(0, sb.length()-2));   //Remove the final separator
+            lblLoads.setText(sb.substring(0, sb.length()-1));   //Remove the final line feed
         }
         return item;
     }

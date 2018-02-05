@@ -48,7 +48,7 @@ public class TrainingExerciseAdapter extends ArrayAdapter<TrainingExercise> {
         ImageView imgIcon = (ImageView)item.findViewById(R.id.ImgListItemTrainingExerciseIcon);
         String text = lblName.getText().toString();
 
-        imgIcon.setImageResource(TrackIcon.getResourceId(text));
+        imgIcon.setImageResource(TrackIcon.getResourceId(text, context));
         updateControlsVisibility(item, trainingExercise);
         return item;
     }

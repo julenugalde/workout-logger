@@ -13,6 +13,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import eus.julenugalde.workoutlogger.R;
+import eus.julenugalde.workoutlogger.controller.TextWithCounterWatcher;
 import eus.julenugalde.workoutlogger.model.Load;
 import eus.julenugalde.workoutlogger.model.Track;
 import eus.julenugalde.workoutlogger.model.TrainingExercise;
@@ -54,8 +55,10 @@ public class ActivityDefineTrack extends AppCompatActivity {
     private void initializeControls() {
         //Character limits for text fields
         txtCustomGroup.setCountLimit(Track.NAME_MAX_LENGTH);
+        txtCustomGroup.addTextChangedListener(new TextWithCounterWatcher(txtCustomGroup));
         for (int i=0; i<ActivityDefineWorkout.KEY_LOADS.length; i++) {
             txtLoads[i].setCountLimit(Load.NAME_MAX_LENGTH);
+            txtLoads[i].addTextChangedListener(new TextWithCounterWatcher(txtLoads[i]));
         }
 
         //Spinner adapter

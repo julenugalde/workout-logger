@@ -93,6 +93,8 @@
             android:paddingStart="@dimen/activity_horizontal_margin"
             android:paddingEnd="@dimen/activity_horizontal_margin"
             android:inputType="text"
+            android:selectAllOnFocus="true"
+            android:textSize="@dimen/font_size_normal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/TxtDefineTrackLoad0" />
         <eus.julenugalde.workoutlogger.view.EditTextWithCounter
@@ -103,6 +105,8 @@
             android:paddingStart="@dimen/activity_horizontal_margin"
             android:paddingEnd="@dimen/activity_horizontal_margin"
             android:inputType="text"
+            android:selectAllOnFocus="true"
+            android:textSize="@dimen/font_size_normal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/TxtDefineTrackLoad1" />
         <eus.julenugalde.workoutlogger.view.EditTextWithCounter
@@ -113,9 +117,10 @@
             android:paddingStart="@dimen/activity_horizontal_margin"
             android:paddingEnd="@dimen/activity_horizontal_margin"
             android:inputType="text"
+            android:selectAllOnFocus="true"
+            android:textSize="@dimen/font_size_normal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/TxtDefineTrackLoad2" />
-
 
     </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>

@@ -16,6 +16,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import eus.julenugalde.workoutlogger.R;
+import eus.julenugalde.workoutlogger.controller.TextWithCounterWatcher;
 import eus.julenugalde.workoutlogger.controller.TrackAdapter;
 import eus.julenugalde.workoutlogger.model.Load;
 import eus.julenugalde.workoutlogger.model.Track;
@@ -50,7 +51,8 @@ public class ActivityDefineWorkout extends AppCompatActivity {
 
     private void initializeControls() {
         txtWorkoutName.setCountLimit(Workout.NAME_MAX_LENGTH);
-        txtWorkoutName.setText("");
+        txtWorkoutName.setText(""); //todo Suggest name
+        txtWorkoutName.addTextChangedListener(new TextWithCounterWatcher(txtWorkoutName));
 
         lstTracks.setAdapter(new TrackAdapter(this, trackArrayList));
 
@@ -131,7 +133,6 @@ public class ActivityDefineWorkout extends AppCompatActivity {
                 track.addLoad(new Load(aux));
             }
         }
-
         return track;
     }
 
@@ -187,6 +188,7 @@ public class ActivityDefineWorkout extends AppCompatActivity {
                                 Toast.LENGTH_LONG).show();
                     }
                 }
+                workoutData.close();
             }
             else {
                 Toast.makeText(getApplicationContext(), R.string.define_workout_save_error_db,
