@@ -9,11 +9,13 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import eus.julenugalde.workoutlogger.R;
 import eus.julenugalde.workoutlogger.controller.TextWithCounterWatcher;
+import eus.julenugalde.workoutlogger.controller.TrackIcon;
 import eus.julenugalde.workoutlogger.model.Load;
 import eus.julenugalde.workoutlogger.model.Track;
 import eus.julenugalde.workoutlogger.model.TrainingExercise;
@@ -22,6 +24,7 @@ public class ActivityDefineTrack extends AppCompatActivity {
     private Spinner cmbDefaultGroups;
     private EditTextWithCounter txtCustomGroup;
     private EditTextWithCounter[] txtLoads;
+    private ImageView imgIcon;
 
     private static final String TAG = ActivityDefineTrack.class.getSimpleName();
 
@@ -50,6 +53,7 @@ public class ActivityDefineTrack extends AppCompatActivity {
             txtLoads[i] = (EditTextWithCounter)findViewById(getResources().getIdentifier(
                     "TxtDefineTrackLoad" + i, "id", getPackageName()));
         }
+        imgIcon = (ImageView)findViewById(R.id.ImgDefineTrackIcon);
     }
 
     private void initializeControls() {
@@ -79,15 +83,19 @@ public class ActivityDefineTrack extends AppCompatActivity {
             }
             cmbDefaultGroups.setEnabled(false);
 
-            //Set the custom track name field
+            //Set the custom track name field and hide icon
             cmbDefaultGroups.setSelection(index);
             if (index == (defaultTracks.length-1)) {    //Custom track
                 txtCustomGroup.setVisibility(View.VISIBLE);
                 txtCustomGroup.setText(readTrack);
+                imgIcon.setVisibility(View.INVISIBLE);
             }
-            else {  //Track in the default tracks list
+            else {  //Track in the default tracks list and show icon
                 txtCustomGroup.setVisibility(View.INVISIBLE);
                 txtCustomGroup.setText("");
+                imgIcon.setImageResource(TrackIcon.getResourceId(
+                        cmbDefaultGroups.getSelectedItem().toString(), this));
+                imgIcon.setVisibility(View.VISIBLE);
             }
 
             //Set the load names
@@ -118,10 +126,14 @@ public class ActivityDefineTrack extends AppCompatActivity {
                     txtCustomGroup.setVisibility(View.VISIBLE);
                     txtCustomGroup.setEnabled(true);
                     txtCustomGroup.requestFocus();
+                    imgIcon.setVisibility(View.INVISIBLE);
                 }
                 else {  //Selection within the default tracks list
                     txtCustomGroup.setVisibility(View.INVISIBLE);
                     txtCustomGroup.setEnabled(false);
+                    imgIcon.setImageResource(TrackIcon.getResourceId(
+                            cmbDefaultGroups.getSelectedItem().toString(), view.getContext()));
+                    imgIcon.setVisibility(View.VISIBLE);
                 }
             }
             @Override

@@ -125,12 +125,16 @@ public class ActivityNewTrainingSession extends AppCompatActivity
         txtDate.setText(DateFormat.format("yyyy-MM-dd", date.getTime()));
     }
 
-    private void loadSelectedWorkoutData(boolean clean) {   //TODO decide if this should return a boolean
-        workoutData.open();
+    private boolean loadSelectedWorkoutData(boolean clean) {
+        if (!workoutData.open()) {
+            Log.e(TAG, "Error opening the database");
+            return false;
+        }
         Workout currentWorkout = workoutData.getWorkout(cmbListWorkouts.getSelectedItem().toString());
         workoutData.close();
         if (currentWorkout == null) {
             Log.e(TAG, "Error loading selected workout");
+            return false;
         }
         else {
             if (clean) listExercises.clear();
@@ -149,29 +153,41 @@ public class ActivityNewTrainingSession extends AppCompatActivity
                 listExercises.add(trainingExercise);
             }
         }
+        return true;
     }
 
     private void initializeVariables(Bundle savedInstanceState) {
         if(savedInstanceState != null) {    //Data have been saved
             try {
-                positionCombo = savedInstanceState.getInt(KEY_COMBO_POSITION);
+                positionCombo = savedInstanceState.getInt(KEY_COMBO_POSITION, 0);
                 listExercises = (ArrayList<TrainingExercise>)savedInstanceState.
                         getSerializable(KEY_LIST_EXERCISES);
+                if (listExercises == null) {
+                    listExercises = new ArrayList<>();
+                }
                 arrayWorkouts = savedInstanceState.getStringArray(KEY_ARRAY_WORKOUTS);
+                if (arrayWorkouts == null) {
+                    arrayWorkouts = new String[] {};
+                }
             }catch (ClassCastException ccex) {
                 Log.e(TAG, "Error in the cast of exercises list: " + ccex.getLocalizedMessage());
             }
         }
         else {
             positionCombo = 0;
-            workoutData.open();
-            ArrayList<Workout> listWorkouts = workoutData.getListWorkouts();
-            workoutData.close();
-            arrayWorkouts = new String[listWorkouts.size()];
-            int i = listWorkouts.size()-1;  //Display in inverse order
-            Iterator<Workout> iterator = listWorkouts.iterator();
-            while(iterator.hasNext()) {
-                arrayWorkouts[i--] = iterator.next().getName();
+            if (workoutData.open()) {
+                ArrayList<Workout> listWorkouts = workoutData.getListWorkouts();
+                workoutData.close();
+                arrayWorkouts = new String[listWorkouts.size()];
+                int i = listWorkouts.size() - 1;  //Display in inverse order
+                Iterator<Workout> iterator = listWorkouts.iterator();
+                while (iterator.hasNext()) {
+                    arrayWorkouts[i--] = iterator.next().getName();
+                }
+            }
+            else {  //Error opening the database
+                arrayWorkouts = new String[] {getResources().getString(R.string.open_db_error)};
+                Log.e(TAG, "Error opening the database");
             }
             listExercises = new ArrayList<TrainingExercise>();
         }
@@ -229,7 +245,10 @@ public class ActivityNewTrainingSession extends AppCompatActivity
                     if(trainingExercise.isCompleted()) anyExercise = true;
                 }
                 if (anyExercise) { //There are exercises --> Save data and return to main activity
-                    workoutData.open();
+                    if (!workoutData.open()) {
+                        Log.e(TAG, "Error opening the database");
+                        return false;
+                    }
                     //Workout list is in inverse order
                     ArrayList<Workout> listWorkouts = workoutData.getListWorkouts();
                     int index = listWorkouts.size() - cmbListWorkouts.getSelectedItemPosition() - 1;
@@ -265,18 +284,19 @@ public class ActivityNewTrainingSession extends AppCompatActivity
                     Bundle bundle = data.getExtras();
                     TrainingExercise result = (TrainingExercise)bundle.getSerializable(KEY_EXERCISE);
                     //Replace the training session data in the list
-                    Log.d(TAG, "Exercise data: " + result.toString());
-                    TrainingExercise aux;
-                    for (int i=0; i<listExercises.size(); i++) {    //Replace if already existing
-                        aux = listExercises.get(i);
-                        if(aux.getName().compareTo(result.getName()) == 0) {
-                            listExercises.remove(i);
-                            listExercises.add(i, result);
-                            break;
+                    if (result != null) {
+                        TrainingExercise aux;
+                        for (int i = 0; i < listExercises.size(); i++) {//Replace if already existing
+                            aux = listExercises.get(i);
+                            if (aux.getName().compareTo(result.getName()) == 0) {
+                                listExercises.remove(i);
+                                listExercises.add(i, result);
+                                break;
+                            }
                         }
+                        ((BaseAdapter) lstTrainingExercises.getAdapter()).notifyDataSetChanged();
+                        lstTrainingExercises.requestLayout();
                     }
-                    ((BaseAdapter)lstTrainingExercises.getAdapter()).notifyDataSetChanged();
-                    lstTrainingExercises.requestLayout();
                 }
                 break;
 

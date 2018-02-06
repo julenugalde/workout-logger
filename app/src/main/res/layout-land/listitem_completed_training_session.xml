@@ -13,7 +13,8 @@
         app:layout_constraintTop_toTopOf="parent"
         android:paddingStart="@dimen/activity_horizontal_margin"
         android:paddingEnd="@dimen/activity_horizontal_margin"
-        android:src="@drawable/bodypump"
+        android:src="@drawable/completed_session"
+        android:background="@android:color/transparent"
         tools:ignore="ContentDescription" />
     <TextView
         android:id="@+id/LblListItemCompletedTrainingSessionName"

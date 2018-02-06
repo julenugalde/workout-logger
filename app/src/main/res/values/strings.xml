@@ -39,6 +39,7 @@
     <string name="training_session_detail_no_load"><em>No loads</em></string>
     <string name="training_session_detail_no_comment"><em>No comment</em></string>
     <string name="menu_training_session_detail_delete">Delete</string>
+    <string name="menu_training_session_detail_edit">Edit</string>
 
     <!--View new training session -->
     <string name="new_training_session_title">New training session</string>

@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.List;
@@ -39,8 +40,16 @@ public class WorkoutAdapter extends ArrayAdapter<Workout> {
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         LayoutInflater inflater = context.getLayoutInflater();
         View item = inflater.inflate(R.layout.listitem_workout, null);
-
         Workout workout = listWorkouts.get(position);
+
+        ImageView imgIcon = item.findViewById(R.id.ImgListItemWorkout);
+        if (workout.getName().toLowerCase().contains("bodypump")) {
+            imgIcon.setImageResource(R.drawable.bodypump);
+        }
+        else {
+            imgIcon.setImageResource(R.drawable.other_workout);
+        }
+
         TextView lblName = item.findViewById(R.id.LblListItemWorkoutName);
         lblName.setText(workout.getName());
 

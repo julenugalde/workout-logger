@@ -37,7 +37,6 @@
             android:paddingStart="@dimen/activity_horizontal_margin"
             android:paddingEnd="@dimen/activity_horizontal_margin"
             android:text="@string/define_track_group"/>
-        <!--TODO Include the icon to the left of the spinner-->
         <Spinner
             android:id="@+id/CmbDefineTrackDefaultGroups"
             android:layout_width="wrap_content"
@@ -57,6 +56,15 @@
             app:layout_constraintStart_toEndOf="@id/CmbDefineTrackDefaultGroups"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@id/LblDefineTrackNameTitle"/>
+        <ImageView
+            android:id="@+id/ImgDefineTrackIcon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:tint="@color/colorBlack"
+            android:paddingStart="@dimen/activity_horizontal_margin"
+            android:paddingEnd="@dimen/activity_horizontal_margin"
+            app:layout_constraintStart_toEndOf="@id/CmbDefineTrackDefaultGroups"
+            app:layout_constraintBottom_toBottomOf="@id/CmbDefineTrackDefaultGroups"/>
 
         <!-- Track loads -->
         <TextView

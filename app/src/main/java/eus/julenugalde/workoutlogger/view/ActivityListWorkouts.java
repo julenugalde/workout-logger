@@ -67,14 +67,7 @@ public class ActivityListWorkouts extends AppCompatActivity {
                 startActivityForResult(intent, REQ_CODE_VIEW_WORKOUT);
             }
         });
-        /*if (!workoutData.open()) {
-            Toast.makeText(getApplicationContext(), R.string.open_db_error, Toast.LENGTH_LONG).show();
-            finish();   //TODO Change open() method calls in the project so they test if DB is correctly opened
-        }
-        listWorkouts = workoutData.getListWorkouts();
-        Log.d(TAG, listWorkouts.size() + " workouts in the database");
-        lstWorkouts.setAdapter(new WorkoutAdapter(this, listWorkouts));
-        */
+
         updateWorkoutList();
     }
 

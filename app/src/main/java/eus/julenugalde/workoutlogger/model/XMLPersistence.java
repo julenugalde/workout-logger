@@ -33,7 +33,7 @@ public class XMLPersistence implements Persistence {
      */
     @Override
     public boolean loadData(InputStream inputStream) {
-        workoutData.open();
+        if (!workoutData.open()) return false;
         try {
             SAXParserFactory factory = SAXParserFactory.newInstance();
             SAXParser parser = factory.newSAXParser();
@@ -59,7 +59,7 @@ public class XMLPersistence implements Persistence {
      */
     @Override
     public boolean saveData(OutputStream outputStream) {
-        workoutData.open();
+        if (!workoutData.open()) return false;
         XmlSerializer serializer = Xml.newSerializer();
         try {
             serializer.setOutput(outputStream, "UTF-8");

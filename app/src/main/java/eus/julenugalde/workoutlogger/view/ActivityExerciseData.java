@@ -40,8 +40,10 @@ public class ActivityExerciseData extends AppCompatActivity
         Bundle bundle = getIntent().getExtras();
         trainingExercise = (TrainingExercise)bundle.
                 getSerializable(ActivityNewTrainingSession.KEY_EXERCISE);
-        //this.setTitle(trainingExercise.getName());
-
+        if (trainingExercise == null) {
+            Log.e(TAG, "Error receiving training exercise data");
+            finish();
+        }
         captureControls();
         configControls(savedInstanceState);
         initializeVariables(savedInstanceState);

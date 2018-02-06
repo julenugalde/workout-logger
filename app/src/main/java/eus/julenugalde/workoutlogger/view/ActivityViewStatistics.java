@@ -19,6 +19,7 @@ import java.util.Map;
 import java.util.Set;
 
 import eus.julenugalde.workoutlogger.R;
+import eus.julenugalde.workoutlogger.controller.TrackArrayAdapter;
 import eus.julenugalde.workoutlogger.model.Load;
 import eus.julenugalde.workoutlogger.model.Track;
 import eus.julenugalde.workoutlogger.model.TrainingSession;
@@ -42,7 +43,7 @@ public class ActivityViewStatistics extends AppCompatActivity {
     private Track[] arrayTracks;
     private int indexWorkout;
     private int indexTrack;
-    private ArrayAdapter<Track> trackArrayAdapter;
+    private TrackArrayAdapter trackArrayAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,19 +54,28 @@ public class ActivityViewStatistics extends AppCompatActivity {
             indexTrack = 0;
             indexWorkout = 0;
             workoutData = new WorkoutData(this);
-            workoutData.open();
-            ArrayList<Workout> listWorkouts = workoutData.getListWorkouts();
-            initializeArrayWorkouts(listWorkouts);
-            arrayTracks = loadTracks(0);
-            workoutData.close();
+            if (workoutData.open()) {
+                ArrayList<Workout> listWorkouts = workoutData.getListWorkouts();
+                initializeArrayWorkouts(listWorkouts);
+                arrayTracks = loadTracks(0);
+                workoutData.close();
+            }
+            else {
+                arrayTracks = null;
+            }
         }
         else {  //there are previous data
             arrayWorkouts = savedInstanceState.getStringArray(KEY_ARRAY_WORKOUTS);
             indexWorkout = savedInstanceState.getInt(KEY_INDEX_WORKOUT);
-            workoutData.open();
-            arrayTracks = loadTracks(indexWorkout);
-            workoutData.close();
-            indexTrack = savedInstanceState.getInt(KEY_INDEX_TRACK);
+            if (workoutData.open()) {
+                arrayTracks = loadTracks(indexWorkout);
+                workoutData.close();
+                indexTrack = savedInstanceState.getInt(KEY_INDEX_TRACK);
+            }
+            else {
+                arrayTracks = null;
+                indexTrack = 0;
+            }
         }
 
         captureControls();
@@ -105,7 +115,7 @@ public class ActivityViewStatistics extends AppCompatActivity {
         });
 
         //Tracks spinner adapter
-        trackArrayAdapter = new ArrayAdapter<Track>(
+        trackArrayAdapter = new TrackArrayAdapter(
                 this, android.R.layout.simple_spinner_item, arrayTracks);
         trackArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cmbTracks.setAdapter(trackArrayAdapter);
@@ -129,7 +139,9 @@ public class ActivityViewStatistics extends AppCompatActivity {
     }
 
     private Track[] loadTracks(int index) {
-        workoutData.open();
+        if (!workoutData.open()) {
+            return new Track[] {new Track(getResources().getString(R.string.open_db_error))};
+        }
         Track[] initial = workoutData.getWorkout(arrayWorkouts[index]).getTracks();
         workoutData.close();
         Track[] result = new Track[initial.length+1];
@@ -154,7 +166,7 @@ public class ActivityViewStatistics extends AppCompatActivity {
         arrayTracks = loadTracks(indexWorkout);
 
         //TODO try to do this with notifyDataSetChanged()
-        trackArrayAdapter = new ArrayAdapter<Track>(
+        trackArrayAdapter = new TrackArrayAdapter(
                 this, android.R.layout.simple_spinner_item, arrayTracks);
         trackArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cmbTracks.setAdapter(trackArrayAdapter);

@@ -45,11 +45,18 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
         setContentView(R.layout.activity_training_session_detail);
         Bundle bundle = this.getIntent().getExtras();
         trainingSession = (TrainingSession)bundle.getSerializable(MainActivity.KEY_TRAINING_SESSION);
-        //Log.d(TAG, "trainingSession: " + trainingSession.toString());
+        if (trainingSession == null) {
+            Log.e(TAG, "Error retrieving training session data");
+            finish();
+        }
         workoutData = new WorkoutData(getApplicationContext());
-        workoutData.open();
-        workout = workoutData.getTrainingSession(
-                trainingSession.getNameWorkout(), trainingSession.getDate());
+        if (workoutData.open()) {
+            workout = workoutData.getTrainingSession(
+                    trainingSession.getNameWorkout(), trainingSession.getDate());
+        }
+        else {
+            workout = null;
+        }
 
         if (workout != null) {
             //Capture and initialize controls
@@ -113,9 +120,17 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
             case R.id.menu_training_session_detail_delete:
                 showTrainingSessionDeleteDialog();
                 return true;
+            case R.id.menu_training_session_detail_edit:
+                editTrainingSession();
+                return true;
             default:
                 return false;
         }
+    }
+
+    private void editTrainingSession() {
+        //TODO Implement editing training session data
+        Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
     }
 
     private void showTrainingSessionDeleteDialog() {
@@ -125,18 +140,23 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        workoutData.open();
-                        Log.i(TAG, "Deleting training session " + trainingSession.toString());
-                        if(!workoutData.deleteTrainingSession(trainingSession)) {
+                        if (workoutData.open()) {
+                            Log.i(TAG, "Deleting training session " + trainingSession.toString());
+                            if(!workoutData.deleteTrainingSession(trainingSession)) {
+                                Toast.makeText(getApplicationContext(),
+                                        R.string.training_session_detail_delete_error,
+                                        Toast.LENGTH_LONG).show();
+                            }
+                            else {
+                                setResult(RESULT_OK);
+                                finish();
+                            }
+                            workoutData.close();
+                        }
+                        else  {
                             Toast.makeText(getApplicationContext(),
-                                    R.string.training_session_detail_delete_error,
-                                    Toast.LENGTH_LONG).show();
+                                    R.string.open_db_error, Toast.LENGTH_LONG).show();
                         }
-                        else {
-                            setResult(RESULT_OK);
-                            finish();
-                        }
-                        workoutData.close();
                     }
                 });
         builder.setNegativeButton(R.string.training_session_detail_warning_cancel,

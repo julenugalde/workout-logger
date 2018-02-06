@@ -346,8 +346,7 @@ public class WorkoutData {
                     "INNER JOIN Workouts ON Workouts.idWorkout=Entrenamientos.idWorkout "+
                     "WHERE (Workouts.nombreWorkout=? AND Entrenamientos.fecha=?)", args);
 
-			//TODO Devolver null si la búsqueda no ha devuelto ningún registro
-			c.moveToFirst();
+			if (!c.moveToFirst()) return null;
 			idTrainingSession = c.getInt(0);
 
             //Retrieve the info of exercises carried out in the training session
@@ -693,58 +692,23 @@ public class WorkoutData {
                         return false;
                     }
                 }
-                else {  //TODO Transform into a loop from 0 to TrainingExercise.MAX_LOADS-1
-                    if (!exercise.getLoadName(0).isEmpty()) {
-                        idLoad = c.getInt(0);
-                        contentValues.clear();
-                        contentValues.put("idLoad", idLoad);
-                        contentValues.put("idEntrenamiento", idTrainingSession);
-                        contentValues.put("kg", exercise.getLoadKg(0));
-                        contentValues.put("g", exercise.getLoadG(0));
-                        if (db.insert("Ejercicios", null, contentValues) == -1) {
-                            Log.e(TAG, "Error inserting training exercise into the database");
-                            return false;
+                else {  //Save each load in the track
+                    int i=0;
+					do {
+                        if (!exercise.getLoadName(i).isEmpty()) {
+                            idLoad = c.getInt(0);
+                            contentValues.clear();
+                            contentValues.put("idLoad", idLoad);
+                            contentValues.put("idEntrenamiento", idTrainingSession);
+                            contentValues.put("kg", exercise.getLoadKg(i));
+                            contentValues.put("g", exercise.getLoadG(i));
+                            if (db.insert("Ejercicios", null, contentValues) == -1) {
+                                Log.e(TAG, "Error inserting training exercise into the database");
+                                return false;
+                            }
                         }
-                    }
-
-                    if (c.moveToNext() && !exercise.getLoadName(1).isEmpty()) {
-                        idLoad = c.getInt(0);
-                        contentValues.clear();
-                        contentValues.put("idLoad", idLoad);
-                        contentValues.put("idEntrenamiento", idTrainingSession);
-                        contentValues.put("kg", exercise.getLoadKg(1));
-                        contentValues.put("g", exercise.getLoadG(1));
-                        if (db.insert("Ejercicios", null, contentValues) == -1) {
-                            Log.e(TAG, "Error inserting training exercise into the database");
-                            return false;
-                        }
-                    }
-
-                    if (c.moveToNext() && !exercise.getLoadName(2).isEmpty()) {
-                        idLoad = c.getInt(0);
-                        contentValues.clear();
-                        contentValues.put("idLoad", idLoad);
-                        contentValues.put("idEntrenamiento", idTrainingSession);
-                        contentValues.put("kg", exercise.getLoadKg(2));
-                        contentValues.put("g", exercise.getLoadG(2));
-                        if (db.insert("Ejercicios", null, contentValues) == -1) {
-                            Log.e(TAG, "Error inserting training exercise into the database");
-                            return false;
-                        }
-                    }
-
-                    if (c.moveToNext() && !exercise.getLoadName(3).isEmpty()) {
-                        idLoad = c.getInt(0);
-                        contentValues.clear();
-                        contentValues.put("idLoad", idLoad);
-                        contentValues.put("idEntrenamiento", idTrainingSession);
-                        contentValues.put("kg", exercise.getLoadKg(3));
-                        contentValues.put("g", exercise.getLoadG(3));
-                        if (db.insert("Ejercicios", null, contentValues) == -1) {
-                            Log.e(TAG, "Error inserting training exercise into the database");
-                            return false;
-                        }
-                    }
+                        i++;
+                    } while (c.moveToNext());
                 }
             }
         }
