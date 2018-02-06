@@ -16,9 +16,13 @@ import android.widget.TextView;
 import eus.julenugalde.workoutlogger.model.Track;
 
 public class TrackArrayAdapter extends ArrayAdapter<Track> {
+    private Context context;
+    Track[] arrayTracks;
 
     public TrackArrayAdapter(@NonNull Context context, int resource, @NonNull Track[] objects) {
         super(context, resource, objects);
+        this.context = context;
+        arrayTracks = objects;
     }
 
     @NonNull
@@ -29,5 +33,5 @@ public class TrackArrayAdapter extends ArrayAdapter<Track> {
         return view;
     }
 
-    
+
 }

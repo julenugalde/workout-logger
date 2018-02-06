@@ -6,8 +6,15 @@ import android.content.res.Configuration;
 import android.media.MediaScannerConnection;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.service.autofill.FillEventHistory;
+import android.support.annotation.NonNull;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
@@ -33,7 +40,8 @@ import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
 import eus.julenugalde.workoutlogger.model.XMLPersistence;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener {
     private ListView lstTrainingSessionSummary;
     private ArrayList<TrainingSession> listTrainingSessions;
     private WorkoutData workoutData;
@@ -63,6 +71,18 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQ_CODE_ADD_TRAINING_SESSION);
             }
         });
+
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
         lstTrainingSessionSummary = (ListView)findViewById(R.id.LstTrainingSessionSummary);
         lstTrainingSessionSummary.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -97,20 +117,24 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-        return true;
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
+    public boolean onNavigationItemSelected(MenuItem item) {
         switch(item.getItemId()) {
             case R.id.main_activity_menu_list_workouts:
                 startActivityForResult(
                         new Intent(MainActivity.this, ActivityListWorkouts.class),
                         REQ_CODE_VIEW_STATISTICS);
-                return true;
+                break;
             case R.id.main_activity_menu_load_xml:
                 if (loadXML()) {
                     Toast.makeText(getApplicationContext(), R.string.main_activity_load_xml_ok,
@@ -120,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), R.string.main_activity_load_xml_error,
                             Toast.LENGTH_LONG).show();
                 }
-                return true;
+                break;
             case R.id.main_activity_menu_save_xml:
                 if (saveXML()) {
                     Toast.makeText(getApplicationContext(), R.string.main_activity_save_xml_ok,
@@ -130,21 +154,23 @@ public class MainActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), R.string.main_activity_save_xml_error,
                             Toast.LENGTH_LONG).show();
                 }
-                return true;
+                break;
             case R.id.main_activity_menu_settings:
                 Log.d(TAG, "opening preferences");
                 startActivityForResult(
                         new Intent(MainActivity.this, ActivityPreferences.class),
                         REQ_CODE_SETTINGS);
-                return true;
+                break;
             case R.id.main_activity_menu_view_graph:
                 startActivityForResult(
                         new Intent(MainActivity.this, ActivityViewStatistics.class),
                         REQ_CODE_VIEW_STATISTICS);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
+                break;
         }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
     @Override

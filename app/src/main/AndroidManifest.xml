@@ -18,10 +18,10 @@
             android:value="AEdPqrEAAAAIyZ_lVAdq-NoqkNBEXRA4d11TlIjf0FCNCvXKkA" />
         <activity
             android:name=".view.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar"
             android:label="@string/main_title">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>

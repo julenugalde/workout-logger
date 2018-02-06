@@ -6,6 +6,8 @@
     <string name="weight_unit">kg.</string>
     <string name="main_title">Workout Logger</string>
     <string name="open_db_error">Error opening the database</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
 
     <!--View training sessions activity-->
     <string name="main_activity_save_session_ok">Training session successfully saved</string>
@@ -15,6 +17,7 @@
     <string name="main_activity_menu_backup">Backup data</string>
     <string name="main_activity_menu_save_xml">Save XML</string>
     <string name="main_activity_menu_load_xml">Load XML</string>
+    <string name="main_activity_menu_preferences">Application preferences</string>
     <string name="main_activity_menu_settings">Settings</string>
     <string name="main_activity_load_xml_ok">XML file loaded correctly</string>
     <string name="main_activity_load_xml_error">Error loading XML file</string>

@@ -6,4 +6,6 @@
     <dimen name="font_size_small">12sp</dimen>
     <dimen name="font_size_title">16sp</dimen>
     <dimen name="font_size_subtitle">14sp</dimen>
+    <dimen name="nav_header_vertical_spacing">8dp</dimen>
+    <dimen name="nav_header_height">176dp</dimen>
 </resources>
