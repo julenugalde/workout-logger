@@ -5,11 +5,8 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.ContextMenu;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -17,10 +14,10 @@ import java.util.ArrayList;
 
 
 import eus.julenugalde.workoutlogger.R;
-import eus.julenugalde.workoutlogger.controller.CompletedTrainingSessionAdapter;
 import eus.julenugalde.workoutlogger.controller.WorkoutAdapter;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
+import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
 public class ActivityListWorkouts extends AppCompatActivity {
     private ArrayList<Workout> listWorkouts;
@@ -38,7 +35,7 @@ public class ActivityListWorkouts extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_workouts);
-        workoutData = new WorkoutData(getApplicationContext());
+        workoutData = new WorkoutDataSQLite(getApplicationContext());
 
         captureControls();
         initializeControls();

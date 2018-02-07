@@ -19,11 +19,12 @@ import eus.julenugalde.workoutlogger.controller.TrackAdapter;
 import eus.julenugalde.workoutlogger.model.Track;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
+import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
 /** Activity that shows workout details */
 public class ActivityDetailWorkout extends AppCompatActivity {
     private Workout workout;
-    private WorkoutData  workoutData;
+    private WorkoutData workoutData;
     private static final String TAG = ActivityDetailWorkout.class.getSimpleName();
 
     @Override
@@ -34,7 +35,7 @@ public class ActivityDetailWorkout extends AppCompatActivity {
 
         try {
             workout = (Workout) bundle.getSerializable(ActivityListWorkouts.KEY_WORKOUT);
-            workoutData = new WorkoutData(getApplicationContext());
+            workoutData = new WorkoutDataSQLite(getApplicationContext());
             setTitle(workout.getName());
             TextView lblNumSessions = (TextView)findViewById(R.id.LblDetailWorkoutNumSessions);
             StringBuilder sb = new StringBuilder();

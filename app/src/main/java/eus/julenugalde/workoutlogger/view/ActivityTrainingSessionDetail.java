@@ -23,6 +23,7 @@ import eus.julenugalde.workoutlogger.model.TrainingExercise;
 import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
+import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
 /** This activity is displayed when a training session is selected from the list in the main
  * activity. It shows the information of the {@link TrainingSession} object and all the details
@@ -49,7 +50,7 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
             Log.e(TAG, "Error retrieving training session data");
             finish();
         }
-        workoutData = new WorkoutData(getApplicationContext());
+        workoutData = new WorkoutDataSQLite(getApplicationContext());
         if (workoutData.open()) {
             workout = workoutData.getTrainingSession(
                     trainingSession.getNameWorkout(), trainingSession.getDate());

@@ -36,6 +36,7 @@ import eus.julenugalde.workoutlogger.model.TrainingExercise;
 import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
+import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
 public class ActivityNewTrainingSession extends AppCompatActivity
         implements OnItemSelectedListener, OnItemClickListener, DatePickerDialog.OnDateSetListener {
@@ -70,7 +71,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity
 
         //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarNewTrainingSession);
         //setSupportActionBar(toolbar);
-        workoutData = new WorkoutData(this);
+        workoutData = new WorkoutDataSQLite(this);
 
         captureControls();
         initializeVariables(savedInstanceState);

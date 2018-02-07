@@ -8,6 +8,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.XMLReader;
 import org.xmlpull.v1.XmlSerializer;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 
@@ -35,15 +36,22 @@ public class XMLPersistence implements Persistence {
     public boolean loadData(InputStream inputStream) {
         if (!workoutData.open()) return false;
         try {
-            SAXParserFactory factory = SAXParserFactory.newInstance();
-            SAXParser parser = factory.newSAXParser();
-            XMLReader reader = parser.getXMLReader();
-            WorkoutLoggerXMLHandler xmlHandler = new WorkoutLoggerXMLHandler(workoutData.db);
-            reader.setContentHandler(xmlHandler);
-            workoutData.cleanDB();
-            reader.parse(new InputSource(inputStream));
-            workoutData.close();
-            return true;
+            if (workoutData instanceof WorkoutDataSQLite) {
+                SAXParserFactory factory = SAXParserFactory.newInstance();
+                SAXParser parser = factory.newSAXParser();
+                XMLReader reader = parser.getXMLReader();
+                WorkoutLoggerXMLHandler xmlHandler =
+                        new WorkoutLoggerXMLHandler(((WorkoutDataSQLite)workoutData).db);
+                reader.setContentHandler(xmlHandler);
+                workoutData.cleanDB();
+                reader.parse(new InputSource(inputStream));
+                workoutData.close();
+                return true;
+            }
+            else {
+                Log.e(TAG, "Load from XML only implemented for SQLite databases");
+                return false;
+            }
         }
         catch (Exception e) {
             Log.e(TAG, "Error loading XML: " + e.getLocalizedMessage());
@@ -66,95 +74,15 @@ public class XMLPersistence implements Persistence {
             serializer.startDocument("UTF-8", true);
             serializer.startTag("", "info_workouts");
 
-            //Save table 'Workouts'
-            Cursor c = workoutData.db.rawQuery("SELECT * FROM Workouts", null);
-            if (c.moveToFirst()) {
-                serializer.startTag("", "workouts");
-                do {
-                    serializer.startTag("", "workout");
-                    serializer.attribute("", "idWorkout", String.valueOf(c.getInt(0)));
-                    serializer.startTag("", "nombreWorkout");
-                    serializer.text(c.getString(1));
-                    serializer.endTag("", "nombreWorkout");
-                    serializer.endTag("", "workout");
-                } while(c.moveToNext());
-                serializer.endTag("", "workouts");
+            if (workoutData instanceof WorkoutDataSQLite) {
+                saveTablesSQLite(serializer);
             }
-
-            //Save table 'Tracks'
-            c = workoutData.db.rawQuery("SELECT * FROM Tracks", null);
-            if (c.moveToFirst()) {
-                serializer.startTag("", "tracks");
-                do {
-                    serializer.startTag("", "track");
-                    serializer.attribute("", "idTrack", String.valueOf(c.getInt(0)));
-                    serializer.attribute("", "idWorkout", String.valueOf(c.getInt(1)));
-                    serializer.startTag("", "nombreTrack");
-                    serializer.text(c.getString(2));
-                    serializer.endTag("", "nombreTrack");
-                    serializer.endTag("", "track");
-                } while(c.moveToNext());
-                serializer.endTag("", "tracks");
-            }
-
-            //Save table 'Loads'
-            c = workoutData.db.rawQuery("SELECT * FROM Loads", null);
-            if (c.moveToFirst()) {
-                serializer.startTag("", "loads");
-                do {
-                    serializer.startTag("", "load");
-                    serializer.attribute("", "idLoad", String.valueOf(c.getInt(0)));
-                    serializer.attribute("", "idTrack", String.valueOf(c.getInt(1)));
-                    serializer.startTag("", "nombreLoad");
-                    serializer.text(c.getString(2));
-                    serializer.endTag("", "nombreLoad");
-                    serializer.endTag("", "load");
-                } while(c.moveToNext());
-                serializer.endTag("", "loads");
-            }
-
-            //Save table 'Entrenamientos'
-            c = workoutData.db.rawQuery("SELECT * FROM Entrenamientos", null);
-            if (c.moveToFirst()) {
-                serializer.startTag("", "entrenamientos");
-                do {
-                    serializer.startTag("", "entrenamiento");
-                    serializer.attribute("", "idEntrenamiento", String.valueOf(c.getInt(0)));
-                    serializer.attribute("", "idWorkout", String.valueOf(c.getInt(1)));
-                    serializer.startTag("", "fecha");
-                    serializer.text(c.getString(2));
-                    serializer.endTag("", "fecha");
-                    serializer.startTag("", "comentario");
-                    serializer.text(c.getString(3));
-                    serializer.endTag("", "comentario");
-                    serializer.endTag("", "entrenamiento");
-                } while(c.moveToNext());
-                serializer.endTag("", "entrenamientos");
-            }
-
-            //Save table 'Ejercicios'
-            c = workoutData.db.rawQuery("SELECT * FROM Ejercicios", null);
-            if (c.moveToFirst()) {
-                serializer.startTag("", "ejercicios");
-                do {
-                    serializer.startTag("", "ejercicio");
-                    serializer.attribute("", "idEjercicio", String.valueOf(c.getInt(0)));
-                    serializer.attribute("", "idLoad", String.valueOf(c.getInt(1)));
-                    serializer.attribute("", "idEntrenamiento", String.valueOf(c.getInt(2)));
-                    serializer.startTag("", "kg");
-                    serializer.text(String.valueOf(c.getInt(3)));
-                    serializer.endTag("", "kg");
-                    serializer.startTag("", "g");
-                    serializer.text(String.valueOf(c.getInt(4)));
-                    serializer.endTag("", "g");
-                    serializer.endTag("", "ejercicio");
-                } while(c.moveToNext());
-                serializer.endTag("", "ejercicios");
+            else {
+                Log.e(TAG, "Save in XML only implemented for SQLite databases");
             }
 
             serializer.endTag("", "info_workouts");
             serializer.endDocument();
-            c.close();
             workoutData.close();
             return true;
         }
@@ -163,5 +91,94 @@ public class XMLPersistence implements Persistence {
             workoutData.close();
             return false;
         }
+    }
+
+    private void saveTablesSQLite (XmlSerializer serializer) throws IOException{
+        //Save table 'Workouts'
+        Cursor c = ((WorkoutDataSQLite)workoutData).db.rawQuery("SELECT * FROM Workouts", null);
+        if (c.moveToFirst()) {
+            serializer.startTag("", "workouts");
+            do {
+                serializer.startTag("", "workout");
+                serializer.attribute("", "idWorkout", String.valueOf(c.getInt(0)));
+                serializer.startTag("", "nombreWorkout");
+                serializer.text(c.getString(1));
+                serializer.endTag("", "nombreWorkout");
+                serializer.endTag("", "workout");
+            } while(c.moveToNext());
+            serializer.endTag("", "workouts");
+        }
+
+        //Save table 'Tracks'
+        c = ((WorkoutDataSQLite)workoutData).db.rawQuery("SELECT * FROM Tracks", null);
+        if (c.moveToFirst()) {
+            serializer.startTag("", "tracks");
+            do {
+                serializer.startTag("", "track");
+                serializer.attribute("", "idTrack", String.valueOf(c.getInt(0)));
+                serializer.attribute("", "idWorkout", String.valueOf(c.getInt(1)));
+                serializer.startTag("", "nombreTrack");
+                serializer.text(c.getString(2));
+                serializer.endTag("", "nombreTrack");
+                serializer.endTag("", "track");
+            } while(c.moveToNext());
+            serializer.endTag("", "tracks");
+        }
+
+        //Save table 'Loads'
+        c = ((WorkoutDataSQLite)workoutData).db.rawQuery("SELECT * FROM Loads", null);
+        if (c.moveToFirst()) {
+            serializer.startTag("", "loads");
+            do {
+                serializer.startTag("", "load");
+                serializer.attribute("", "idLoad", String.valueOf(c.getInt(0)));
+                serializer.attribute("", "idTrack", String.valueOf(c.getInt(1)));
+                serializer.startTag("", "nombreLoad");
+                serializer.text(c.getString(2));
+                serializer.endTag("", "nombreLoad");
+                serializer.endTag("", "load");
+            } while(c.moveToNext());
+            serializer.endTag("", "loads");
+        }
+
+        //Save table 'Entrenamientos'
+        c = ((WorkoutDataSQLite)workoutData).db.rawQuery("SELECT * FROM Entrenamientos", null);
+        if (c.moveToFirst()) {
+            serializer.startTag("", "entrenamientos");
+            do {
+                serializer.startTag("", "entrenamiento");
+                serializer.attribute("", "idEntrenamiento", String.valueOf(c.getInt(0)));
+                serializer.attribute("", "idWorkout", String.valueOf(c.getInt(1)));
+                serializer.startTag("", "fecha");
+                serializer.text(c.getString(2));
+                serializer.endTag("", "fecha");
+                serializer.startTag("", "comentario");
+                serializer.text(c.getString(3));
+                serializer.endTag("", "comentario");
+                serializer.endTag("", "entrenamiento");
+            } while(c.moveToNext());
+            serializer.endTag("", "entrenamientos");
+        }
+
+        //Save table 'Ejercicios'
+        c = ((WorkoutDataSQLite)workoutData).db.rawQuery("SELECT * FROM Ejercicios", null);
+        if (c.moveToFirst()) {
+            serializer.startTag("", "ejercicios");
+            do {
+                serializer.startTag("", "ejercicio");
+                serializer.attribute("", "idEjercicio", String.valueOf(c.getInt(0)));
+                serializer.attribute("", "idLoad", String.valueOf(c.getInt(1)));
+                serializer.attribute("", "idEntrenamiento", String.valueOf(c.getInt(2)));
+                serializer.startTag("", "kg");
+                serializer.text(String.valueOf(c.getInt(3)));
+                serializer.endTag("", "kg");
+                serializer.startTag("", "g");
+                serializer.text(String.valueOf(c.getInt(4)));
+                serializer.endTag("", "g");
+                serializer.endTag("", "ejercicio");
+            } while(c.moveToNext());
+            serializer.endTag("", "ejercicios");
+        }
+        c.close();
     }
 }

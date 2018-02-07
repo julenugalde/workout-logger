@@ -23,6 +23,7 @@ import eus.julenugalde.workoutlogger.model.Load;
 import eus.julenugalde.workoutlogger.model.Track;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
+import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
 /** Activity for defining a new workout */
 public class ActivityDefineWorkout extends AppCompatActivity {
@@ -172,9 +173,9 @@ public class ActivityDefineWorkout extends AppCompatActivity {
             }
 
             //Store the workout in the database
-            WorkoutData workoutData = new WorkoutData(getApplicationContext());
+            WorkoutData workoutData = new WorkoutDataSQLite(getApplicationContext());
             if(workoutData.open()) {
-                if (workoutData.existsWorkout(workout)) {
+                if (workoutData.existsWorkout(workout.getName())) {
                     Toast.makeText(getApplicationContext(), R.string.define_workout_save_error_exists,
                             Toast.LENGTH_LONG).show();
                 }
@@ -199,7 +200,7 @@ public class ActivityDefineWorkout extends AppCompatActivity {
 
     /** For the case of BodyPump workouts, the next workout is suggested */
     private String suggestWorkoutName() {
-        WorkoutData workoutData = new WorkoutData(getApplicationContext());
+        WorkoutData workoutData = new WorkoutDataSQLite(getApplicationContext());
         if(!workoutData.open()) {
             Log.e(TAG, "Error opening the database");
             return "";
@@ -231,6 +232,6 @@ public class ActivityDefineWorkout extends AppCompatActivity {
         }
 
         workoutData.close();
-        return "BodyPump" + (++lastRelease);
+        return "BodyPump " + (++lastRelease);
     }
 }
