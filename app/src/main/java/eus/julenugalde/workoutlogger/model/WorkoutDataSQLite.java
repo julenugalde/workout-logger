@@ -33,7 +33,7 @@ public class WorkoutDataSQLite implements WorkoutData {
      *
      * @param context Application context
      */
-	public WorkoutDataSQLite(Context context) {
+	protected WorkoutDataSQLite(Context context) {
 		workoutLoggerSQLiteHelper =
 				new WorkoutLoggerSQLiteHelper(context, DB_FILE_NAME, null, VERSION);
 	}

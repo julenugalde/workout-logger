@@ -44,8 +44,8 @@ public class Workout implements Serializable {
      * @param track Track to be added
      * @return <code>true</code> it the tracks list changed
      */
-    public void addTrack(Track track) {
-		listTracks.add(track);
+    public boolean addTrack(Track track) {
+		return listTracks.add(track);
 	}
 
     /** Returns a specific Track from the workout

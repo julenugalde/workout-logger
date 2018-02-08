@@ -17,6 +17,7 @@ import eus.julenugalde.workoutlogger.R;
 import eus.julenugalde.workoutlogger.controller.WorkoutAdapter;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
+import eus.julenugalde.workoutlogger.model.WorkoutDataFactory;
 import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
 public class ActivityListWorkouts extends AppCompatActivity {
@@ -35,7 +36,7 @@ public class ActivityListWorkouts extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list_workouts);
-        workoutData = new WorkoutDataSQLite(getApplicationContext());
+        workoutData = WorkoutDataFactory.getInstance(getApplicationContext());
 
         captureControls();
         initializeControls();

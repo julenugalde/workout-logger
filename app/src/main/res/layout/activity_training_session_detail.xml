@@ -19,7 +19,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -102,22 +102,32 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/LblTrainingSessionDetailComment" />
 
-        <LinearLayout
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/FrameTrainingSessionDetailList"
             android:layout_width="match_parent"
-            android:layout_height="400dp"
+            android:layout_height="390dp"
+            android:gravity="center_horizontal"
             android:orientation="vertical"
             android:paddingLeft="@dimen/activity_horizontal_margin"
             android:paddingRight="@dimen/activity_horizontal_margin"
-            android:gravity="center_horizontal"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/LblTracksLoadsTitle" >
+            app:layout_constraintTop_toBottomOf="@id/LblTracksLoadsTitle">
+
             <ListView
                 android:id="@+id/LstTrainingSessionDetailTracksLoads"
                 android:layout_width="match_parent"
-                android:layout_height="0dip"
-                android:paddingLeft="@dimen/activity_horizontal_margin"
-                android:layout_weight="1" />
-        </LinearLayout>
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent" />
+        </android.support.constraint.ConstraintLayout>
+
+
     </android.support.constraint.ConstraintLayout>
 
 </android.support.design.widget.CoordinatorLayout>

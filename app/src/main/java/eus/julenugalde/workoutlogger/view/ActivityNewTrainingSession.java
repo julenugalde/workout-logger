@@ -36,6 +36,7 @@ import eus.julenugalde.workoutlogger.model.TrainingExercise;
 import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
+import eus.julenugalde.workoutlogger.model.WorkoutDataFactory;
 import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
 public class ActivityNewTrainingSession extends AppCompatActivity
@@ -69,9 +70,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_training_session);
 
-        //Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarNewTrainingSession);
-        //setSupportActionBar(toolbar);
-        workoutData = new WorkoutDataSQLite(this);
+        workoutData = WorkoutDataFactory.getInstance(getApplicationContext());
 
         captureControls();
         initializeVariables(savedInstanceState);

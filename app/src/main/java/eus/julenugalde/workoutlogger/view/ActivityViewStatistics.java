@@ -25,6 +25,7 @@ import eus.julenugalde.workoutlogger.model.Track;
 import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
+import eus.julenugalde.workoutlogger.model.WorkoutDataFactory;
 import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
 public class ActivityViewStatistics extends AppCompatActivity {
@@ -54,7 +55,7 @@ public class ActivityViewStatistics extends AppCompatActivity {
         if (savedInstanceState == null) {   //Activity created
             indexTrack = 0;
             indexWorkout = 0;
-            workoutData = new WorkoutDataSQLite(this);
+            workoutData = WorkoutDataFactory.getInstance(getApplicationContext());
             if (workoutData.open()) {
                 ArrayList<Workout> listWorkouts = workoutData.getListWorkouts();
                 initializeArrayWorkouts(listWorkouts);

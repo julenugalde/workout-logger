@@ -23,6 +23,7 @@ import eus.julenugalde.workoutlogger.model.TrainingExercise;
 import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
+import eus.julenugalde.workoutlogger.model.WorkoutDataFactory;
 import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
 /** This activity is displayed when a training session is selected from the list in the main
@@ -50,7 +51,7 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
             Log.e(TAG, "Error retrieving training session data");
             finish();
         }
-        workoutData = new WorkoutDataSQLite(getApplicationContext());
+        workoutData = WorkoutDataFactory.getInstance(getApplicationContext());
         if (workoutData.open()) {
             workout = workoutData.getTrainingSession(
                     trainingSession.getNameWorkout(), trainingSession.getDate());

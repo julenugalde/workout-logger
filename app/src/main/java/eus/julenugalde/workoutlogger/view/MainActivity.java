@@ -35,6 +35,7 @@ import eus.julenugalde.workoutlogger.controller.CompletedTrainingSessionAdapter;
 import eus.julenugalde.workoutlogger.model.Persistence;
 import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
+import eus.julenugalde.workoutlogger.model.WorkoutDataFactory;
 import eus.julenugalde.workoutlogger.model.WorkoutDataFirebase;
 import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 import eus.julenugalde.workoutlogger.model.XMLPersistence;
@@ -95,7 +96,7 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
-        workoutData = new WorkoutDataSQLite(getApplicationContext());
+        workoutData = WorkoutDataFactory.getInstance(getApplicationContext());
         persistence = new XMLPersistence(workoutData);
         updateTrainingSessionList();
     }

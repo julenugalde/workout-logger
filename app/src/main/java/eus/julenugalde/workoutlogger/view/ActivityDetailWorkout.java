@@ -19,6 +19,7 @@ import eus.julenugalde.workoutlogger.controller.TrackAdapter;
 import eus.julenugalde.workoutlogger.model.Track;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
+import eus.julenugalde.workoutlogger.model.WorkoutDataFactory;
 import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
 /** Activity that shows workout details */
@@ -35,7 +36,7 @@ public class ActivityDetailWorkout extends AppCompatActivity {
 
         try {
             workout = (Workout) bundle.getSerializable(ActivityListWorkouts.KEY_WORKOUT);
-            workoutData = new WorkoutDataSQLite(getApplicationContext());
+            workoutData = WorkoutDataFactory.getInstance(getApplicationContext());
             setTitle(workout.getName());
             TextView lblNumSessions = (TextView)findViewById(R.id.LblDetailWorkoutNumSessions);
             StringBuilder sb = new StringBuilder();
@@ -94,7 +95,6 @@ public class ActivityDetailWorkout extends AppCompatActivity {
     }
 
     private void showWorkoutDeleteDialog() {
-        Log.d(TAG, "Deleting workout " + workout.toString());
         //Alert dialog displayed to the user
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         if (!workoutData.open()) {
