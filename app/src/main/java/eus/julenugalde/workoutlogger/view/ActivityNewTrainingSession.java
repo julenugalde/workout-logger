@@ -22,6 +22,7 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
@@ -69,12 +70,42 @@ public class ActivityNewTrainingSession extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_training_session);
-
         workoutData = WorkoutDataFactory.getInstance(getApplicationContext());
 
         captureControls();
         initializeVariables(savedInstanceState);
         configControls(savedInstanceState);
+        loadPreviousData();
+    }
+
+    private void loadPreviousData() {
+        //Check if we're editing an existing training session
+        Bundle bundle = getIntent().getExtras();
+        try {   //We're editing
+            setTitle(R.string.new_training_session_edit_title);
+            Workout workout =
+                    (Workout) bundle.getSerializable(ActivityTrainingSessionDetail.KEY_WORKOUT);
+            TrainingSession trainingSession =
+                    (TrainingSession)bundle.get(ActivityTrainingSessionDetail.KEY_TRAINING_SESSION);
+            txtDate.setText(DateFormat.format("yyyy-MM-dd", trainingSession.getDate()));
+            txtComment.setText(trainingSession.getComment());
+            //TODO Fill listExercises with existing data
+            //debug ***********************
+            TrainingExercise trainingExercise = new TrainingExercise("kk", true);
+            Track[] tracks = workout.getTracks();
+            Load[] loads;
+            for (int j=0; j<tracks.length; j++) {
+                loads = workout.getTrack(j).getLoads();
+                for (int i = 0; i < loads.length; i++) {
+                    trainingExercise.setLoad(i, loads[i].getName(), loads[i].getKg(), loads[i].getG());
+                }
+            }
+            listExercises.add(trainingExercise);
+            lstTrainingExercises.requestLayout();
+            //////////////////
+        } catch (NullPointerException npex) {
+            // New training session. Do nothing
+        }
     }
 
     private void configControls(Bundle savedInstanceState) {
@@ -184,6 +215,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity
                 while (iterator.hasNext()) {
                     arrayWorkouts[i--] = iterator.next().getName();
                 }
+                workoutData.close();
             }
             else {  //Error opening the database
                 arrayWorkouts = new String[] {getResources().getString(R.string.open_db_error)};

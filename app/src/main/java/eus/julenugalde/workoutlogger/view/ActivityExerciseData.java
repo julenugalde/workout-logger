@@ -166,6 +166,10 @@ public class ActivityExerciseData extends AppCompatActivity
         switch(item.getItemId()) {
             case R.id.menu_exercise_data_save:
                 saveData();
+                returnToParent();
+                return true;
+            case android.R.id.home:
+                returnToParent();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -189,6 +193,9 @@ public class ActivityExerciseData extends AppCompatActivity
                         Integer.parseInt((String)cmbGs[i].getSelectedItem()));
             }
         }
+    }
+
+    private void returnToParent() {
         Bundle bundle = new Bundle();
         bundle.putSerializable(ActivityNewTrainingSession.KEY_EXERCISE, trainingExercise);
         Intent intent = getIntent();

@@ -46,6 +46,7 @@
 
     <!--View new training session -->
     <string name="new_training_session_title">New training session</string>
+    <string name="new_training_session_edit_title">Edit training session</string>
     <string name="new_training_session_date">Date:</string>
     <string name="new_training_session_group">Select a workout</string>
     <string name="new_training_session_workout">Workout:</string>
@@ -71,7 +72,7 @@
     <!-- Activity define workout -->
     <string name="define_workout_name">Name</string>
     <string name="define_workout_track_list">Track list</string>
-    <string name="define_workout_new">Add new track / muscle group</string>
+    <string name="define_workout_new">Add or edit track / muscle group</string>
     <string name="define_workout_title">Define new workout</string>
     <string name="define_workout_contextual_edit">Edit track</string>
     <string name="define_workout_contextual_delete">Delete track</string>

@@ -53,7 +53,7 @@
     <string name="menu_exercise_data_save">Guardar</string>
     <string name="define_workout_name">Nombre</string>
     <string name="define_workout_track_list">Lista de pistas</string>
-    <string name="define_workout_new">Añadir nueva pista / grupo muscular</string>
+    <string name="define_workout_new">Añadir o editar pista / grupo muscular</string>
     <string name="define_workout_title">Definir nuevo workout</string>
     <string name="define_workout_contextual_edit">Editar ejercicio</string>
     <string name="define_workout_contextual_delete">Borrar ejercicio</string>
@@ -92,4 +92,8 @@
     <string name="statistics_error_data">Error de datos</string>
     <string name="statistics_graph_no_title">(Sin nombre)</string>
     <string name="menu_training_session_detail_edit">Editar</string>
+    <string name="navigation_drawer_open">Abrir navigation drawer</string>
+    <string name="navigation_drawer_close">Cerrar navigation drawer</string>
+    <string name="main_activity_menu_preferences">Preferencias de la aplicación</string>
+    <string name="new_training_session_edit_title">Editar entrenamiento</string>
 </resources>

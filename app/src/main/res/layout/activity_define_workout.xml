@@ -70,14 +70,20 @@
             android:layout_height="wrap_content"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/LblDefineWorkoutListTracks"/>
-        <ListView
-            android:id="@+id/LstDefineWorkoutsTracks"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:paddingTop="@dimen/activity_vertical_margin"
+            android:layout_height="390dp"
             app:layout_constraintTop_toBottomOf="@id/BtnDefineWorkoutNewTrack"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"/>
+            app:layout_constraintStart_toStartOf="parent" >
+            <ListView
+                android:id="@+id/LstDefineWorkoutsTracks"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:paddingTop="@dimen/activity_vertical_margin"
+                />
+        </LinearLayout>
+
     </android.support.constraint.ConstraintLayout>
 </android.support.design.widget.CoordinatorLayout>

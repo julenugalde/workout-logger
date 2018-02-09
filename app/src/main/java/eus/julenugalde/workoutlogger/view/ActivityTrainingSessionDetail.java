@@ -2,6 +2,7 @@ package eus.julenugalde.workoutlogger.view;
 
 import android.app.AlertDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -40,25 +41,16 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
     private Workout workout;
 
     private static final String TAG = ActivityTrainingSessionDetail.class.getSimpleName();
+    private static final int REQ_CODE_EDIT_TRAINING_SESSION = 101;
+    protected static final String KEY_TRAINING_SESSION = "TRAINING_SESSION";
+    protected static final String KEY_WORKOUT = "WORKOUT";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_training_session_detail);
-        Bundle bundle = this.getIntent().getExtras();
-        trainingSession = (TrainingSession)bundle.getSerializable(MainActivity.KEY_TRAINING_SESSION);
-        if (trainingSession == null) {
-            Log.e(TAG, "Error retrieving training session data");
-            finish();
-        }
-        workoutData = WorkoutDataFactory.getInstance(getApplicationContext());
-        if (workoutData.open()) {
-            workout = workoutData.getTrainingSession(
-                    trainingSession.getNameWorkout(), trainingSession.getDate());
-        }
-        else {
-            workout = null;
-        }
+
+        retrieveData();
 
         if (workout != null) {
             //Capture and initialize controls
@@ -109,6 +101,24 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
         }
     }
 
+    private void retrieveData() {
+        Bundle bundle = this.getIntent().getExtras();
+        trainingSession = (TrainingSession)bundle.getSerializable(MainActivity.KEY_TRAINING_SESSION);
+        if (trainingSession == null) {
+            Log.e(TAG, "Error retrieving training session data");
+            finish();
+        }
+        workoutData = WorkoutDataFactory.getInstance(getApplicationContext());
+        if (workoutData.open()) {
+            workout = workoutData.getTrainingSession(
+                    trainingSession.getNameWorkout(), trainingSession.getDate());
+            workoutData.close();
+        }
+        else {
+            workout = null;
+        }
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
@@ -131,8 +141,12 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
     }
 
     private void editTrainingSession() {
-        //TODO Implement editing training session data
-        Toast.makeText(this, "Not yet implemented", Toast.LENGTH_SHORT).show();
+        Intent intent = new Intent(ActivityTrainingSessionDetail.this, ActivityNewTrainingSession.class);
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(KEY_TRAINING_SESSION, trainingSession);
+        bundle.putSerializable(KEY_WORKOUT, workout);
+        intent.putExtras(bundle);
+        startActivityForResult(intent, REQ_CODE_EDIT_TRAINING_SESSION);
     }
 
     private void showTrainingSessionDeleteDialog() {
@@ -176,5 +190,17 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
         setResult(RESULT_OK);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case REQ_CODE_EDIT_TRAINING_SESSION:
+                retrieveData();
+                break;
+            default:
+                Log.e(TAG, "Invalid requestCode value");
+        }
     }
 }

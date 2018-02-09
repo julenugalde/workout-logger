@@ -8,6 +8,8 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -90,13 +92,31 @@ public class ActivityDefineWorkout extends AppCompatActivity {
 
     private void updateListTracks(int requestCode, Intent data) {
         try {
+            // Hide soft keyboard to show better the track list
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
             Track track;
             switch (requestCode) {
                 case REQ_CODE_NEW_TRACK:    //Return from an ActivityDefineTrack
                     track = readBundleData(data);
-                    if(existsTrack(track)) {
-                        Toast.makeText(getApplicationContext(), R.string.define_workout_save_error_exists,
-                                Toast.LENGTH_LONG).show();
+                    //TODO Not working
+                    if(existsTrack(track)) { //the track already existed. It's replaced
+                        int index = 0;
+                        for (int i=0; i<trackArrayList.size(); i++) {
+                            if (track.getName() == trackArrayList.get(i).getName()) {
+                                index = i;
+                            }
+                        }
+                        if (index < trackArrayList.size()) {
+                            Log.d(TAG, "Replacing " + trackArrayList.get(index).toString() +
+                                    " by " + track.toString());
+                            trackArrayList.set(index, track);
+                        }
+                        else {
+                            Log.e(TAG, "Track " + track.getName() + " not found in the array");
+                        }
+                        lstTracks.requestLayout();
                     }
                     else {
                         trackArrayList.add(track);

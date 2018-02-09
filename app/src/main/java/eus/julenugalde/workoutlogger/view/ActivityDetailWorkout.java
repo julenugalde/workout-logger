@@ -134,6 +134,7 @@ public class ActivityDetailWorkout extends AppCompatActivity {
             //AlertDialog dialog = builder.create();
                     setIcon(android.R.drawable.ic_dialog_alert).
                     show();
+            workoutData.close();
         }
     }
 }

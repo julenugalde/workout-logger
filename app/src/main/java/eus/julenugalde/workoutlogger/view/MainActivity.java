@@ -113,6 +113,8 @@ public class MainActivity extends AppCompatActivity
             lstTrainingSessionSummary.setAdapter(adapter);
         } catch (Exception e) {
             Toast.makeText(getApplicationContext(), e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+        } finally {
+            workoutData.close();
         }
     }
 

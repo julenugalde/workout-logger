@@ -45,6 +45,7 @@
         <activity
             android:name=".view.ActivityDefineWorkout"
             android:label="@string/define_workout_title"
+            android:windowSoftInputMode="adjustPan|adjustResize"
             android:parentActivityName=".view.ActivityListWorkouts" />
         <activity
             android:name=".view.ActivityDetailWorkout"

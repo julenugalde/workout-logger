@@ -53,7 +53,7 @@
     <string name="menu_exercise_data_save">Gorde</string>
     <string name="define_workout_name">Izena</string>
     <string name="define_workout_track_list">Ariketen zerrenda</string>
-    <string name="define_workout_new">Gehitu ariketa berria / gihar taldea</string>
+    <string name="define_workout_new">Gehitu edo editatu ariketa / gihar taldea</string>
     <string name="define_workout_title">Definitu workout berria</string>
     <string name="define_workout_contextual_edit">Ariketa editatu</string>
     <string name="define_workout_contextual_delete">Ariketa ezabatu</string>
@@ -92,4 +92,8 @@
     <string name="statistics_error_data">Errorea datuetan</string>
     <string name="statistics_graph_no_title">(Izenarik gabe)</string>
     <string name="menu_training_session_detail_edit">Aldatu</string>
+    <string name="navigation_drawer_open">Navigation drawer ireki</string>
+    <string name="navigation_drawer_close">Navigation drawer itix</string>
+    <string name="main_activity_menu_preferences">Aplikazioaren hobespenak</string>
+    <string name="new_training_session_edit_title">Entrenamendua editatu</string>
 </resources>
