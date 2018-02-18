@@ -17,6 +17,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import eus.julenugalde.workoutlogger.R;
+import eus.julenugalde.workoutlogger.controller.LocalesManager;
 import eus.julenugalde.workoutlogger.controller.TrainingExerciseAdapter;
 import eus.julenugalde.workoutlogger.model.Load;
 import eus.julenugalde.workoutlogger.model.Track;
@@ -59,8 +60,8 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
             lblWorkout = (TextView)findViewById(R.id.LblTrainingSessionDetailWorkout);
             lblComment = (TextView)findViewById(R.id.LblTrainingSessionDetailComment);
 
-            SimpleDateFormat sdf = new SimpleDateFormat(getString(R.string.readable_date_format));
-            lblDate.setText(sdf.format(trainingSession.getDate()));
+            lblDate.setText(LocalesManager.getLongDateString(trainingSession.getDate(),
+                    getApplicationContext().getResources().getConfiguration().locale));
             lblWorkout.setText(trainingSession.getNameWorkout());
 
             String comment = trainingSession.getComment();

@@ -2,9 +2,12 @@ package eus.julenugalde.workoutlogger.view;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.res.Configuration;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -27,8 +30,10 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
+import java.util.Locale;
 
 import eus.julenugalde.workoutlogger.R;
+import eus.julenugalde.workoutlogger.controller.LocalesManager;
 import eus.julenugalde.workoutlogger.controller.TextWithCounterWatcher;
 import eus.julenugalde.workoutlogger.controller.TrainingExerciseAdapter;
 import eus.julenugalde.workoutlogger.model.Load;
@@ -40,6 +45,7 @@ import eus.julenugalde.workoutlogger.model.WorkoutData;
 import eus.julenugalde.workoutlogger.model.WorkoutDataFactory;
 import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
+/** Activity to create a new training session or edit an existing one */
 public class ActivityNewTrainingSession extends AppCompatActivity
         implements OnItemSelectedListener, OnItemClickListener, DatePickerDialog.OnDateSetListener {
     public final static String KEY_EXERCISE = "EXERCISE";
@@ -60,6 +66,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity
     private String[] arrayWorkouts;
     private int positionCombo;
     private Calendar date;
+    private boolean editing = false;
 
     private static final int REQ_CODE_EXERCISE_DATA = 101;
     private static final int REQ_CODE_TRAINING_SESSION_DATE = 102;
@@ -78,33 +85,50 @@ public class ActivityNewTrainingSession extends AppCompatActivity
         loadPreviousData();
     }
 
+    /** Checks if it's a new training session or we're editing a previous one. In the latter case,
+     * the previous data are loaded     */
     private void loadPreviousData() {
-        //Check if we're editing an existing training session
         Bundle bundle = getIntent().getExtras();
-        try {   //We're editing
-            setTitle(R.string.new_training_session_edit_title);
+        try {   //to get training session data from parent activity
             Workout workout =
                     (Workout) bundle.getSerializable(ActivityTrainingSessionDetail.KEY_WORKOUT);
             TrainingSession trainingSession =
                     (TrainingSession)bundle.get(ActivityTrainingSessionDetail.KEY_TRAINING_SESSION);
+
+            //Complete fields with data from parent activity
             txtDate.setText(DateFormat.format("yyyy-MM-dd", trainingSession.getDate()));
             txtComment.setText(trainingSession.getComment());
-            //TODO Fill listExercises with existing data
-            //debug ***********************
-            TrainingExercise trainingExercise = new TrainingExercise("kk", true);
-            Track[] tracks = workout.getTracks();
+
+            //For each recorded track a TrainingExercise will be added to the list and set as completed
+            TrainingExercise trainingExercise;
+            Track[] recordedTracks = workout.getTracks();
             Load[] loads;
-            for (int j=0; j<tracks.length; j++) {
-                loads = workout.getTrack(j).getLoads();
-                for (int i = 0; i < loads.length; i++) {
-                    trainingExercise.setLoad(i, loads[i].getName(), loads[i].getKg(), loads[i].getG());
+            int index;
+            for (Track track : recordedTracks) {
+                Log.d(TAG, track.toString());
+                trainingExercise = new TrainingExercise(track.getName(), true);
+                for (int j=0; j<recordedTracks.length; j++) {
+                    loads = workout.getTrack(j).getLoads();
+                    for (int i = 0; i < loads.length; i++) {
+                        trainingExercise.setLoad(i, loads[i].getName(), loads[i].getKg(), loads[i].getG());
+                    }
+                }
+                index = getTrainingExerciseIndex(track.getName());
+                if (index == -1) {  //Not in the list (e.g. custom track)
+                    listExercises.add(trainingExercise);
+                }
+                else {  //Replace in the existing list
+                    listExercises.set(index, trainingExercise);
                 }
             }
-            listExercises.add(trainingExercise);
+
+            //No NullpointerException ocurred --> we're editing
+            setTitle(R.string.new_training_session_edit_title);
+            editing = true;
             lstTrainingExercises.requestLayout();
-            //////////////////
         } catch (NullPointerException npex) {
             // New training session. Do nothing
+            editing = false;    //Not really needed
         }
     }
 
@@ -281,19 +305,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity
                         Log.e(TAG, "Error opening the database");
                         return false;
                     }
-                    //Workout list is in inverse order
-                    ArrayList<Workout> listWorkouts = workoutData.getListWorkouts();
-                    int index = listWorkouts.size() - cmbListWorkouts.getSelectedItemPosition() - 1;
-                    if (workoutData.insertTrainingSession(
-                            listWorkouts.get(index),            //Workout
-                            listExercises,                      //List TrainingExercises
-                            txtDate.getText().toString(),       //Date
-                            txtComment.getText().toString())) {  //Comment
-                        setResult(RESULT_OK);
-                    }
-                    else {      //Error inserting in the database
-                        setResult(RESULT_ERROR_SAVE);
-                    }
+                    saveTrainingSession();
                     workoutData.close();
                     finish();
                 }
@@ -304,6 +316,29 @@ public class ActivityNewTrainingSession extends AppCompatActivity
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    /** Save the training session information in the database and set the activity result. If
+     * we're editing, a new training session will be added to the database and the existing one
+     * will be deleted. */
+    private void saveTrainingSession() {
+        //Workout list is in inverse order
+        ArrayList<Workout> listWorkouts = workoutData.getListWorkouts();
+        int index = listWorkouts.size() - cmbListWorkouts.getSelectedItemPosition() - 1;
+        if (workoutData.insertTrainingSession(
+                listWorkouts.get(index),            //Workout
+                listExercises,                      //List TrainingExercises
+                txtDate.getText().toString(),       //Date
+                txtComment.getText().toString())) {  //Comment
+            setResult(RESULT_OK);
+        }
+        else {      //Error inserting in the database
+            setResult(RESULT_ERROR_SAVE);
+        }
+        if (editing) {  //Remove the previous one
+            //TODO remove previous training session to avoid duplicates
+
         }
     }
 
@@ -357,5 +392,24 @@ public class ActivityNewTrainingSession extends AppCompatActivity
         outState.putSerializable(KEY_LIST_EXERCISES, listExercises);
         outState.putStringArray(KEY_ARRAY_WORKOUTS, arrayWorkouts);
         outState.putInt(KEY_COMBO_POSITION, positionCombo);
+    }
+
+    /** returns the index of a TrainingExercise in the ArrayList listExercises. Will return -1 if
+     * not found */
+    private int getTrainingExerciseIndex(String trackName) {
+        //The default track names are defined in multiple languages (locales). It has to be
+        //taken into account that the training session might have been defined in a particular
+        //language and in the editing we're using a different one.
+        String[] locales = LocalesManager.getLocales();
+        String[][] defaultTrackNames = LocalesManager.getDefaultTrackNames();
+        for (int i=0; i<locales.length; i++) {
+            for (int j=0; j<defaultTrackNames[i].length; j++) {
+                if (trackName.equalsIgnoreCase(defaultTrackNames[i][j])) {
+                    Log.d(TAG, trackName + "=" + defaultTrackNames[i][j] + " (" + i + j + ")");
+                    return j;
+                }
+            }
+        }
+        return -1;
     }
 }

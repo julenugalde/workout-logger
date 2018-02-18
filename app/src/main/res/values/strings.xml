@@ -1,7 +1,6 @@
 <resources>
     <!-- General -->
     <string name="app_name">WorkoutLogger</string>
-    <string name="readable_date_format">EEEE, d MMMM yyyy</string>
     <string name="decimal_separator">.</string>
     <string name="weight_unit">kg.</string>
     <string name="main_title">Workout Logger</string>
@@ -125,5 +124,4 @@
     <string name="statistics_global_index"><b>Global index</b></string>
     <string name="statistics_error_data">Data error</string>
     <string name="statistics_graph_no_title">(No title)</string>
-
 </resources>

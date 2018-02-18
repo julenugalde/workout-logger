@@ -13,7 +13,8 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/workout_logger_app"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name="eus.julenugalde.workoutlogger.controller.WorkoutLoggerApp" >
         <meta-data android:name="com.google.android.backup.api_key"
             android:value="AEdPqrEAAAAIyZ_lVAdq-NoqkNBEXRA4d11TlIjf0FCNCvXKkA" />
         <activity
@@ -57,5 +58,4 @@
             android:name=".view.ActivityViewStatistics"
             android:parentActivityName=".view.MainActivity" />
     </application>
-
 </manifest>

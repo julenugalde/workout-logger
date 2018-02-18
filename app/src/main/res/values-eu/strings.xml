@@ -3,7 +3,6 @@
     <string name="app_name">WorkoutLogger</string>
     <string name="action_settings">Ezarpenak</string>
     <string name="main_title">Workout Logger</string>
-    <string name="readable_date_format">yyyy, MMMM-k d</string>
     <string name="open_db_error">Errorea datu basea irekitzen</string>
     <string name="training_session_detail_date">"Data: "</string>
     <string name="training_session_detail_workout">Workout:</string>

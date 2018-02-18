@@ -37,14 +37,16 @@ public class CompletedTrainingSessionAdapter extends ArrayAdapter<TrainingSessio
         lblName.setText(trainingSession.getNameWorkout());
 
         TextView lblDate = item.findViewById(R.id.LblListItemCompletedTrainingSessionDate);
-        SimpleDateFormat sdf;
         if (getContext().getResources().getConfiguration().orientation ==
                 Configuration.ORIENTATION_LANDSCAPE){   //Landscape: compact date format
-            sdf = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            lblDate.setText(sdf.format(trainingSession.getDate()));
         } else {    //Portrait: long date format
-            sdf = new SimpleDateFormat(getContext().getString(R.string.readable_date_format));
+            lblDate.setText(LocalesManager.getLongDateString(trainingSession.getDate(),
+                    getContext().getResources().getConfiguration().locale));
+
         }
-        lblDate.setText(sdf.format(trainingSession.getDate()));
+
 
         TextView lblComment = item.findViewById(R.id.LblListItemCompletedTrainingSessionComment);
         lblComment.setText(trainingSession.getComment());
