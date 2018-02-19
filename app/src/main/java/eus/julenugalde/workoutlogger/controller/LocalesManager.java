@@ -40,6 +40,7 @@ public class LocalesManager {
         Locale currentLocale = configuration.locale;    //Save the current locale
         for (int i=0; i<locales.length; i++) {
             configuration.setLocale(new Locale(locales[i]));
+            resources = new Resources(context.getAssets(), new DisplayMetrics(), configuration);
             defaultTrackNames[i] = resources.getStringArray(R.array.defaultTracks);
         }
         configuration.setLocale(currentLocale); //Restore the current locale

@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import eus.julenugalde.workoutlogger.R;
@@ -26,7 +25,6 @@ import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
 import eus.julenugalde.workoutlogger.model.WorkoutDataFactory;
-import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
 /** This activity is displayed when a training session is selected from the list in the main
  * activity. It shows the information of the {@link TrainingSession} object and all the details
@@ -54,45 +52,9 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
         retrieveData();
 
         if (workout != null) {
-            //Capture and initialize controls
-            lstTracks = (ListView)findViewById(R.id.LstTrainingSessionDetailTracksLoads);
-            lblDate = (TextView)findViewById(R.id.LblTrainingSessionDetailDate);
-            lblWorkout = (TextView)findViewById(R.id.LblTrainingSessionDetailWorkout);
-            lblComment = (TextView)findViewById(R.id.LblTrainingSessionDetailComment);
-
-            lblDate.setText(LocalesManager.getLongDateString(trainingSession.getDate(),
-                    getApplicationContext().getResources().getConfiguration().locale));
-            lblWorkout.setText(trainingSession.getNameWorkout());
-
-            String comment = trainingSession.getComment();
-            if (comment.equals("")) {
-                lblComment.setTypeface(null, Typeface.ITALIC);
-                comment = "(" + getString(R.string.training_session_detail_no_comment) + ")";
-            }
-            else {
-                lblComment.setTypeface(null, Typeface.NORMAL);
-            }
-            lblComment.setText(comment);
-
-            //ListView adapter
-            ArrayList<TrainingExercise> arrayTrainingExercise = new ArrayList<TrainingExercise>();
-            TrainingExercise trainingExercise;
-            Track track;
-            Load[] arrayLoads;
-            for (int i=0; i<workout.getNumTracks(); i++) {
-                track = workout.getTrack(i);
-                trainingExercise = new TrainingExercise(track.getName(), true);
-                arrayLoads = track.getLoads();
-                for (int j=0; j<arrayLoads.length; j++) {
-                    track.addLoad(arrayLoads[j]);
-                    trainingExercise.setLoad(j, arrayLoads[j].getName(), arrayLoads[j].getKg(),
-                            arrayLoads[j].getG());
-                }
-                arrayTrainingExercise.add(trainingExercise);
-            }
-            TrainingExerciseAdapter trainingExerciseAdapter =
-                    new TrainingExerciseAdapter(this, arrayTrainingExercise);
-            lstTracks.setAdapter(trainingExerciseAdapter);
+            captureControls();
+            initializeControls();
+            configureListView();
         }
         else {
             Toast.makeText(
@@ -100,6 +62,50 @@ public class ActivityTrainingSessionDetail extends AppCompatActivity {
                     show();
             finish();
         }
+    }
+
+    private void configureListView() {
+        ArrayList<TrainingExercise> arrayTrainingExercise = new ArrayList<TrainingExercise>();
+        TrainingExercise trainingExercise;
+        Track track;
+        Load[] arrayLoads;
+        for (int i=0; i<workout.getNumTracks(); i++) {
+            track = workout.getTrack(i);
+            trainingExercise = new TrainingExercise(track.getName(), true);
+            arrayLoads = track.getLoads();
+            for (int j=0; j<arrayLoads.length; j++) {
+                //track.addLoad(arrayLoads[j]); //TODO Check if ok and delete
+                trainingExercise.setLoad(j, arrayLoads[j].getName(), arrayLoads[j].getKg(),
+                        arrayLoads[j].getG());
+            }
+            arrayTrainingExercise.add(trainingExercise);
+        }
+        TrainingExerciseAdapter trainingExerciseAdapter =
+                new TrainingExerciseAdapter(this, arrayTrainingExercise);
+        lstTracks.setAdapter(trainingExerciseAdapter);
+    }
+
+    private void initializeControls() {
+        lblDate.setText(LocalesManager.getLongDateString(trainingSession.getDate(),
+                getApplicationContext().getResources().getConfiguration().locale));
+        lblWorkout.setText(trainingSession.getNameWorkout());
+
+        String comment = trainingSession.getComment();
+        if (comment.equals("")) {
+            lblComment.setTypeface(null, Typeface.ITALIC);
+            comment = "(" + getString(R.string.training_session_detail_no_comment) + ")";
+        }
+        else {
+            lblComment.setTypeface(null, Typeface.NORMAL);
+        }
+        lblComment.setText(comment);
+    }
+
+    private void captureControls() {
+        lstTracks = (ListView)findViewById(R.id.LstTrainingSessionDetailTracksLoads);
+        lblDate = (TextView)findViewById(R.id.LblTrainingSessionDetailDate);
+        lblWorkout = (TextView)findViewById(R.id.LblTrainingSessionDetailWorkout);
+        lblComment = (TextView)findViewById(R.id.LblTrainingSessionDetailComment);
     }
 
     private void retrieveData() {

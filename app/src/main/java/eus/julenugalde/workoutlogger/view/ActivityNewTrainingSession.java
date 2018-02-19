@@ -2,17 +2,15 @@ package eus.julenugalde.workoutlogger.view;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
-import android.content.res.Configuration;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
-import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
@@ -25,12 +23,10 @@ import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Iterator;
-import java.util.Locale;
 
 import eus.julenugalde.workoutlogger.R;
 import eus.julenugalde.workoutlogger.controller.LocalesManager;
@@ -43,7 +39,6 @@ import eus.julenugalde.workoutlogger.model.TrainingSession;
 import eus.julenugalde.workoutlogger.model.Workout;
 import eus.julenugalde.workoutlogger.model.WorkoutData;
 import eus.julenugalde.workoutlogger.model.WorkoutDataFactory;
-import eus.julenugalde.workoutlogger.model.WorkoutDataSQLite;
 
 /** Activity to create a new training session or edit an existing one */
 public class ActivityNewTrainingSession extends AppCompatActivity
@@ -67,6 +62,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity
     private int positionCombo;
     private Calendar date;
     private boolean editing = false;
+    private TrainingSession retrievedTrainingSession;
 
     private static final int REQ_CODE_EXERCISE_DATA = 101;
     private static final int REQ_CODE_TRAINING_SESSION_DATE = 102;
@@ -92,12 +88,12 @@ public class ActivityNewTrainingSession extends AppCompatActivity
         try {   //to get training session data from parent activity
             Workout workout =
                     (Workout) bundle.getSerializable(ActivityTrainingSessionDetail.KEY_WORKOUT);
-            TrainingSession trainingSession =
+            retrievedTrainingSession =
                     (TrainingSession)bundle.get(ActivityTrainingSessionDetail.KEY_TRAINING_SESSION);
 
             //Complete fields with data from parent activity
-            txtDate.setText(DateFormat.format("yyyy-MM-dd", trainingSession.getDate()));
-            txtComment.setText(trainingSession.getComment());
+            txtDate.setText(DateFormat.format("yyyy-MM-dd", retrievedTrainingSession.getDate()));
+            txtComment.setText(retrievedTrainingSession.getComment());
 
             //For each recorded track a TrainingExercise will be added to the list and set as completed
             TrainingExercise trainingExercise;
@@ -105,7 +101,7 @@ public class ActivityNewTrainingSession extends AppCompatActivity
             Load[] loads;
             int index;
             for (Track track : recordedTracks) {
-                Log.d(TAG, track.toString());
+                Log.d(TAG, track.toString());   //TODO duplicated loads. fix
                 trainingExercise = new TrainingExercise(track.getName(), true);
                 for (int j=0; j<recordedTracks.length; j++) {
                     loads = workout.getTrack(j).getLoads();
@@ -126,6 +122,11 @@ public class ActivityNewTrainingSession extends AppCompatActivity
             setTitle(R.string.new_training_session_edit_title);
             editing = true;
             lstTrainingExercises.requestLayout();
+
+            //TODO Hide keyboard
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+
         } catch (NullPointerException npex) {
             // New training session. Do nothing
             editing = false;    //Not really needed
@@ -332,13 +333,14 @@ public class ActivityNewTrainingSession extends AppCompatActivity
                 txtDate.getText().toString(),       //Date
                 txtComment.getText().toString())) {  //Comment
             setResult(RESULT_OK);
+            if (editing) {  //Remove the previous one
+                if (!workoutData.deleteTrainingSession(retrievedTrainingSession)) {
+                    setResult(RESULT_ERROR_SAVE);
+                }
+            }
         }
         else {      //Error inserting in the database
             setResult(RESULT_ERROR_SAVE);
-        }
-        if (editing) {  //Remove the previous one
-            //TODO remove previous training session to avoid duplicates
-
         }
     }
 
