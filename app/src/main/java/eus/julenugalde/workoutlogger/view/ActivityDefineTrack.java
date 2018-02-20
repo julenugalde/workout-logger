@@ -14,6 +14,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import eus.julenugalde.workoutlogger.R;
+import eus.julenugalde.workoutlogger.controller.LocalesManager;
 import eus.julenugalde.workoutlogger.controller.TextWithCounterWatcher;
 import eus.julenugalde.workoutlogger.controller.TrackIcon;
 import eus.julenugalde.workoutlogger.model.Load;
@@ -66,8 +67,9 @@ public class ActivityDefineTrack extends AppCompatActivity {
         }
 
         //Spinner adapter
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(
-                this, R.array.defaultTracks, android.R.layout.simple_spinner_item);
+        ArrayAdapter<CharSequence> adapter = new ArrayAdapter<CharSequence>(
+                this, android.R.layout.simple_spinner_item,
+                LocalesManager.getDefaultTrackNamesForCurrentLocale());
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         cmbDefaultGroups.setAdapter(adapter);
 
@@ -76,7 +78,7 @@ public class ActivityDefineTrack extends AppCompatActivity {
         if (readTrack != null) {    //We're editing the track
             //Set the selection spinner selection and don't allow changes
             int index = 0;
-            String[] defaultTracks = getResources().getStringArray(R.array.defaultTracks);
+            String[] defaultTracks = LocalesManager.getDefaultTrackNamesForCurrentLocale();
             while((readTrack.compareTo(defaultTracks[index]) != 0) &&
                     (index < (defaultTracks.length-1))) {
                 index++;
@@ -111,7 +113,7 @@ public class ActivityDefineTrack extends AppCompatActivity {
         else {  //It's a new track
             cmbDefaultGroups.setEnabled(true);
             int defaultPosition = bundle.getInt(ActivityDefineWorkout.KEY_POSITION);
-            if (defaultPosition < getResources().getStringArray(R.array.defaultTracks).length) {
+            if (defaultPosition < LocalesManager.getDefaultTrackNamesForCurrentLocale().length) {
                 cmbDefaultGroups.setSelection(defaultPosition);
             }
         }
@@ -121,7 +123,7 @@ public class ActivityDefineTrack extends AppCompatActivity {
         cmbDefaultGroups.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int position, long id) {
-                int lastPosition = (getResources().getStringArray(R.array.defaultTracks).length) - 1;
+                int lastPosition = (LocalesManager.getDefaultTrackNamesForCurrentLocale().length) - 1;
                 if (position == lastPosition) { //Custom track
                     txtCustomGroup.setVisibility(View.VISIBLE);
                     txtCustomGroup.setEnabled(true);
@@ -163,7 +165,7 @@ public class ActivityDefineTrack extends AppCompatActivity {
         Bundle bundle = getIntent().getExtras();
         String trackName = (String)cmbDefaultGroups.getSelectedItem();
         if (cmbDefaultGroups.getSelectedItemPosition() ==
-                (getResources().getStringArray(R.array.defaultTracks).length-1)) {
+                (LocalesManager.getDefaultTrackNamesForCurrentLocale().length-1)) {
             trackName = txtCustomGroup.getText().toString();
         }
         if (!trackName.isEmpty()) {

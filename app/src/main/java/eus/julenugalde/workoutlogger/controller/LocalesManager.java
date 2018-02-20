@@ -34,7 +34,7 @@ public class LocalesManager {
     public static String[][] getDefaultTrackNames() {
         Context context = WorkoutLoggerApp.getContext();
         Configuration configuration = new Configuration(context.getResources().getConfiguration());
-        Resources resources = new Resources(context.getAssets(), new DisplayMetrics(), configuration);
+        Resources resources; //= new Resources(context.getAssets(), new DisplayMetrics(), configuration);
         String[] locales = getLocales();
         String[][] defaultTrackNames = new String[locales.length][];
         Locale currentLocale = configuration.locale;    //Save the current locale
@@ -45,6 +45,10 @@ public class LocalesManager {
         }
         configuration.setLocale(currentLocale); //Restore the current locale
         return defaultTrackNames;
+    }
+
+    public static String[] getDefaultTrackNamesForCurrentLocale() {
+        return getResources().getStringArray(R.array.defaultTracks);
     }
 
     /** Returns the long date format depending on the locale */

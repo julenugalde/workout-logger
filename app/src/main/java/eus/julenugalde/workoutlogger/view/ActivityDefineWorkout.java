@@ -9,7 +9,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -35,20 +34,21 @@ public class ActivityDefineWorkout extends AppCompatActivity {
     public static final String[] KEY_LOADS = {"LOAD0", "LOAD1", "LOAD2", "LOAD3"};
 
     private static final int REQ_CODE_NEW_TRACK = 101;
-    private static final int REQ_CODE_EDIT_TRACK = 102;
+    //private static final int REQ_CODE_EDIT_TRACK = 102;
     private static final String TAG = ActivityDefineWorkout.class.getSimpleName();
 
     private ArrayList<Track> trackArrayList;
     private EditTextWithCounter txtWorkoutName;
     private Button btnNewTrack;
     private ListView lstTracks;
+    private TrackAdapter trackAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_define_workout);
         trackArrayList = new ArrayList<Track>();
-
+        trackAdapter = new TrackAdapter(this, trackArrayList);
         captureControls();
         initializeControls();
     }
@@ -58,7 +58,7 @@ public class ActivityDefineWorkout extends AppCompatActivity {
         txtWorkoutName.setText(suggestWorkoutName());
         txtWorkoutName.addTextChangedListener(new TextWithCounterWatcher(txtWorkoutName));
 
-        lstTracks.setAdapter(new TrackAdapter(this, trackArrayList));
+        lstTracks.setAdapter(trackAdapter);
 
         btnNewTrack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,31 +100,30 @@ public class ActivityDefineWorkout extends AppCompatActivity {
             switch (requestCode) {
                 case REQ_CODE_NEW_TRACK:    //Return from an ActivityDefineTrack
                     track = readBundleData(data);
-                    //TODO Not working
                     if(existsTrack(track)) { //the track already existed. It's replaced
                         int index = 0;
                         for (int i=0; i<trackArrayList.size(); i++) {
-                            if (track.getName() == trackArrayList.get(i).getName()) {
+                            if (track.getName().equalsIgnoreCase(trackArrayList.get(i).getName())) {
                                 index = i;
                             }
                         }
                         if (index < trackArrayList.size()) {
                             Log.d(TAG, "Replacing " + trackArrayList.get(index).toString() +
-                                    " by " + track.toString());
+                                    " by " + track.toString() + " (index=" + index + ")");
                             trackArrayList.set(index, track);
+                            trackAdapter.notifyDataSetChanged();
                         }
                         else {
                             Log.e(TAG, "Track " + track.getName() + " not found in the array");
                         }
-                        lstTracks.requestLayout();
                     }
                     else {
                         trackArrayList.add(track);
-                        lstTracks.requestLayout();
                     }
+                    lstTracks.requestLayout();
                     break;
-                case REQ_CODE_EDIT_TRACK:   //The track information has been updated
-
+                default:
+                    Log.e(TAG, "requestCode not valid: " + requestCode);
                     break;
             }
         } catch(Exception ex) {
@@ -251,7 +250,6 @@ public class ActivityDefineWorkout extends AppCompatActivity {
                 lastRelease = (i>lastRelease) ? i : lastRelease;
             }
         }
-
         workoutData.close();
         return "BodyPump " + (++lastRelease);
     }
