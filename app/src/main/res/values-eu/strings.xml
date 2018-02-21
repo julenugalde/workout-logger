@@ -95,4 +95,5 @@
     <string name="navigation_drawer_close">Navigation drawer itix</string>
     <string name="main_activity_menu_preferences">Aplikazioaren hobespenak</string>
     <string name="new_training_session_edit_title">Entrenamendua editatu</string>
+    <string name="statistics_title">Estatistikak</string>
 </resources>

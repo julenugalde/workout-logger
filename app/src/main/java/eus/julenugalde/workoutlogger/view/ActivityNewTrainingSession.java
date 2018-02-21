@@ -1,8 +1,10 @@
 package eus.julenugalde.workoutlogger.view;
 
 import android.app.DatePickerDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.text.format.DateFormat;
 import android.util.Log;
@@ -79,6 +81,8 @@ public class ActivityNewTrainingSession extends AppCompatActivity
         initializeVariables(savedInstanceState);
         configControls(savedInstanceState);
         loadPreviousData();
+
+        txtComment.requestFocus();
     }
 
     /** Checks if it's a new training session or we're editing a previous one. In the latter case,
@@ -117,16 +121,10 @@ public class ActivityNewTrainingSession extends AppCompatActivity
                     listExercises.set(index, trainingExercise);
                 }
             }
-
             //No NullpointerException ocurred --> we're editing
             setTitle(R.string.new_training_session_edit_title);
             editing = true;
             lstTrainingExercises.requestLayout();
-
-            //TODO Hide keyboard
-            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
-            inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-
         } catch (NullPointerException npex) {
             // New training session. Do nothing
             editing = false;    //Not really needed

@@ -111,7 +111,7 @@ public class ActivityDetailWorkout extends AppCompatActivity {
                     setPositiveButton(R.string.list_workouts_warning_delete_workout_accept,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
-                                Log.i(TAG, "Deleting workout " + workout.toString());
+                                //Log.i(TAG, "Deleting workout " + workout.toString());
                                 if (!workoutData.deleteWorkout(workout.getName())) {
                                     Toast.makeText(getApplicationContext(),
                                             R.string.detail_workout_delete_error,
@@ -119,6 +119,7 @@ public class ActivityDetailWorkout extends AppCompatActivity {
                                 }
                                 else {
                                     setResult(RESULT_OK);
+                                    workoutData.close();
                                     finish();
                                 }
                             }
@@ -129,12 +130,12 @@ public class ActivityDetailWorkout extends AppCompatActivity {
                                 Toast.makeText(getApplicationContext(),
                                         R.string.list_workouts_warning_delete_workout_cancelled,
                                         Toast.LENGTH_LONG).show();
+                                workoutData.close();
                             }
                         }).
             //AlertDialog dialog = builder.create();
                     setIcon(android.R.drawable.ic_dialog_alert).
                     show();
-            workoutData.close();
         }
     }
 }

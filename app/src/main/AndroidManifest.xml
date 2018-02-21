@@ -28,6 +28,7 @@
         </activity>
         <activity
             android:name=".view.ActivityTrainingSessionDetail"
+            android:label="@string/training_session_detail_title"
             android:parentActivityName=".view.ActivityNewTrainingSession" />
         <activity
             android:name=".view.ActivityNewTrainingSession"
@@ -35,9 +36,11 @@
             android:parentActivityName=".view.MainActivity" />
         <activity
             android:name=".view.ActivityPreferences"
+            android:label="@string/preferences_title"
             android:parentActivityName=".view.MainActivity" />
         <activity
             android:name=".view.ActivityExerciseData"
+            android:label="@string/exercise_data_title"
             android:parentActivityName=".view.ActivityNewTrainingSession" />
         <activity
             android:name=".view.ActivityListWorkouts"
@@ -53,9 +56,11 @@
             android:parentActivityName=".view.ActivityListWorkouts" />
         <activity
             android:name=".view.ActivityDefineTrack"
+            android:label="@string/define_track_title"
             android:parentActivityName=".view.ActivityDefineWorkout" />
         <activity
             android:name=".view.ActivityViewStatistics"
+            android:label="@string/statistics_title"
             android:parentActivityName=".view.MainActivity" />
     </application>
 </manifest>
